@@ -5,17 +5,20 @@
             {
                 "url": "#RealEstateRequest/settings",
                 "label": "Settings",
-                "description": "realEstateSettings"
+                "description": "realEstateSettings",
+                "iconClass": "fas fa-cog"
             },
             {
                 "url": "#RealEstateLocation",
                 "label": "Locations",
-                "description": "realEstateLocations"
+                "description": "realEstateLocations",
+                "iconClass": "fas fa-map-marked-alt"
             },
             {
                 "url": "#RealEstateRequest/matchingConfiguration",
                 "label":  "Property Matching",
-                "description": "propertyMatching"
+                "description": "propertyMatching",
+                "iconClass": "fas fa-equals"
             }
         ]
     }
