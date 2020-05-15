@@ -1,0 +1,9 @@
+{
+  "fields": {
+    "saleMarkup": "Margen Predeterminado para la venta (%)",
+    "rentMarkup": "Margen Predeterminado para alquiler (%)",
+    "realEstateEmailSending": "Correos electrónicos solicitantes sobre fincas coincidentes",
+    "realEstatePropertyTemplate": "Plantilla de Email por Finca",
+    "realEstateEmailSendingAssignedUserCc": "Añadir usuario asignado a CC"
+  }
+}

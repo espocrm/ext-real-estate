@@ -1,0 +1,18 @@
+[
+    {
+        "name": "name",
+        "link": true
+    },
+    {
+        "name": "stage",
+        "width": 17
+    },
+    {
+        "name": "request",
+        "width": 17
+    },
+    {
+        "name": "createdAt",
+        "width": 17
+    }
+]

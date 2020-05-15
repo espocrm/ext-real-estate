@@ -1,0 +1,83 @@
+{
+    "controller":"real-estate:controllers/real-estate-request",
+    "dynamicHandler":"real-estate:request-dynamic-handler",
+    "boolFilterList":[
+        "onlyMy"
+    ],
+    "filterList":[
+        "actual",
+        "actualSale",
+        "actualRent",
+        {
+            "name":"completed",
+            "style":"success"
+        }
+    ],
+    "recordViews":{
+        "detail":"real-estate:views/real-estate-request/record/detail"
+    },
+    "views":{
+        "detail":"real-estate:views/real-estate-request/detail"
+    },
+    "menu":{
+        "list":{
+            "dropdown":[
+                {
+                    "link":"#RealEstateLocation",
+                    "aclScope":"RealEstateLocation",
+                    "acl":"read",
+                    "label":"Locations"
+                }
+            ]
+        }
+    },
+    "sidePanels":{
+        "detail":[
+            {
+                "name":"activities",
+                "label":"Activities",
+                "view":"crm:views/record/panels/activities"
+            },
+            {
+                "name":"history",
+                "label":"History",
+                "view":"crm:views/record/panels/history"
+            },
+            {
+                "name":"tasks",
+                "label":"Tasks",
+                "view":"crm:views/record/panels/tasks"
+            }
+        ]
+    },
+    "relationshipPanels": {
+        "opportunities": {
+            "layout": "listForRequest",
+            "view": "real-estate:views/real-estate-request/record/panels/opportunities",
+            "rowActionsView": "views/record/row-actions/relationship-no-unlink",
+            "select": false
+        }
+    },
+    "dynamicLogic": {
+        "fields": {
+            "matchingPropertyCount": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "notIn",
+                            "attribute": "status",
+                            "value": ["Completed", "Canceled", "Lost"]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "additionalLayouts":{
+        "listForProperty":{
+            "type":"list"
+        }
+    },
+    "iconClass":"far fa-dot-circle",
+    "color":"#eaa0a0"
+}

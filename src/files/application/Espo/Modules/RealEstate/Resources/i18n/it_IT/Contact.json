@@ -1,0 +1,19 @@
+{
+  "fields": {
+    "properties": "Immobili",
+    "propertyRole": "Ruolo"
+  },
+  "options": {
+    "propertyRole": {
+      "Landlord": "Proprietario",
+      "Tenant": "Inquilino",
+      "Property Manager": "Amministratore Immobile",
+      "Requester": "Richiedente"
+    }
+  },
+  "links": {
+    "properties": "Immobili",
+    "requests": "Richieste",
+    "requestsPrimary": "Richieste (Contatto Primario)"
+  }
+}

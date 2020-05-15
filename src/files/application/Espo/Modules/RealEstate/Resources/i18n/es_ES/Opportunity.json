@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "property": "Finca",
+    "request": "Solicitud"
+  },
+  "options": {
+    "contactRole": {
+      "Landlord": "Propietario",
+      "Tenant": "Inquilino",
+      "Property Manager": "Administrador de la Finca"
+    }
+  },
+  "links": {
+    "property": "Finca",
+    "request": "Solicitud"
+  }
+}

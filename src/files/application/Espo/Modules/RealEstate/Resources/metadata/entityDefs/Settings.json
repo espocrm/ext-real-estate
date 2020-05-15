@@ -1,0 +1,22 @@
+{
+    "fields": {
+        "saleMarkup": {
+            "type": "int",
+            "min": 0
+        },
+        "rentMarkup": {
+            "type": "int",
+            "min": 0
+        },
+        "realEstateEmailSending": {
+            "type": "bool"
+        },
+        "realEstateEmailSendingAssignedUserCc": {
+            "type": "bool"
+        },
+        "realEstatePropertyTemplate": {
+            "type": "link",
+            "entity": "EmailTemplate"
+        }
+    }
+}

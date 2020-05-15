@@ -1,0 +1,10 @@
+{
+   "additionalLayouts": {
+      "listForProperty": {
+         "type": "listSmall"
+      },
+      "listForRequest": {
+         "type": "listSmall"
+      }
+   }
+}

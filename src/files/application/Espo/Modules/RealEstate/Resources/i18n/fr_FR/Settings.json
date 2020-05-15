@@ -1,0 +1,9 @@
+{
+  "fields": {
+    "saleMarkup": "Honoraires de vente (%)",
+    "rentMarkup": "Honoraires de Location (%)",
+    "realEstateEmailSending": "Envoyer un courriel aux demandeurs concernant les biens correspondants",
+    "realEstatePropertyTemplate": "Mod�le d'email de Bien",
+    "realEstateEmailSendingAssignedUserCc": "Ajouter Utilisateur selectionn� au CC"
+  }
+}

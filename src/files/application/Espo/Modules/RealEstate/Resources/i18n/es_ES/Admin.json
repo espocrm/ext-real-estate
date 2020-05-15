@@ -1,0 +1,14 @@
+{
+  "layouts": {
+    "listForProperty": "Listado (Por Finca)",
+    "listForRequest": "Listado (por Solicitud)"
+  },
+  "labels": {
+    "Real Estate": "Inmueble/s",
+    "Locations": "Ubicaciones"
+  },
+  "descriptions": {
+    "realEstateSettings": "Parámetros para extensión del Inmueble.",
+    "realEstateLocations": "Gestionar ubicaciones para los Inmuebles."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "scopeNames": {
+    "RealEstateProperty": "Finca",
+    "RealEstateRequest": "Solicitud",
+    "RealEstateLocation": "Ubicación"
+  },
+  "scopeNamesPlural": {
+    "RealEstateProperty": "Fincas",
+    "RealEstateRequest": "Solicitudes",
+    "RealEstateLocation": "Ubicaciones"
+  },
+  "dashlets": {
+    "Properties": "Mis Fincas",
+    "Requests": "Mis Solicitudes"
+  }
+}

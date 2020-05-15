@@ -1,0 +1,26 @@
+[
+    {
+        "name": "name",
+        "width": 25,
+        "link": true
+    },
+    {
+        "name": "stage",
+        "width": 15
+    },
+    {
+        "name": "property"
+    },
+    {
+        "name": "request"
+    },
+    {
+        "name": "assignedUser",
+        "width": 10
+    },
+    {
+        "name": "amount",
+        "width": 10,
+        "align": "right"
+    }
+]

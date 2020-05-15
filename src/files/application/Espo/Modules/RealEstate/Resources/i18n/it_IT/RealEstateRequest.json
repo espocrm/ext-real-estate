@@ -1,0 +1,77 @@
+{
+  "labels": {
+    "Create RealEstateRequest": "Crea Richiesta",
+    "Matching Properties": "Proprietà Corrispondente ai Criteri",
+    "Create Opportunity": "Crea Opportunità",
+    "Not Interested": "Non Interessato",
+    "Unset Not Interested": "Togli Non Interessato"
+  },
+  "fields": {
+    "status": "Stato",
+    "assignedUser": "Utente Assegnato",
+    "type": "Tipo",
+    "propertyType": "Tipo Immobile",
+    "number": "Numero",
+    "contact": "Contatto",
+    "contacts": "Contatti",
+    "fromPrice": "Prezzo Min",
+    "toPrice": "Prezzo Max",
+    "fromSquare": "Mq Min",
+    "toSquare": "Mq Max",
+    "fromBedroomCount": "Nr. Camere Min",
+    "toBedroomCount": "Nr. Camere Max",
+    "fromBathroomCount": "Nr. Bagni Min",
+    "toBathroomCount": "Nr. Bagni Max",
+    "fromFloor": "Piano Min",
+    "toFloor": "Piano Max",
+    "fromFloorCount": "Nr. Min Piani",
+    "toFloorCount": "Nr. Max Piani",
+    "fromPriceConverted": "Prezzo Min (Convertito)",
+    "toPriceConverted": "Prezzo Max (Convertito)",
+    "price": "Prezzo",
+    "bedroomCount": "Nr. Camere",
+    "bathroomCount": "Nr. Bagni",
+    "floor": "Piano",
+    "floorCount": "Nr Piani",
+    "square": "Mq",
+    "locations": "Zone",
+    "matchingProperty": "Immobili Corrispondenti ai Criteri",
+    "yearBuilt": "Anno di Costruzione",
+    "fromYearBuilt": "Anno di Costruzione Min",
+    "toYearBuilt": "Anno di Costruzione Max"
+  },
+  "links": {
+    "contact": "Contatto",
+    "contacts": "Contatti",
+    "opportunities": "Opportunità",
+    "locations": "Zone"
+  },
+  "options": {
+    "status": {
+      "New": "Nuovo",
+      "Assigned": "Assegnato",
+      "In Process": "In Corso",
+      "Completed": "Completato",
+      "Canceled": "Cancellato",
+      "Lost": "Perso"
+    },
+    "type": {
+      "Rent": "Affitto",
+      "Sale": "Vendita"
+    },
+    "propertyType": {
+      "Apartment": "Appartamento",
+      "Separate House": "Casa Indipendente",
+      "Office": "Ufficio",
+      "Warehouse": "Magazzino",
+      "Retail": "Negozio",
+      "Farm": "Agriturismo"
+    }
+  },
+  "presetFilters": {
+    "completed": "Completato",
+    "actual": "Effettivo",
+    "actualRent": "Affitto Effettivo",
+    "actualSale": "Vendita Effettiva"
+  }
+}

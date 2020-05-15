@@ -1,0 +1,13 @@
+{
+    "entity": true,
+    "layouts": false,
+    "tab": false,
+    "acl": "recordAllTeamNo",
+    "module": "RealEstate",
+    "customizable": false,
+    "importable": false,
+    "type": "CategoryTree",
+    "stream": false,
+    "notifications": false,
+    "aclPortal": "recordAllOwnNo"
+}

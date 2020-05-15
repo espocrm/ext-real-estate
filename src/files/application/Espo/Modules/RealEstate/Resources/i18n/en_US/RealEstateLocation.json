@@ -1,0 +1,11 @@
+{
+    "labels": {
+        "Create Location": "Create Location"
+    },
+    "fields": {
+        "address": "Address"
+    },
+    "tooltips": {
+        "address": "This address will be inserted into property address field once you specify this location. Keep not needed address fields empty."
+    }
+}

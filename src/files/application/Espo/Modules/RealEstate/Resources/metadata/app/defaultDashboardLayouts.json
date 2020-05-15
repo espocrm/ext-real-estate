@@ -1,0 +1,37 @@
+{
+	"Standard": [
+	    {
+	    	"name": "My Espo",
+            "layout": [
+                [
+                    {
+                        "name": "Stream",
+                        "id": "defaultStream"
+                    },
+                    {
+                        "name": "Opportunities",
+                        "id": "defaultOpportunities"
+                    },
+                    {
+                        "name": "Activities",
+                        "id": "defailtActivities"
+                    }
+                ],
+                [
+                    {
+                        "name": "Properties",
+                        "id": "defaultProperties"
+                    },
+                    {
+                        "name": "Requests",
+                        "id": "defaultRequests"
+                    },
+                    {
+                        "name": "Tasks",
+                        "id": "defaultTasks"
+                    }
+                ]
+            ]
+		}
+	]
+}

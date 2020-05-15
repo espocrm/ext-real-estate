@@ -1,0 +1,67 @@
+{
+  "labels": {
+    "Create RealEstateProperty": "Crea Immobile",
+    "Matching Requests": "Richieste Corrispondenti ai Criteri"
+  },
+  "fields": {
+    "type": "Tipo",
+    "address": "Indirizzo",
+    "contacts": "Contatti",
+    "status": "Stato",
+    "assignedUser": "Utente Assegnato",
+    "images": "Immagini",
+    "sellers": "Venditori",
+    "square": "Mq",
+    "yearBuilt": "Anno di Costruzione",
+    "documents": "Documenti",
+    "requestType": "Tipo di Richiesta",
+    "price": "Prezzo",
+    "priceConverted": "Prezzo (Convertito)",
+    "bedroomCount": "Numero di Camere",
+    "bathroomCount": "Numero di Bagni",
+    "floor": "Piano",
+    "floorCount": "Numero Piani Totale",
+    "location": "Zona",
+    "matchingRequest": "Richieste Corrispondenti ai Criteri",
+    "number": "Numero",
+    "account": "Account",
+    "addressMap": "Mappa"
+  },
+  "options": {
+    "type": {
+      "Apartment": "Appartmento",
+      "Separate House": "Casa Indipendente",
+      "Office": "Ufficio",
+      "Warehouse": "Magazzino",
+      "Retail": "Negozio",
+      "Farm": "Agriturismo",
+      "Room": "Stanza",
+      "Land Lot": "Terreno"
+    },
+    "status": {
+      "New": "Nuovo",
+      "Assigned": "Assegnato",
+      "In Process": "In Corso",
+      "Completed": "Completato",
+      "Canceled": "Cancellato",
+      "Lost": "Perso"
+    },
+    "requestType": {
+      "Rent": "Affitto",
+      "Sale": "Vendita"
+    }
+  },
+  "links": {
+    "contacts": "Contatti",
+    "documents": "Documenti",
+    "opportunities": "Opportunità",
+    "location": "Zona",
+    "account": "Account"
+  },
+  "presetFilters": {
+    "completed": "Completato",
+    "actual": "Effettivo",
+    "actualRent": "Affitto Effettivo",
+    "actualSale": "Vendita Effettiva"
+  }
+}

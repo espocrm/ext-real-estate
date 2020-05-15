@@ -1,0 +1,71 @@
+{
+    "labels": {
+        "Create RealEstateProperty": "Create Property",
+        "Matching Requests": "Matching Requests",
+        "Locations": "Locations"
+    },
+    "fields": {
+        "type": "Type",
+        "address": "Address",
+        "contacts": "Contacts",
+        "status": "Status",
+        "assignedUser": "Assigned User",
+        "images": "Images",
+        "sellers": "Sellers",
+        "square": "Square",
+        "yearBuilt": "Year Built",
+        "documents": "Documents",
+        "requestType": "Request Type",
+        "price": "Price",
+        "priceConverted": "Price (Converted)",
+        "bedroomCount": "Bedroom Count",
+        "bathroomCount": "Bathroom Count",
+        "floor": "Floor",
+        "floorCount": "Floor Count",
+        "location": "Location",
+        "matchingRequest": "Matching Request",
+        "number": "Number",
+        "account": "Account",
+        "addressMap": "Map",
+        "matchingRequestCount": "Matching Count",
+        "contactRole": "Role"
+    },
+    "options": {
+        "type": {
+            "Apartment": "Apartment",
+            "Separate House": "Separate House",
+            "Office": "Office",
+            "Warehouse": "Warehouse",
+            "Retail": "Retail",
+            "Farm": "Farm",
+            "Room": "Room",
+            "Land Lot": "Land Lot"
+        },
+        "status": {
+            "New": "New",
+            "Assigned": "Assigned",
+            "In Process": "In Process",
+            "Completed": "Completed",
+            "Canceled": "Canceled",
+            "Lost": "Lost"
+        },
+        "requestType": {
+            "Rent": "Rent",
+            "Sale": "Sale"
+        }
+    },
+    "links": {
+        "contacts": "Contacts",
+        "documents": "Documents",
+        "opportunities": "Opportunities",
+        "location": "Location",
+        "account": "Account",
+        "matchingRequests": "Matching Requests"
+    },
+    "presetFilters": {
+        "completed": "Completed",
+        "actual": "Actual",
+        "actualRent": "Rent Actual",
+        "actualSale": "Sale Actual"
+    }
+}

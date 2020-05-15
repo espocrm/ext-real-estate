@@ -1,0 +1,44 @@
+{
+
+    "streamRelated": {
+        "RealEstateProperty": [
+            "meetings",
+            "calls",
+            "tasks"
+        ],
+        "RealEstateRequest": [
+            "meetings",
+            "calls",
+            "tasks"
+        ]
+    },
+    "statusStyles": {
+        "RealEstateProperty": {
+            "New" : "primary",
+            "Assigned" : "primary",
+            "In Process" : "primary",
+            "Completed" : "success",
+            "Canceled" : "danger",
+            "Lost" : "danger"
+        },
+        "RealEstateRequest": {
+            "New" : "primary",
+            "Assigned" : "primary",
+            "In Process" : "primary",
+            "Completed" : "success",
+            "Canceled" : "danger",
+            "Lost" : "danger"
+        },
+        "Opportunity": {
+            "Prospecting": "primary",
+            "Proposed": "primary",
+            "Presented": "primary",
+            "Closed Won" : "success",
+            "Closed Lost" : "danger"
+        }
+    },
+    "statusFields": {
+        "RealEstateProperty": "status",
+        "RealEstateRequest": "status"
+    }
+}

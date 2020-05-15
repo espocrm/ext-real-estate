@@ -1,0 +1,4 @@
+{
+    "view":"real-estate:views/dashlets/requests",
+    "aclScope": "RealEstateRequest"
+}

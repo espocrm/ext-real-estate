@@ -1,0 +1,14 @@
+{
+  "layouts": {
+    "listForProperty": "Liste (pour Bien)",
+    "listForRequest": "Liste (pour Demande)"
+  },
+  "labels": {
+    "Real Estate": "Immobilier",
+    "Locations": "Emplacements"
+  },
+  "descriptions": {
+    "realEstateSettings": "Param�tres pour l'extension immobili�re.",
+    "realEstateLocations": "G�rer les Emplacements Immobilier."
+  }
+}

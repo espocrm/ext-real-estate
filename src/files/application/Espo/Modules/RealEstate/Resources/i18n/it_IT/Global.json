@@ -1,0 +1,16 @@
+{
+  "scopeNames": {
+    "RealEstateProperty": "Immobile",
+    "RealEstateRequest": "Richiesta",
+    "RealEstateLocation": "Zona"
+  },
+  "scopeNamesPlural": {
+    "RealEstateProperty": "Immobili",
+    "RealEstateRequest": "Richieste",
+    "RealEstateLocation": "Zone"
+  },
+  "dashlets": {
+    "Properties": "I Miei Immobili",
+    "Requests": "Le Mie Richieste"
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "links": {
+        "properties": {
+            "type": "hasMany",
+            "foreign": "account",
+            "entity": "RealEstateProperty"
+        }
+    }
+}

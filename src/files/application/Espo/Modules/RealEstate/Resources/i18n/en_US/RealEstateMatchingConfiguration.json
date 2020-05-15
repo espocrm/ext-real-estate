@@ -1,0 +1,8 @@
+{
+    "fields": {
+        "fieldList": "Field list used for matching"
+    },
+    "messages": {
+        "typeFieldsMap": "Fields available for property types"
+    }
+}

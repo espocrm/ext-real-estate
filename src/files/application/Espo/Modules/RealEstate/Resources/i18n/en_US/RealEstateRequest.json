@@ -1,0 +1,82 @@
+{
+    "labels": {
+        "Create RealEstateRequest": "Create Request",
+        "Matching Properties": "Matching Properties",
+        "Create Opportunity": "Create Opportunity",
+        "Not Interested": "Not Interested",
+        "Unset Not Interested": "Unset Not Interested",
+        "Locations": "Locations",
+        "Min": "Min",
+        "Max": "Max"
+    },
+    "fields": {
+        "status": "Status",
+        "assignedUser": "Assigned User",
+        "type": "Type",
+        "propertyType": "Property Type",
+        "number": "Number",
+        "contact": "Contact",
+        "contacts": "Contacts",
+        "fromPrice": "Min Price",
+        "toPrice": "Max Price",
+        "fromSquare": "Min Square",
+        "toSquare": "Max Square",
+        "fromBedroomCount": "Min Bedroom Count",
+        "toBedroomCount": "Max Bedroom Count",
+        "fromBathroomCount": "Min Bathroom Count",
+        "toBathroomCount": "Max Bathroom Count",
+        "fromFloor": "Min Floor",
+        "toFloor": "Max Floor",
+        "fromFloorCount": "Min Floor Count",
+        "toFloorCount": "Max Floor Count",
+        "fromPriceConverted": "Min Price (Converted)",
+        "toPriceConverted": "Max Price (Converted)",
+        "price": "Price",
+        "bedroomCount": "Bedroom Count",
+        "bathroomCount": "Bathroom Count",
+        "floor": "Floor",
+        "floorCount": "Floor Count",
+        "square": "Square",
+        "locations": "Locations",
+        "matchingProperty": "Matching Property",
+        "yearBuilt": "Year Built",
+        "fromYearBuilt": "Min Year Built",
+        "toYearBuilt": "Max Year Built",
+        "matchingPropertyCount": "Matching Count"
+    },
+    "links": {
+        "contact": "Contact",
+        "contacts": "Contacts",
+        "opportunities": "Opportunities",
+        "locations": "Locations",
+        "matchingProperties": "Matching Properties"
+    },
+    "options": {
+        "status": {
+            "New": "New",
+            "Assigned": "Assigned",
+            "In Process": "In Process",
+            "Completed": "Completed",
+            "Canceled": "Canceled",
+            "Lost": "Lost"
+        },
+        "type": {
+            "Rent": "Rent",
+            "Sale": "Sale"
+        },
+        "propertyType": {
+            "Apartment": "Apartment",
+            "Separate House": "Separate House",
+            "Office": "Office",
+            "Warehouse": "Warehouse",
+            "Retail": "Retail",
+            "Farm": "Farm"
+        }
+    },
+    "presetFilters": {
+        "completed": "Completed",
+        "actual": "Actual",
+        "actualRent": "Rent Actual",
+        "actualSale": "Sale Actual"
+    }
+}

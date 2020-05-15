@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "property": "Immobile",
+    "request": "Richiesta"
+  },
+  "options": {
+    "contactRole": {
+      "Landlord": "Proprietario",
+      "Tenant": "Inquilino",
+      "Property Manager": "Amministratore Immobile"
+    }
+  },
+  "links": {
+    "property": "Immobile",
+    "request": "Richiesta"
+  }
+}

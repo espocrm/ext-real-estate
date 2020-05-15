@@ -1,0 +1,21 @@
+[
+    "matchingProperty",
+    "propertyType",
+    "status",
+    "matchingPropertyCount",
+    "locations",
+    "fromPriceConverted",
+    "toPriceConverted",
+    "fromSquare",
+    "toSquare",
+    "fromBathroomCount",
+    "toBathroomCount",
+    "fromBedroomCount",
+    "toBedroomCount",
+    "fromFloor",
+    "toFloor",
+    "fromFloorCount",
+    "toFloorCount",
+    "assignedUser",
+    "address"
+]

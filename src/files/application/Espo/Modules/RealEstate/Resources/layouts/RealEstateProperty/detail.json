@@ -1,0 +1,95 @@
+[
+    {
+        "label": "Overview",
+        "rows": [
+            [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "status"
+                }
+            ],
+            [
+                {
+                    "name": "requestType"
+                },
+                false
+            ],
+            [
+                {
+                    "name": "location"
+                },
+                {
+                    "name": "account"
+                }
+            ],
+            [
+                {
+                    "name": "address"
+                },
+                {
+                    "name": "contacts"
+                }
+            ]
+        ]
+    },
+    {
+        "label": "Details",
+        "rows": [
+            [
+                {
+                    "name": "price"
+                },
+                false
+            ],
+            [
+                {
+                    "name": "square"
+                },
+                {
+                    "name": "bedroomCount"
+                }
+            ],
+            [
+                {
+                    "name": "yearBuilt"
+                },
+                {
+                    "name": "bathroomCount"
+                }
+            ],
+            [
+                {
+                    "name": "floor"
+                },
+                {
+                    "name": "floorCount"
+                }
+            ],
+            [
+                {
+                    "name": "description",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "images",
+                    "fullWidth": true
+                }
+            ]
+        ]
+    },
+    {
+        "label": "",
+        "rows": [
+            [
+                {
+                    "name": "addressMap",
+                    "fullWidth": true
+                }
+            ]
+        ]
+    }
+]

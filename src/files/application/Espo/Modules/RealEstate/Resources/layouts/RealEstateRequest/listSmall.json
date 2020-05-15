@@ -1,0 +1,22 @@
+[
+    {
+        "name": "name",
+        "link": true,
+        "width": 17
+    },
+    {
+        "name": "type",
+        "width": 17
+    },
+    {
+        "name": "propertyType",
+        "width": 17
+    },
+    {
+        "name": "status",
+        "width": 18
+    },
+    {
+        "name": "price"
+    }
+]

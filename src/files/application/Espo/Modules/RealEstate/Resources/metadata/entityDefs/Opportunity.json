@@ -1,0 +1,40 @@
+{
+    "fields": {
+        "property": {
+            "type": "link"
+        },
+        "request": {
+            "type": "link"
+        },
+        "stage": {
+            "default": "Prospecting",
+            "options": ["Prospecting", "Proposed", "Presented", "Closed Won", "Closed Lost"],
+            "probabilityMap": {
+                "Prospecting": 5,
+                "Proposed": 10,
+                "Presented": 30
+            }
+        },
+        "closeDate": {
+            "required": false
+        },
+        "assignedUser": {
+            "required": false
+        },
+        "name": {
+            "required": false
+        }
+    },
+    "links": {
+        "property": {
+            "type": "belongsTo",
+            "foreign": "opportunities",
+            "entity": "RealEstateProperty"
+        },
+        "request": {
+            "type": "belongsTo",
+            "foreign": "opportunities",
+            "entity": "RealEstateRequest"
+        }
+    }
+}

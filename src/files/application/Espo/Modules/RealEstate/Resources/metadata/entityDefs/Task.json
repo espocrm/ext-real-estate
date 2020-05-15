@@ -1,0 +1,15 @@
+{
+    "fields": {
+        "parent": {
+            "entityList": [
+                "RealEstateProperty",
+                "RealEstateRequest",
+                "Opportunity",
+                "Contact",
+                "Account",
+                "Lead",
+                "Case"
+            ]
+        }
+    }
+}

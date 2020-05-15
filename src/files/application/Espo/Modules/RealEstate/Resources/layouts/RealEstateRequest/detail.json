@@ -1,0 +1,66 @@
+[
+    {
+        "label": "Overview",
+        "rows": [
+            [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "status"
+                }
+            ],
+            [
+                {
+                    "name": "propertyType"
+                },
+                {
+                    "name": "contacts"
+                }
+            ]
+        ]
+    },
+    {
+        "label": "Details",
+        "rows": [
+            [
+                {
+                    "name": "locations"
+                },
+                {
+                    "name": "price"
+                }
+            ],
+            [
+                {
+                    "name": "square"
+                },
+                {
+                    "name": "bedroomCount"
+                }
+            ],
+            [
+                {
+                    "name": "yearBuilt"
+                },
+                {
+                    "name": "bathroomCount"
+                }
+            ],
+            [
+                {
+                    "name": "floor"
+                },
+                {
+                    "name": "floorCount"
+                }
+            ],
+            [
+                {
+                    "name": "description",
+                    "fullWidth": true
+                }
+            ]
+        ]
+    }
+]

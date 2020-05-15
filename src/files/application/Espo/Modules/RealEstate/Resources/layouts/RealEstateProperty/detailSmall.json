@@ -1,0 +1,61 @@
+[
+    {
+        "label": "",
+        "rows": [
+            [
+                {
+                    "name": "type"
+                },
+                {
+                    "name": "status"
+                }
+            ],
+            [
+                {
+                    "name": "requestType"
+                },
+                false
+            ],
+            [
+
+                {
+                    "name": "account",
+                    "fullWidth": true
+                }
+            ],
+            [
+
+                {
+                    "name": "contacts",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "location"
+                },
+                {
+                    "name": "price"
+                }
+            ],
+            [
+                {
+                    "name": "address",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "images",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "description",
+                    "fullWidth": true
+                }
+            ]
+        ]
+    }
+]

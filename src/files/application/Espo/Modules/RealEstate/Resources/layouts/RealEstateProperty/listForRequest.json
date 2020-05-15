@@ -1,0 +1,23 @@
+[
+    {
+        "name": "name",
+        "link": true,
+        "notSortable": true
+    },
+    {
+        "name": "status",
+        "width": 17,
+        "notSortable": true
+    },
+    {
+        "name": "square",
+        "width": 14,
+        "notSortable": true
+    },
+    {
+        "name": "price",
+        "width": 18,
+        "align": "right",
+        "notSortable": true
+    }
+]

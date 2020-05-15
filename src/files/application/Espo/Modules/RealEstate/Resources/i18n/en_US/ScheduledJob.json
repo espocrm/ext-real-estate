@@ -1,0 +1,8 @@
+{
+    "options": {
+        "job": {
+            "PropertyMatchingUpdate": "Property Matching Update",
+            "SendPropertyMatches": "Send Matched Properties to Requestors"
+        }
+    }
+}

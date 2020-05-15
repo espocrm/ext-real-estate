@@ -1,0 +1,19 @@
+[
+    {
+        "label": "",
+        "rows": [
+            [
+                {
+                    "name": "name",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "address",
+                    "fullWidth": true
+                }
+            ]
+        ]
+    }
+]

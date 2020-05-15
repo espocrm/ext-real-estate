@@ -1,0 +1,19 @@
+{
+  "fields": {
+    "properties": "Fincas",
+    "propertyRole": "Rol"
+  },
+  "options": {
+    "propertyRole": {
+      "Landlord": "Propietario",
+      "Tenant": "Inquilino",
+      "Property Manager": "Administrador de la Finca",
+      "Requester": "Solicitante"
+    }
+  },
+  "links": {
+    "properties": "Fincas",
+    "requests": "Solicitudes",
+    "requestsPrimary": "Solicitudes (Principales)"
+  }
+}

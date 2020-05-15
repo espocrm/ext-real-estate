@@ -1,0 +1,30 @@
+[
+    {
+        "name": "name",
+        "link": true
+    },
+    {
+        "name": "status",
+        "width": 15,
+        "align": "left"
+    },
+    {
+        "name": "requestType",
+        "width": 14,
+        "align": "left"
+    },
+    {
+        "name": "type",
+        "width": 14,
+        "align": "left"
+    },
+    {
+        "name": "contactRole",
+        "width": 15,
+        "notSortable": true
+    },
+    {
+        "name": "matchingRequestCount",
+        "width": 12
+    }
+]

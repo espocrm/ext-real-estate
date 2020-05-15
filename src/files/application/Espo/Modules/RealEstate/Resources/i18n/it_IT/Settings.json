@@ -1,0 +1,9 @@
+{
+  "fields": {
+    "saleMarkup": "Provvigione di Default per una Vendita (%)",
+    "rentMarkup": "Provvigione di Default per un Affitto (%)",
+    "realEstateEmailSending": "Invia una Email ai richiedenti con gli immobili corrispondenti ai criteri",
+    "realEstatePropertyTemplate": "Modello Email per gli Immobili",
+    "realEstateEmailSendingAssignedUserCc": "Aggiungi l'utente assegnato ai CC"
+  }
+}

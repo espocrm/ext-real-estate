@@ -1,0 +1,67 @@
+{
+  "labels": {
+    "Create RealEstateProperty": "Crear Finca",
+    "Matching Requests": "Coincidencias"
+  },
+  "fields": {
+    "type": "Tipo",
+    "address": "Dirección",
+    "contacts": "Contactos",
+    "status": "Estado",
+    "assignedUser": "Usuario Asignado",
+    "images": "Imágenes",
+    "sellers": "Vendedores",
+    "square": "Superficie",
+    "yearBuilt": "Año de Construcción",
+    "documents": "Documentos",
+    "requestType": "Tipo de Solicitud",
+    "price": "Precio",
+    "priceConverted": "Precio (Conversión)",
+    "bedroomCount": "Número de Dormitorios",
+    "bathroomCount": "Número de Baños",
+    "floor": "Plantas",
+    "floorCount": "Número de Plantas",
+    "location": "Ubicación",
+    "matchingRequest": "Coincidencias",
+    "number": "Número",
+    "account": "Cuenta",
+    "addressMap": "Mapa"
+  },
+  "options": {
+    "type": {
+      "Apartment": "Apartmento",
+      "Separate House": "Chalet",
+      "Office": "Oficina",
+      "Warehouse": "Almacén",
+      "Retail": "Al por menor",
+      "Farm": "Granja",
+      "Room": "Habitación",
+      "Land Lot": "Lote de Terreno"
+    },
+    "status": {
+      "New": "Nuevo",
+      "Assigned": "Asignado",
+      "In Process": "En Proceso",
+      "Completed": "Completedo",
+      "Canceled": "Cancelado",
+      "Lost": "Perdido"
+    },
+    "requestType": {
+      "Rent": "Alquiler",
+      "Sale": "Venta"
+    }
+  },
+  "links": {
+    "contacts": "Contactos",
+    "documents": "Documentos",
+    "opportunities": "Oportunidades",
+    "location": "Ubicación",
+    "account": "Cuenta"
+  },
+  "presetFilters": {
+    "completed": "Completado",
+    "actual": "Actual",
+    "actualRent": "Alquiler Actual",
+    "actualSale": "Venta Actual"
+  }
+}

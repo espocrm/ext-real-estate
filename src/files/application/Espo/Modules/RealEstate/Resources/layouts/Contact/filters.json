@@ -1,0 +1,10 @@
+[
+	"account",
+    "address",
+	"assignedUser",
+	"createdAt",
+	"emailAddress",
+    "phoneNumber",
+	"title",
+	"targetLists"
+]

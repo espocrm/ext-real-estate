@@ -1,0 +1,22 @@
+{
+    "fields": {
+        "isProcessed": {
+            "type": "bool",
+            "readOnly": true
+        },
+        "createdAt": {
+            "type": "datetime",
+            "readOnly": true
+        }
+    },
+    "links": {
+        "property": {
+            "type": "belongsTo",
+            "entity": "RealEstateProperty"
+        },
+        "request": {
+            "type": "belongsTo",
+            "entity": "RealEstateRequest"
+        }
+    }
+}

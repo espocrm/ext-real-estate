@@ -1,0 +1,72 @@
+{
+  "labels": {
+    "Create RealEstateRequest": "Cr�er une Demande",
+    "Matching Properties": "Biens Correspondants",
+    "Create Opportunity": "Cr�er une Opportunit�",
+    "Not Interested": "Pas int�ress�",
+    "Unset Not Interested": "D�sactiver Pas Int�ress�"
+  },
+  "fields": {
+    "status": "Statut",
+    "assignedUser": "Utilisateur Assign�",
+    "propertyType": "Type de Bien",
+    "number": "Nombre",
+    "fromPrice": "Prix Min",
+    "toPrice": "Prix Max",
+    "fromSquare": "Surface Min",
+    "toSquare": "Surface Max",
+    "fromBedroomCount": "Nbre Chambre Min",
+    "toBedroomCount": "Nbre Chambre Max",
+    "fromBathroomCount": "Nbre SDB Min",
+    "toBathroomCount": "Nbre SDB Max",
+    "fromFloor": "Niveau Min",
+    "toFloor": "Niveau Max",
+    "fromFloorCount": "Nbre Niveaux Min",
+    "toFloorCount": "Nbre Niveaux Max",
+    "fromPriceConverted": "Prix Min (Converti)",
+    "toPriceConverted": "Prix Max (Converti)",
+    "price": "Prix",
+    "bedroomCount": "Nbre Chambre",
+    "bathroomCount": "Nbre SDB",
+    "floor": "niveau",
+    "floorCount": "Nbre de Niveaux",
+    "square": "Surface",
+    "locations": "Emplacements",
+    "matchingProperty": "Biens Correspondants",
+    "yearBuilt": "Ann�e de Construction",
+    "fromYearBuilt": "Ann�e de Construction Min",
+    "toYearBuilt": "Ann�e de Construction Max"
+  },
+  "links": {
+    "opportunities": "Opportunit�s",
+    "locations": "Emplacements"
+  },
+  "options": {
+    "status": {
+      "New": "Neuf",
+      "Assigned": "Assign�",
+      "In Process": "En Cours",
+      "Completed": "Complet�",
+      "Canceled": "Annul�",
+      "Lost": "Perdu"
+    },
+    "type": {
+      "Rent": "Location",
+      "Sale": "Vente"
+    },
+    "propertyType": {
+      "Apartment": "Appartement",
+      "Separate House": "Maison Individuelle",
+      "Office": "Bureau",
+      "Warehouse": "Entrep�t",
+      "Retail": "Commerce",
+      "Farm": "Ferme"
+    }
+  },
+  "presetFilters": {
+    "completed": "Termin�",
+    "actual": "Exact",
+    "actualRent": "Loyer en Cours",
+    "actualSale": "Vente en Cours"
+  }
+}

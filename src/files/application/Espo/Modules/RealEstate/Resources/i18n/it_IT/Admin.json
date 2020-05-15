@@ -1,0 +1,14 @@
+{
+  "layouts": {
+    "listForProperty": "Lista (per Immobili)",
+    "listForRequest": "Lista (per le Richieste)"
+  },
+  "labels": {
+    "Real Estate": "Real Estate",
+    "Locations": "Zone"
+  },
+  "descriptions": {
+    "realEstateSettings": "Parametri per l'estensione Real Estate.",
+    "realEstateLocations": "Gestisci Zone per Real Estate."
+  }
+}

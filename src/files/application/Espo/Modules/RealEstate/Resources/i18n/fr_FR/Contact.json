@@ -1,0 +1,19 @@
+{
+  "fields": {
+    "properties": "Biens",
+    "propertyRole": "R�le"
+  },
+  "options": {
+    "propertyRole": {
+      "Landlord": "Propri�taire",
+      "Tenant": "Locataire",
+      "Property Manager": "Administrateur du Bien",
+      "Requester": "Demandeur"
+    }
+  },
+  "links": {
+    "properties": "Biens",
+    "requests": "Demandes",
+    "requestsPrimary": "Demandes (principales)"
+  }
+}

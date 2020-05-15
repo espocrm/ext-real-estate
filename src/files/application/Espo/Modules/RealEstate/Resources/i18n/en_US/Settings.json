@@ -1,0 +1,9 @@
+{
+    "fields": {
+        "saleMarkup": "Default Markup for Sale (%)",
+        "rentMarkup": "Default Markup for Rent (%)",
+        "realEstateEmailSending": "Email requestors about matching properties",
+        "realEstatePropertyTemplate": "Email Template for Property",
+        "realEstateEmailSendingAssignedUserCc": "Add assigned user to CC"
+    }
+}

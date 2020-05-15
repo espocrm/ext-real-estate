@@ -1,0 +1,22 @@
+[
+    {
+        "name": "name",
+        "link": true,
+        "width": 32,
+        "notSortable": true
+    },
+    {
+        "name": "status",
+        "width": 18,
+        "notSortable": true
+    },
+    {
+        "name": "contact",
+        "width": 25,
+        "notSortable": true
+    },
+    {
+        "name": "price",
+        "notSortable": true
+    }
+]

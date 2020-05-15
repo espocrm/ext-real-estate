@@ -1,0 +1,17 @@
+[
+    "matchingRequest",
+    "type",
+    "status",
+    "matchingRequestCount",
+    "location",
+    "priceConverted",
+    "square",
+    "addressPostalCode",
+    "bathroomCount",
+    "bedroomCount",
+    "floor",
+    "floorCount",
+    "yearBuilt",
+    "assignedUser",
+    "address"
+]

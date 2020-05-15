@@ -1,0 +1,23 @@
+{
+    "espocrm": {
+        "repository": "https://github.com/espocrm/espocrm.git",
+        "branch": "stable"
+    },
+    "database": {
+        "driver": "pdo_mysql",
+        "host": "localhost",
+        "port": "",
+        "charset": "utf8mb4",
+        "dbname": "real-estate",
+        "user": "root",
+        "password": ""
+    },
+    "install": {
+        "language": "en_US",
+        "defaultOwner": "www-data",
+        "defaultGroup": "www-data",
+        "siteUrl": "http://localhost/real-estate/site",
+        "adminUsername": "admin",
+        "adminPassword": "1"
+    }
+}

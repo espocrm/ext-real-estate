@@ -1,0 +1,22 @@
+{
+    "realEstate": {
+        "label": "Real Estate",
+        "items":[
+            {
+                "url": "#RealEstateRequest/settings",
+                "label": "Settings",
+                "description": "realEstateSettings"
+            },
+            {
+                "url": "#RealEstateLocation",
+                "label": "Locations",
+                "description": "realEstateLocations"
+            },
+            {
+                "url": "#RealEstateRequest/matchingConfiguration",
+                "label":  "Property Matching",
+                "description": "propertyMatching"
+            }
+        ]
+    }
+}

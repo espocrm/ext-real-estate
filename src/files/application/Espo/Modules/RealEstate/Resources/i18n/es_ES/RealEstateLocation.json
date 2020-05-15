@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "Create Location": "Crear Ubicación"
+  },
+  "fields": {
+    "address": "Dirección"
+  },
+  "tooltips": {
+    "address": "Esta dirección será insertada en el campo dirección de la finca una vez que especifique su localización. Puede dejar vacíos los campos de dirección no obligatorios."
+  }
+}

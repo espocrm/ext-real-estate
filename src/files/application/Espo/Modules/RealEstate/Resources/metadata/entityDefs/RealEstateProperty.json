@@ -1,0 +1,342 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "readOnly": true,
+            "view": "real-estate:views/real-estate-property/fields/name",
+            "matchingDisabled": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "createdAt": {
+            "type": "datetime",
+            "readOnly": true,
+            "matchingDisabled": true
+        },
+        "modifiedAt": {
+            "type": "datetime",
+            "readOnly": true,
+            "matchingDisabled": true
+        },
+        "createdBy": {
+            "type": "link",
+            "readOnly": true,
+            "matchingDisabled": true
+        },
+        "modifiedBy": {
+            "type": "link",
+            "readOnly": true,
+            "matchingDisabled": true
+        },
+        "assignedUser": {
+            "type": "link",
+            "required": false
+        },
+        "teams": {
+            "type": "linkMultiple"
+        },
+        "type": {
+            "type": "enum",
+            "options": [
+                "Apartment",
+                "Separate House",
+                "Room",
+                "Land Lot",
+                "Office",
+                "Warehouse",
+                "Retail",
+                "Farm"
+            ],
+            "isSorted": false,
+            "default": "Apartment",
+            "matchingDisabled": true
+        },
+        "address": {
+            "type": "address"
+        },
+        "addressMap": {
+            "type": "map",
+            "notStorable": true,
+            "readOnly": true,
+            "height": 300,
+            "view": "real-estate:views/real-estate-property/fields/address-map",
+            "layoutListDisabled": true,
+            "layoutSearchDisabled": true,
+            "layoutMassUpdateDisabled": true
+        },
+        "status": {
+            "type": "enum",
+            "options": [
+                "New",
+                "Assigned",
+                "In Process",
+                "Completed",
+                "Canceled",
+                "Lost"
+            ],
+            "default": "New",
+            "isSorted": false,
+            "view": "views/fields/enum-styled",
+            "style": {
+                "Completed": "success",
+                "Lost": "danger",
+                "Canceled": "danger"
+            },
+            "matchingDisabled": true
+        },
+        "number": {
+            "type": "autoincrement",
+            "autoincrement": true,
+            "unique": true,
+            "matchingDisabled": true
+        },
+        "location": {
+            "type": "link",
+            "view": "real-estate:views/real-estate-property/fields/location",
+            "matchingDisabled": true
+        },
+        "images": {
+            "type": "attachmentMultiple",
+            "required": false,
+            "layoutListDisabled": true
+        },
+        "contacts": {
+            "type": "linkMultiple",
+            "view": "views/fields/link-multiple-with-role",
+            "columns": {
+                "role": "propertyRole"
+            },
+            "view": "real-estate:views/real-estate-property/fields/contacts",
+            "additionalAttributeList": ["columns"]
+        },
+        "contactRole": {
+            "view": "real-estate:views/real-estate-property/fields/contact-role",
+            "type": "enum",
+            "notStorable": true,
+            "layoutMassDetailDisabled": true,
+            "layoutMassUpdateDisabled": true,
+            "layoutMassFiltersDisabled": true,
+            "customizationOptionsDisabled": true,
+            "layoutAvailabilityList": ["listForContact"],
+            "translation": "Contact.options.propertyRole"
+        },
+        "account": {
+            "type": "link",
+            "matchingDisabled": true
+        },
+        "requestType": {
+            "type": "enum",
+            "required": false,
+            "default": "Rent",
+            "view": "real-estate:views/real-estate-property/fields/request-type",
+            "customizationOptionsDisabled": true,
+            "isSorted": false,
+            "matchingDisabled": true
+        },
+        "price": {
+            "type": "currency",
+            "required": false,
+            "matchingDisabled": true
+        },
+        "square": {
+            "notNull": false,
+            "type": "float",
+            "required": false,
+            "min": 0,
+            "isMatching": true
+        },
+        "yearBuilt": {
+            "type": "int",
+            "required": false,
+            "min": 0,
+            "max": 2100,
+            "isMatching": true
+        },
+        "bedroomCount": {
+            "type": "int",
+            "required": false,
+            "min": 0,
+            "isMatching": true
+        },
+        "bathroomCount": {
+            "type": "int",
+            "required": false,
+            "min": 0,
+            "isMatching": true
+        },
+        "floor": {
+            "type": "int",
+            "required": false,
+            "isMatching": true
+        },
+        "floorCount": {
+            "type": "int",
+            "required": false,
+            "min": 0,
+            "default": 1,
+            "isMatching": true
+        },
+        "matchingRequest": {
+            "type": "link",
+            "entity": "RealEstateRequest",
+            "notStorable": true,
+            "layoutDetailDisabled": true,
+            "layoutListDisabled": true,
+            "view": "real-estate:views/real-estate-property/fields/matching-request",
+            "matchingDisabled": true
+        },
+        "interestDegree": {
+            "type": "int",
+            "notStorable": true,
+            "disabled": true,
+            "matchingDisabled": true
+        },
+        "matchingRequestCount": {
+            "type": "int",
+            "readOnly": true,
+            "matchingDisabled": true,
+            "customizationReadOnlyDisabled": true,
+            "customizationMinDisabled": true,
+            "customizationMaxDisabled": true,
+            "customizationAuditedDisabled": true,
+            "customizationRequiredDisabled": true,
+            "customizationDefaultDisabled": true
+        }
+    },
+    "links": {
+        "createdBy": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "modifiedBy": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "assignedUser": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "teams": {
+            "type": "hasMany",
+            "entity": "Team",
+            "relationName": "EntityTeam",
+            "layoutRelationshipsDisabled": true
+        },
+        "images": {
+            "type": "hasChildren",
+            "entity": "Attachment",
+            "foreign": "parent",
+            "layoutRelationshipsDisabled": true,
+            "relationName": "attachments"
+        },
+        "contacts": {
+            "type": "hasMany",
+            "foreign": "properties",
+            "entity": "Contact",
+            "additionalColumns": {
+                "role": {
+                    "type": "varchar",
+                    "len": 50
+                }
+            }
+        },
+        "account": {
+            "type": "belongsTo",
+            "foreign": "properties",
+            "entity": "Account"
+        },
+        "documents": {
+            "type": "hasMany",
+            "foreign": "properties",
+            "entity": "Document"
+        },
+        "location": {
+            "type": "belongsTo",
+            "foreign": "properties",
+            "entity": "RealEstateLocation"
+        },
+        "opportunities": {
+            "type": "hasMany",
+            "foreign": "property",
+            "entity": "Opportunity"
+        },
+        "meetings": {
+            "type": "hasChildren",
+            "foreign": "parent",
+            "entity": "Meeting",
+            "audited": true
+        },
+        "calls": {
+            "type": "hasChildren",
+            "foreign": "parent",
+            "entity": "Call",
+            "audited": true
+        },
+        "tasks": {
+            "type": "hasChildren",
+            "foreign": "parent",
+            "entity": "Task",
+            "audited": true
+        },
+        "requests": {
+            "type": "hasMany",
+            "foreign": "properties",
+            "entity": "RealEstateRequest",
+            "layoutRelationshipsDisabled": true,
+            "disabled": true,
+            "additionalColumns": {
+                "interestDegree": {
+                    "type": "int",
+                    "default": 1
+                }
+            }
+        }
+    },
+    "collection": {
+        "sortBy": "createdAt",
+        "asc": false,
+        "textFilterFields": ["name", "addressCity", "addressStreet", "description"]
+    },
+    "indexes": {
+        "name": {
+            "columns": [
+                "name",
+                "deleted"
+            ]
+        },
+        "assignedUser": {
+            "columns": [
+                "assignedUserId",
+                "deleted"
+            ]
+        }
+    },
+    "propertyTypes": {
+        "Apartment": {
+            "fieldList": ["bedroomCount", "bathroomCount", "floor", "floorCount", "yearBuilt", "square"]
+        },
+        "Separate House": {
+            "fieldList": ["bedroomCount", "bathroomCount", "floorCount", "yearBuilt", "square"]
+        },
+        "Room": {
+            "fieldList": ["floor", "yearBuilt", "square"]
+        },
+        "Office": {
+            "fieldList": ["floor", "floorCount", "yearBuilt", "square"]
+        },
+        "Land Lot": {
+            "fieldList": ["square"]
+        },
+        "Warehouse": {
+            "fieldList": ["yearBuilt", "square"]
+        },
+        "Retail": {
+            "fieldList": ["yearBuilt", "square"]
+        },
+        "Farm": {
+            "fieldList": ["yearBuilt", "square"]
+        }
+    },
+    "matchingFieldTypeList": ["int", "float"]
+}

@@ -1,0 +1,77 @@
+{
+  "labels": {
+    "Create RealEstateRequest": "Crear Solicitud",
+    "Matching Properties": "Fincas Coincidentes",
+    "Create Opportunity": "Crear Oportunidad",
+    "Not Interested": "No interesado",
+    "Unset Not Interested": "Desactivar no interesado"
+  },
+  "fields": {
+    "status": "Estado",
+    "assignedUser": "Usuario Asignado",
+    "type": "Tipo",
+    "propertyType": "Tipo de Finca",
+    "number": "Número",
+    "contact": "Contacto",
+    "contacts": "Contactos",
+    "fromPrice": "Precio Mínimo",
+    "toPrice": "Precio Máximo",
+    "fromSquare": "Superficie Mínima",
+    "toSquare": "Superficie Máxima",
+    "fromBedroomCount": "Mínimo Número de Dormitorios",
+    "toBedroomCount": "Máximo Número de Dormitorios",
+    "fromBathroomCount": "Mínimo Número de Baños",
+    "toBathroomCount": "Máximo Número de Baños",
+    "fromFloor": "Planta Mínima",
+    "toFloor": "Planta Máxima",
+    "fromFloorCount": "Mínimo Número de Plantas",
+    "toFloorCount": "Máximo Número de Plantas",
+    "fromPriceConverted": "Precio Mínimo (Convertido)",
+    "toPriceConverted": "Precio Máximo (Convertido)",
+    "price": "Precio",
+    "bedroomCount": "Número de Dormitorios",
+    "bathroomCount": "Número de Baños",
+    "floor": "Plantas",
+    "floorCount": "Número de Plantas",
+    "square": "Superficie",
+    "locations": "Ubicaciones",
+    "matchingProperty": "Finca Coincidente",
+    "yearBuilt": "Año de Construcción",
+    "fromYearBuilt": "Mínimo Año de Construcción",
+    "toYearBuilt": "Máximo Año de Construcción"
+  },
+  "links": {
+    "contact": "Contacto",
+    "contacts": "Contactos",
+    "opportunities": "Oportunidades",
+    "locations": "Ubicaciones"
+  },
+  "options": {
+    "status": {
+      "New": "Nuevo",
+      "Assigned": "Asignado",
+      "In Process": "En Proceso",
+      "Completed": "Completado",
+      "Canceled": "Cancelado",
+      "Lost": "Perdido"
+    },
+    "type": {
+      "Rent": "Alquiler",
+      "Sale": "Venta"
+    },
+    "propertyType": {
+      "Apartment": "Apartmento",
+      "Separate House": "Chalet",
+      "Office": "Oficina",
+      "Warehouse": "Almacén",
+      "Retail": "Venta al por menor",
+      "Farm": "Granja"
+    }
+  },
+  "presetFilters": {
+    "completed": "Completedo",
+    "actual": "Actual",
+    "actualRent": "Alquiler Actual",
+    "actualSale": "Venta Actual"
+  }
+}

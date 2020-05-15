@@ -1,0 +1,10 @@
+{
+    "links": {
+        "properties": {
+            "type": "hasMany",
+            "foreign": "documents",
+            "entity": "RealEstateProperty",
+            "isCustom": true
+        }
+    }
+}

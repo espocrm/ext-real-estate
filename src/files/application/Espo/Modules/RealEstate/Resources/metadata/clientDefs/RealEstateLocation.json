@@ -1,0 +1,29 @@
+{
+    "controller": "controllers/record-tree",
+    "collection": "collections/tree",
+    "menu": {
+        "listTree": {
+            "buttons": [
+                {
+                    "label": "List View",
+                    "link": "#RealEstateLocation\/list",
+                    "acl": "read",
+                    "style": "default"
+                }
+            ]
+        },
+        "list": {
+            "buttons": [
+                {
+                    "label": "Tree View",
+                    "link": "#RealEstateLocation",
+                    "acl": "read",
+                    "style": "default"
+                }
+            ]
+        }
+    },
+    "recordViews": {
+        "listTree": "real-estate:views/real-estate-location/record/list-tree"
+    }
+}

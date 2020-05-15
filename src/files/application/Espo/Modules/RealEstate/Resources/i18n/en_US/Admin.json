@@ -1,0 +1,16 @@
+{
+    "layouts": {
+        "listForProperty": "List (for Property)",
+        "listForRequest": "List (for Request)"
+    },
+    "labels": {
+        "Real Estate": "Real Estate",
+        "Locations": "Locations",
+        "Property Matching": "Property Matching"
+    },
+    "descriptions": {
+        "realEstateSettings": "Parameters for Real Estate extension.",
+        "realEstateLocations": "Manage Locations for Real Estate.",
+        "propertyMatching": "Matching configuration."
+    }
+}

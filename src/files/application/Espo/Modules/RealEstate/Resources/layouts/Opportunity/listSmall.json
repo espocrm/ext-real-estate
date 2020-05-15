@@ -1,0 +1,17 @@
+[
+    {
+        "name": "name",
+        "width": 32,
+        "link": true
+    },
+    {
+        "name": "property"
+    },
+    {
+        "name": "stage",
+        "width": 22
+    },
+    {
+        "name": "createdAt"
+    }
+]

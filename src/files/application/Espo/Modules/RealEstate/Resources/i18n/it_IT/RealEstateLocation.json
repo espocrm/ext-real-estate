@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "Create Location": "Crea Zona"
+  },
+  "fields": {
+    "address": "Indirizzo"
+  },
+  "tooltips": {
+    "address": "Questo indirizzo sarà inserito nel campo Indirizzo Immobile dopo che avrai specificato la zona. Lascia le maschere dell'indirizzo non necessarie vuote."
+  }
+}

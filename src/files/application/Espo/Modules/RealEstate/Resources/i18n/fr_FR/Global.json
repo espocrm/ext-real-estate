@@ -1,0 +1,16 @@
+{
+  "scopeNames": {
+    "RealEstateProperty": "Biens",
+    "RealEstateRequest": "Demande",
+    "RealEstateLocation": "Emplacement"
+  },
+  "scopeNamesPlural": {
+    "RealEstateProperty": "Biens",
+    "RealEstateRequest": "Demandes",
+    "RealEstateLocation": "Emplacements"
+  },
+  "dashlets": {
+    "Properties": "Mes Biens",
+    "Requests": "Mes demandes"
+  }
+}

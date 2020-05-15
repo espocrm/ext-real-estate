@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "property": "Bien",
+    "request": "Demande"
+  },
+  "options": {
+    "contactRole": {
+      "Landlord": "Propri�taire",
+      "Tenant": "Locataire",
+      "Property Manager": "Administrateur de biens"
+    }
+  },
+  "links": {
+    "property": "Bien",
+    "request": "Demande"
+  }
+}

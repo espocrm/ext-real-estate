@@ -1,0 +1,10 @@
+[
+    {
+        "route": "RealEstateMatchingConfiguration",
+        "method": "put",
+        "params": {
+            "controller": "RealEstateMatchingConfiguration",
+            "action": "update"
+        }
+    }
+]

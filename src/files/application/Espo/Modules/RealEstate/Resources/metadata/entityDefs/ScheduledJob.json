@@ -1,0 +1,6 @@
+{
+    "jobSchedulingMap": {
+        "PropertyMatchingUpdate": "55 */2 * * *",
+        "SendPropertyMatches": "*/2 * * * *"
+    }
+}
