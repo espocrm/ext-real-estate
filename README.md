@@ -41,7 +41,7 @@ You can access it with credentials:
 
 ### Full EspoCRM instance building
 
-It will download EspoCRM, build, install it, then install the extension.
+It will download EspoCRM (from the repository specified in the config), then build and install it. Then it will install the extension.
 
 Command:
 
