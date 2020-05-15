@@ -39,7 +39,7 @@ if (helpers.hasProcessParam('copy')) {
         console.log('Done');
     });
 }
-if (helpers.hasProcessParam('afterInstall')) {
+if (helpers.hasProcessParam('after-install')) {
     afterInstall().then(function () {
         console.log('Done');
     });

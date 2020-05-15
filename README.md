@@ -61,10 +61,12 @@ node build --copy
 
 ### Running after-install script
 
+AfterInstall.php will be applied for EspoCRM instance.
+
 Command:
 
 ```
-node build --afterInstall
+node build --after-install
 ```
 
 ### Extension package building
