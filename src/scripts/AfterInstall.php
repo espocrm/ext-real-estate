@@ -48,7 +48,6 @@ class AfterInstall
             array_unshift($quickCreateList, 'RealEstateRequest');
         }
 
-
         $globalSearchEntityList = $config->get('globalSearchEntityList', []);
 
         if (!in_array('RealEstateRequest', $globalSearchEntityList)) {
@@ -71,51 +70,57 @@ class AfterInstall
         $config->set('tabList', $tabList);
         $config->set('quickCreateList', $quickCreateList);
         $config->set('globalSearchEntityList', $globalSearchEntityList);
-        $config->set('saleMarkup', 5);
-        $config->set('rentMarkup', 50);
 
+        if ($config->get('saleMarkup') == null) {
+            $config->set('saleMarkup', 5);
+        }
+        if ($config->get('rentMarkup') == null) {
+            $config->set('rentMarkup', 50);
+        }
 
-        $config->set('dashboardLayoutBeforeRealEstate', $config->get('dashboardLayout'));
+        if (!$config->get('dashboardLayoutBeforeRealEstate')) {
+            $config->set('dashboardLayoutBeforeRealEstate', $config->get('dashboardLayout'));
 
-        $config->set('dashboardLayout', [
-            (object) [
-                'name' => 'My Espo',
-                'layout' => [
-                    (object) [
-                        'id' => 'd514529',
-                        'name' => 'Stream',
-                        'x' => 0,
-                        'y' => 0,
-                        'width' => 2,
-                        'height' => 2
-                    ],
-                    (object) [
-                        'id' => 'd665441',
-                        'name' => 'Properties',
-                        'x' => 2,
-                        'y' => 2,
-                        'width' => 2,
-                        'height' => 2
-                    ],
-                    (object) [
-                        'id' => 'd272694',
-                        'name' => 'Requests',
-                        'x' => 2,
-                        'y' => 0,
-                        'width' => 2,
-                        'height' => 2
-                    ],
-                    (object) [
-                        'id' => 'd319362',
-                        'name' => 'Opportunities',
-                        'x' => 0,
-                        'y' => 2,
-                        'width' => 2,
-                        'height' => 2
+            $config->set('dashboardLayout', [
+                (object) [
+                    'name' => 'My Espo',
+                    'layout' => [
+                        (object) [
+                            'id' => 'reStream',
+                            'name' => 'Stream',
+                            'x' => 0,
+                            'y' => 0,
+                            'width' => 2,
+                            'height' => 2
+                        ],
+                        (object) [
+                            'id' => 'reProperties',
+                            'name' => 'Properties',
+                            'x' => 2,
+                            'y' => 2,
+                            'width' => 2,
+                            'height' => 2
+                        ],
+                        (object) [
+                            'id' => 'reRequests',
+                            'name' => 'Requests',
+                            'x' => 2,
+                            'y' => 0,
+                            'width' => 2,
+                            'height' => 2
+                        ],
+                        (object) [
+                            'id' => 'reOpportunities',
+                            'name' => 'Opportunities',
+                            'x' => 0,
+                            'y' => 2,
+                            'width' => 2,
+                            'height' => 2
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
+        }
 
         $config->save();
 
