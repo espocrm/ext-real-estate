@@ -85,7 +85,7 @@ Note: The version number is taken from `package.json`.
 
 1. Do development in `src` dir.
 2. Run `node build --copy`.
-3. Test changes in EspoCRM instance at `site` dir.
+3. Test changes in EspoCRM instance at `site` dir by opening it in a browser. A URL will look like: `http://localhost/real-estate/site`, depending on how you named your directory.
 
 ## Tests
 
