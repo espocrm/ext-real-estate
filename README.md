@@ -34,6 +34,8 @@ You can access it with credentials:
 * Username: admin
 * Password: 1
 
+Note: You can build on Linux and Windows OS. Commands are the same.
+
 ### Preparation
 
 1. You need to have *node*, *npm*, *composer* installed.
