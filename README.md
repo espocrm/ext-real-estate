@@ -116,7 +116,7 @@ You need to have EspoCRM instance built.
 1. `cd site`
 2. `node po en_US --module=RealEstate`
 
-Replace `en_US` with a language you need to translate to.
+Replace `en_US` with a language code you need to translate to.
 
 This will generate PO file in `site/build/` directory. You will need to translate this file.
 
@@ -127,7 +127,7 @@ Assuming you have translated PO file in build directory with the same name as wh
 1. `cd site`
 2. `node lang en_US --module=RealEstate`
 
-Replace `en_US` with the target language.
+Replace `en_US` with the target language code.
 
 This will generate language files in `site/build/` directory. You will need to copy these files to `src/files/` directory and commit.
 
