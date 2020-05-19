@@ -109,7 +109,7 @@ vendor/bin/phpunit --bootstrap=./vendor/autoload.php tests/integration/Espo/Modu
 
 ## Translation
 
-You need to have EspoCRM instance built.
+Assuming that you have already built EspoCRM instance.
 
 ### Building PO file
 
