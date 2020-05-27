@@ -109,6 +109,18 @@ Integration tests:
 vendor/bin/phpunit --bootstrap=./vendor/autoload.php tests/integration/Espo/Modules/RealEstate
 ```
 
+## Version
+
+The version number is stored in `package.json` and `package-lock.json`.
+
+Bumping version:
+
+```
+npm version patch
+npm version minor
+npm version major
+```
+
 ## Translation
 
 Assuming that you have already built EspoCRM instance.
@@ -126,7 +138,6 @@ Assuming you have translated PO file in build directory with the same name as wh
 
 1. Change dir: `cd site`
 2. Run: `node lang en_US --module=RealEstate` (replace `en_US` with the target language code)
-
 
 This will generate language files in `site/build/` directory. You will need to copy these files to `src/files/` directory and commit.
 
