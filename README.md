@@ -110,7 +110,7 @@ Integration tests:
 vendor/bin/phpunit --bootstrap=./vendor/autoload.php tests/integration/Espo/Modules/RealEstate
 ```
 
-## Version
+## Versioning
 
 The version number is stored in `package.json` and `package-lock.json`.
 
