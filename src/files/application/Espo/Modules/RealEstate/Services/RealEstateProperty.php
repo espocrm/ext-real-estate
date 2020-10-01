@@ -70,61 +70,82 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         return parent::find($params);
     }
 
-    public function getMatchingRequestsSelectParams($entity, $params)
+    public function getMatchingRequestsSelectParams(Entity $entity, array $params) : array
     {
-        $pdo = $this->getEntityManager()->getPDO();
-
         $selectManager = $this->getSelectManager('RealEstateRequest');
+
         $selectParams = $selectManager->getSelectParams($params, true);
 
         $locationId = $entity->get('locationId');
+
         if ($locationId) {
             $selectParams['leftJoins'][] = 'locations';
-            $selectParams['customJoin'] .= "
-                LEFT JOIN real_estate_location_path AS `realEstateLocationPathLeft` ON realEstateLocationPathLeft.descendor_id = locationsMiddle.real_estate_location_id
-                LEFT JOIN real_estate_location_path AS `realEstateLocationPathRight` ON realEstateLocationPathRight.ascendor_id = locationsMiddle.real_estate_location_id
-            ";
+
+            $selectParams['leftJoins'][] = [
+                'RealEstateLocationPath',
+                'realEstateLocationPathLeft',
+                [
+                    'realEstateLocationPathLeft.descendorId=:' => 'locationsMiddle.realEstateLocationId',
+                ],
+            ];
+
+            $selectParams['leftJoins'][] = [
+                'RealEstateLocationPath',
+                'realEstateLocationPathRight',
+                [
+                    'realEstateLocationPathLeft.ascendorId=:' => 'locationsMiddle.realEstateLocationId',
+                ],
+            ];
 
             $selectParams['whereClause'][] = [
                 'OR' => [
                     ['realEstateLocationPathRight.descendorId' => $locationId],
                     ['realEstateLocationPathLeft.ascendorId' => $locationId],
-                    ['locations.id' => null]
+                    ['locations.id' => null],
                 ]
             ];
+
             $selectParams['distinct'] = true;
         }
 
-        if (empty($selectParams['customWhere'])) {
-            $selectParams['customWhere'] = '';
-        }
-        if (empty($selectParams['customJoin'])) {
-            $selectParams['customJoin'] = '';
-        }
-
-        $selectParams['customWhere'] .=
-            " AND real_estate_request.id NOT IN (SELECT request_id FROM opportunity WHERE property_id = ".$pdo->quote($entity->id)." AND deleted = 0)";
-
-        $selectParams['customJoin'] .= "
-            LEFT JOIN real_estate_property_real_estate_request AS requestsMiddle
-            ON
-            requestsMiddle.real_estate_request_id = real_estate_request.id AND
-            requestsMiddle.deleted = 0 AND
-            requestsMiddle.real_estate_property_id = ".$pdo->quote($entity->id)."
-        ";
-
-        $selectParams['additionalSelectColumns'] = [
-            'requestsMiddle.interest_degree' => 'interestDegree'
+        $selectParams['whereClause'][] = [
+            'id!=s' => [
+                'from' => 'Opportunity',
+                'select' => ['requestId'],
+                'whereClause' => [
+                    'propertyId=' => $entity->id,
+                    'deleted' => false,
+                ],
+            ],
         ];
+
+        $selectParams['leftJoins'][] = [
+            'RealEstatePropertyRealEstateRequest',
+            'requestsMiddle',
+            [
+                'requestsMiddle.realEstateRequestId=:' => 'id',
+                'requestsMiddle.deleted' => false,
+                'requestsMiddle.realEstatePropertyId=' => $entity->id,
+            ],
+        ];
+
+        if (empty($selectParams['select'])) {
+            $selectParams['select'] = ['*'];
+        }
+
+        $selectParams['select'][] = ['requestsMiddle.interestDegree', 'interestDegree'];
 
         $primaryFilter = null;
 
         switch ($entity->get('requestType')) {
             case 'Rent':
                 $primaryFilter = 'actualRent';
+
                 break;
+
             case 'Sale':
                 $primaryFilter = 'actualSale';
+
                 break;
         }
 
@@ -249,7 +270,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 
         if (!$customOrder) {
             $selectParams['orderBy'] = [
-                ['requestsMiddle.interest_degree'],
+                ['requestsMiddle.interestDegree'],
                 ['LIST:status:New,Assigned,In Process'],
                 ['createdAt', 'DESC'],
             ];

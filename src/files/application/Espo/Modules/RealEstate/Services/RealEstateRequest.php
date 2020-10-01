@@ -98,40 +98,56 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         return parent::find($params);
     }
 
-    public function getMatchingPropertiesSelectParams($entity, $params)
+    public function getMatchingPropertiesSelectParams(Entity $entity, array $params) : array
     {
-        $pdo = $this->getEntityManager()->getPDO();
-
         $selectManager = $this->getSelectManager('RealEstateProperty');
+
         $selectParams = $selectManager->getSelectParams($params, true);
 
         $locationIdList = $entity->getLinkMultipleIdList('locations');
 
+        $selectParams['leftJoins'] = $selectParams['leftJoins'] ?? [];
+
         if (!empty($locationIdList)) {
-            $selectParams['customJoin'] .= " JOIN real_estate_location_path AS `realEstateLocationPath` ON realEstateLocationPath.descendor_id = real_estate_property.location_id ";
+            $selectParams['leftJoins'][] = [
+                'RealEstateLocationPath',
+                'realEstateLocationPath',
+                [
+                    'realEstateLocationPath.descendorId=:' => 'locationId',
+                ]
+            ];
+
             $selectParams['whereClause']['realEstateLocationPath.ascendorId'] = $locationIdList;
+
             $selectParams['distinct'] = true;
         }
 
-        if (empty($selectParams['customWhere'])) {
-            $selectParams['customWhere'] = '';
-        }
-        if (empty($selectParams['customJoin'])) {
-            $selectParams['customJoin'] = '';
+        $selectParams['whereClause'][] = [
+            'id!=s' => [
+                'from' => 'Opportunity',
+                'select' => ['propertyId'],
+                'whereClause' => [
+                    'requestId=' => $entity->id,
+                    'deleted' => false,
+                ],
+            ],
+        ];
+
+        $selectParams['leftJoins'][] = [
+            'RealEstatePropertyRealEstateRequest',
+            'propertiesMiddle',
+            [
+                'propertiesMiddle.realEstatePropertyId=:' => 'id',
+                'propertiesMiddle.deleted' => false,
+                'propertiesMiddle.realEstateRequestId=' => $entity->id,
+            ],
+        ];
+
+        if (empty($selectParams['select'])) {
+            $selectParams['select'] = ['*'];
         }
 
-        $selectParams['customWhere'] .= " AND real_estate_property.id NOT IN (SELECT property_id FROM opportunity WHERE request_id = ".$pdo->quote($entity->id)." AND deleted = 0)";
-
-        $selectParams['customJoin'] .= "
-            LEFT JOIN real_estate_property_real_estate_request AS propertiesMiddle
-            ON
-            propertiesMiddle.real_estate_property_id = real_estate_property.id AND
-            propertiesMiddle.deleted = 0 AND
-            propertiesMiddle.real_estate_request_id = ".$pdo->quote($entity->id)."
-        ";
-        $selectParams['additionalSelectColumns'] = array(
-            'propertiesMiddle.interest_degree' => 'interestDegree'
-        );
+        $selectParams['select'][] = ['propertiesMiddle.interestDegree', 'interestDegree'];
 
         $primaryFilter = null;
 
