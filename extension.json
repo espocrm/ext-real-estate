@@ -4,9 +4,9 @@
     "description": "Provides the ability to manage real estate properties and requests.",
     "author": "EspoCRM",
     "acceptableVersions": [
-        ">=5.5.0"
+        ">=6.0.0"
     ],
     "php": [
-        ">=7.1"
+        ">=7.2"
     ]
 }
