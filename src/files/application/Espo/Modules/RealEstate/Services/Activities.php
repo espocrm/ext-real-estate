@@ -26,7 +26,7 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use \PDO;
+use PDO;
 
 class Activities extends \Espo\Modules\Crm\Services\Activities
 {
@@ -288,7 +288,4 @@ class Activities extends \Espo\Modules\Crm\Services\Activities
 
         return $sql;
     }
-
-
 }
-

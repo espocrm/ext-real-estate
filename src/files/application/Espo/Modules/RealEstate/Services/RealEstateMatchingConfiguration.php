@@ -26,28 +26,29 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use \Espo\Core\Exceptions\Forbidden;
-use \Espo\Core\Exceptions\BadRequest;
-use \Espo\Core\Exceptions\NotFound;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\NotFound;
 
-class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
+use Espo\Core\{
+    Utils\Metadata,
+    Utils\Language,
+};
+
+use StdClass;
+
+class RealEstateMatchingConfiguration
 {
-    protected function init()
+    protected $metadata;
+    protected $baseLanguage;
+
+    public function __construct(Metadata $metadata, Language $baseLanguage)
     {
-        parent::init();
-        $this->addDependencyList([
-            'serviceFactory',
-            'container',
-            'baseLanguage'
-        ]);
+        $this->metadata = $metadata;
+        $this->baseLanguage = $baseLanguage;
     }
 
-    protected function getBaseLanguage()
-    {
-        return $this->getInjection('container')->get('baseLanguage');
-    }
-
-    public function setMatchingParameters($data)
+    public function setMatchingParameters(StdClass $data)
     {
         $isMetadataChanged = false;
         $isLanguageChanged = false;
@@ -57,15 +58,23 @@ class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
 
         $propertyTypes = (object) [];
 
-        $typeList = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields', 'type', 'options'], []);
+        $typeList = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields', 'type', 'options'], []);
+
         foreach ($typeList as $type) {
             $key = 'fieldList_' . $type;
-            if (!isset($data->$key)) continue;
-            if (!is_array($data->$key)) continue;
+
+            if (!isset($data->$key)) {
+                continue;
+            }
+
+            if (!is_array($data->$key)) {
+                continue;
+            }
+
             $fieldList = $data->$key;
 
             $propertyTypes->$type = (object) [
-                'fieldList' => $fieldList
+                'fieldList' => $fieldList,
             ];
 
             foreach ($fieldList as $field) {
@@ -75,7 +84,7 @@ class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
             }
         }
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
         foreach ($fieldDefs as $field => $defs) {
             if (!empty($defs['isMatching'])) {
@@ -92,9 +101,11 @@ class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
                 if (!array_key_exists('fields', $entityDefsData)) {
                     $entityDefsData['fields'] = [];
                 }
+
                 if (!array_key_exists($field, $entityDefsData['fields'])) {
                     $entityDefsData['fields'][$field] = [];
                 }
+
                 $entityDefsData['fields'][$field]['isMatching'] = false;
 
                 if (!empty($fieldDefs[$field]['isCustom'])) {
@@ -107,38 +118,51 @@ class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
             if (!array_key_exists('fields', $entityDefsData)) {
                 $entityDefsData['fields'] = [];
             }
+
             if (!array_key_exists($field, $entityDefsData['fields'])) {
                 $entityDefsData['fields'][$field] = [];
             }
+
             $entityDefsData['fields'][$field]['isMatching'] = true;
         }
 
         $entityDefsData['propertyTypes'] = $propertyTypes;
 
         if (!empty($entityDefsData)) {
-            $this->getMetadata()->set('entityDefs', 'RealEstateProperty', $entityDefsData);
+            $this->metadata->set('entityDefs', 'RealEstateProperty', $entityDefsData);
+
             $isMetadataChanged = true;
         }
 
         $requestFieldDefs = [];
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+
         foreach ($fieldDefs as $field => $defs) {
             if (!empty($defs['isMatching']) && !empty($defs['isCustom'])) {
                 $type = $defs['type'];
-                if (!in_array($type, $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'matchingFieldTypeList'], []))) {
+
+                if (
+                    !in_array(
+                        $type,
+                        $this->metadata->get(['entityDefs', 'RealEstateProperty', 'matchingFieldTypeList'], [])
+                    )
+                ) {
                     continue;
                 }
 
                 if ($type === 'int' || $type === 'float') {
                     $fromName = 'from' . ucfirst($field);
                     $toName = 'to' . ucfirst($field);
+
                     $requestFieldDefs[$fromName] = [
                         'type' => $type
                     ];
+
                     $requestFieldDefs[$toName] = [
                         'type' => $type
                     ];
+
                     $requestFieldDefs[$field] = [
                         'type' => 'range' . ucfirst($type)
                     ];
@@ -147,53 +171,62 @@ class RealEstateMatchingConfiguration extends \Espo\Core\Templates\Services\Base
                         $requestFieldDefs[$fromName]['min'] = $defs['min'];
                         $requestFieldDefs[$toName]['min'] = $defs['min'];
                     }
+
                     if (array_key_exists('max', $defs)) {
                         $requestFieldDefs[$fromName]['max'] = $defs['max'];
                         $requestFieldDefs[$toName]['max'] = $defs['max'];
                     }
 
-                    $label = $this->getBaseLanguage()->translate($field, 'fields', 'RealEstateProperty');
-                    $minLabel = $this->getBaseLanguage()->translate('Min', 'labels', 'RealEstateRequest');
-                    $maxLabel = $this->getBaseLanguage()->translate('Max', 'labels', 'RealEstateRequest');
+                    $label = $this->baseLanguage->translate($field, 'fields', 'RealEstateProperty');
 
-                    $this->getBaseLanguage()->set('RealEstateRequest', 'fields', $field, $label);
-                    $this->getBaseLanguage()->set('RealEstateRequest', 'fields', $fromName, $minLabel . ' ' . $label);
-                    $this->getBaseLanguage()->set('RealEstateRequest', 'fields', $toName, $maxLabel . ' ' . $label);
+                    $minLabel = $this->baseLanguage->translate('Min', 'labels', 'RealEstateRequest');
+                    $maxLabel = $this->baseLanguage->translate('Max', 'labels', 'RealEstateRequest');
+
+                    $this->baseLanguage->set('RealEstateRequest', 'fields', $field, $label);
+                    $this->baseLanguage->set('RealEstateRequest', 'fields', $fromName, $minLabel . ' ' . $label);
+                    $this->baseLanguage->set('RealEstateRequest', 'fields', $toName, $maxLabel . ' ' . $label);
+
                     $isLanguageChanged = true;
                 }
             }
         }
 
         if (!empty($requestFieldDefs)) {
-            $this->getMetadata()->set('entityDefs', 'RealEstateRequest', [
+
+            $this->metadata->set('entityDefs', 'RealEstateRequest', [
                 'fields' => $requestFieldDefs
             ]);
+
             $isMetadataChanged = true;
         }
 
-
-        $this->getMetadata()->save();
+        $this->metadata->save();
 
         if ($isLanguageChanged) {
-            $this->getBaseLanguage()->save();
+            $this->baseLanguage->save();
         }
 
         if (!empty($toRemoveFieldList)) {
-            $requestCustomDefs = $this->getMetadata()->getCustom('entityDefs', 'RealEstateRequest');
+            $requestCustomDefs = $this->metadata->getCustom('entityDefs', 'RealEstateRequest');
+
             foreach ($toRemoveFieldList as $field) {
                 $fromField = 'from' . ucfirst($field);
                 $toField = 'to' . ucfirst($field);
+
                 if (isset($requestCustomDefs->fields) && isset($requestCustomDefs->fields->$field)) {
                     unset($requestCustomDefs->fields->$field);
+
                     if (isset($requestCustomDefs->fields->$fromField)) {
                         unset($requestCustomDefs->fields->$fromField);
                     }
+
                     if (isset($requestCustomDefs->fields->$toField)) {
                         unset($requestCustomDefs->fields->$toField);
                     }
                 }
             }
-            $this->getMetadata()->saveCustom('entityDefs', 'RealEstateRequest', $requestCustomDefs);
+
+            $this->metadata->saveCustom('entityDefs', 'RealEstateRequest', $requestCustomDefs);
         }
 
         return true;

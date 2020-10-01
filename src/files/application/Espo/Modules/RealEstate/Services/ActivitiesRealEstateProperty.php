@@ -26,13 +26,13 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use \Espo\Core\Exceptions\Error;
-use \Espo\Core\Exceptions\NotFound;
-use \Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\NotFound;
+use Espo\Core\Exceptions\Forbidden;
 
-use \Espo\ORM\Entity;
+use Espo\ORM\Entity;
 
-use \PDO;
+use PDO;
 
 class ActivitiesRealEstateProperty extends \Espo\Core\Services\Base
 {

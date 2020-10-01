@@ -30,4 +30,3 @@ class Opportunity extends \Espo\Modules\Crm\Services\Opportunity
 {
 
 }
-

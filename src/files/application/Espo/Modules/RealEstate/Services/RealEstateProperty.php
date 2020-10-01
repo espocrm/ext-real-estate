@@ -26,50 +26,48 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use \Espo\Core\Exceptions\Forbidden;
-use \Espo\Core\Exceptions\BadRequest;
-use \Espo\Core\Exceptions\NotFound;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\NotFound;
 
-use \Espo\ORM\Entity;
+use Espo\ORM\Entity;
+
+use Espo\Core\{
+    Record\Collection as RecordCollection,
+};
 
 class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 {
     protected $readOnlyAttributeList = [
-        'matchingRequestCount'
+        'matchingRequestCount',
     ];
 
-    public function find($params)
+    public function find(array $params) : RecordCollection
     {
         if (!empty($params['where']) && is_array($params['where'])) {
             foreach ($params['where'] as $i => $item) {
-                if (!is_array($item)) continue;
-                if (empty($item['attribute']) || $item['attribute'] !== 'matchingRequestId') continue;
+                if (!is_array($item)) {
+                    continue;
+                }
+
+                if (empty($item['attribute']) || $item['attribute'] !== 'matchingRequestId') {
+                    continue;
+                }
+
                 unset($params['where'][$i]);
-                if (empty($item['type']) || empty($item['value'])) continue;
+
+                if (empty($item['type']) || empty($item['value'])) {
+                    continue;
+                }
+
                 if ($item['type'] == 'equals') {
-                    return $this->getServiceFactory()->create('RealEstateRequest')->findLinkedEntitiesMatchingProperties($item['value'], $params, true);
+                    return $this->getServiceFactory()->create('RealEstateRequest')
+                        ->findLinkedEntitiesMatchingProperties($item['value'], $params, true);
                 }
             }
         }
 
         return parent::find($params);
-    }
-
-    public function findEntities($params) // TODO remove
-    {
-        if (!empty($params['where']) && is_array($params['where'])) {
-            foreach ($params['where'] as $i => $item) {
-                if (!is_array($item)) continue;
-                if (empty($item['attribute']) || $item['attribute'] !== 'matchingRequestId') continue;
-                unset($params['where'][$i]);
-                if (empty($item['type']) || empty($item['value'])) continue;
-                if ($item['type'] == 'equals') {
-                    return $this->getServiceFactory()->create('RealEstateRequest')->findLinkedEntitiesMatchingProperties($item['value'], $params, true);
-                }
-            }
-        }
-
-        return parent::findEntities($params);
     }
 
     public function getMatchingRequestsSelectParams($entity, $params)
@@ -86,6 +84,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                 LEFT JOIN real_estate_location_path AS `realEstateLocationPathLeft` ON realEstateLocationPathLeft.descendor_id = locationsMiddle.real_estate_location_id
                 LEFT JOIN real_estate_location_path AS `realEstateLocationPathRight` ON realEstateLocationPathRight.ascendor_id = locationsMiddle.real_estate_location_id
             ";
+
             $selectParams['whereClause'][] = [
                 'OR' => [
                     ['realEstateLocationPathRight.descendorId' => $locationId],
@@ -103,7 +102,8 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $selectParams['customJoin'] = '';
         }
 
-        $selectParams['customWhere'] .= " AND real_estate_request.id NOT IN (SELECT request_id FROM opportunity WHERE property_id = ".$pdo->quote($entity->id)." AND deleted = 0)";
+        $selectParams['customWhere'] .=
+            " AND real_estate_request.id NOT IN (SELECT request_id FROM opportunity WHERE property_id = ".$pdo->quote($entity->id)." AND deleted = 0)";
 
         $selectParams['customJoin'] .= "
             LEFT JOIN real_estate_property_real_estate_request AS requestsMiddle
@@ -112,11 +112,13 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             requestsMiddle.deleted = 0 AND
             requestsMiddle.real_estate_property_id = ".$pdo->quote($entity->id)."
         ";
+
         $selectParams['additionalSelectColumns'] = [
             'requestsMiddle.interest_degree' => 'interestDegree'
         ];
 
         $primaryFilter = null;
+
         switch ($entity->get('requestType')) {
             case 'Rent':
                 $primaryFilter = 'actualRent';
@@ -125,6 +127,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                 $primaryFilter = 'actualSale';
                 break;
         }
+
         if ($primaryFilter) {
             $selectManager->applyPrimaryFilter($primaryFilter, $selectParams);
         }
@@ -134,8 +137,12 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         }
 
         $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+
         foreach ($fieldDefs as $field => $defs) {
-            if (empty($defs['isMatching'])) continue;
+            if (empty($defs['isMatching'])) {
+                continue;
+            }
+
             $fromField = 'from' . ucfirst($field);
             $toField = 'to' . ucfirst($field);
 
@@ -160,14 +167,14 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                         ],
                         [
                             $fromField . '=' => null,
-                            $toField . '=' => null
+                            $toField . '=' => null,
                         ]
-                    ]
+                    ],
                 ];
             } else {
                 $selectParams['whereClause'][] = [
                     $fromField . '=' => null,
-                    $toField . '=' => null
+                    $toField . '=' => null,
                 ];
             }
         }
@@ -177,59 +184,65 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 
             $price = $entity->get('price');
             $priceCurrency = $entity->get('priceCurrency');
+
             if ($defaultCurrency !== $priceCurrency) {
                 $rates = $this->getConfig()->get('currencyRates');
                 $rate1 = $this->getConfig()->get('currencyRates.' . $priceCurrency, 1.0);
 
                 $rate1 = 1.0;
+
                 if (!empty($rates[$priceCurrency])) {
                     $rate1 = $rates[$priceCurrency];
                 }
+
                 $rate2 = 1.0;
+
                 if (!empty($rates[$defaultCurrency])) {
                     $rate2 = $rates[$defaultCurrency];
                 }
+
                 $price = $price * ($rate1);
                 $price = $price / ($rate2);
             }
 
-            $selectParams['whereClause'][] = array(
+            $selectParams['whereClause'][] = [
                 'OR' => [
-                    array(
+                    [
                         'fromPrice!=' => null,
                         'toPrice!=' => null,
                         'fromPriceConverted<=' => $price,
-                        'toPriceConverted>=' => $price
-                    ),
-                    array(
+                        'toPriceConverted>=' => $price,
+                    ],
+                    [
                         'fromPrice!=' => null,
                         'toPrice=' => null,
                         'fromPriceConverted<=' => $price,
-                    ),
-                    array(
+                    ],
+                    [
                         'fromPrice=' => null,
                         'toPrice!=' => null,
                         'toPriceConverted>=' => $price,
-                    ),
-                    array(
+                    ],
+                    [
                         'fromPrice=' => null,
-                        'toPrice=' => null
-                    )
-                ]
-            );
+                        'toPrice=' => null,
+                    ],
+                ],
+            ];
         } else {
-            $selectParams['whereClause'][] = array(
+            $selectParams['whereClause'][] = [
                 'fromPrice=' => null,
-                'toPrice=' => null
-            );
+                'toPrice=' => null,
+            ];
         }
 
         return $selectParams;
     }
 
-    public function findLinkedEntitiesMatchingRequests($id, $params, $customOrder = false)
+    public function findLinkedEntitiesMatchingRequests(string $id, $params, $customOrder = false) : RecordCollection
     {
         $entity = $this->getRepository()->get($id);
+
         $this->loadAdditionalFields($entity);
 
         $selectParams = $this->getMatchingRequestsSelectParams($entity, $params);
@@ -238,11 +251,14 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $selectParams['orderBy'] = [
                 ['requestsMiddle.interest_degree'],
                 ['LIST:status:New,Assigned,In Process'],
-                ['createdAt', 'DESC']
+                ['createdAt', 'DESC'],
             ];
         }
 
-        $collection = $this->getEntityManager()->getRepository('RealEstateRequest')->find($selectParams);
+        $collection = $this->getEntityManager()
+            ->getRepository('RealEstateRequest')
+            ->find($selectParams);
+
         $recordService = $this->getRecordService('RealEstateRequest');
 
         foreach ($collection as $e) {
@@ -250,47 +266,56 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $recordService->prepareEntityForOutput($e);
         }
 
-        $total = $this->getEntityManager()->getRepository('RealEstateRequest')->count($selectParams);
+        $total = $this->getEntityManager()
+            ->getRepository('RealEstateRequest')
+            ->count($selectParams);
 
         if ($entity->isActual()) {
             $entity->set('matchingRequestCount', $total);
+
             $this->getRepository()->save($entity, [
                 'silent' => true,
                 'skipHooks' => true,
-                'skipAll' => true
+                'skipAll' => true,
             ]);
         }
 
-        return array(
-            'total' => $total,
-            'collection' => $collection
-        );
+        return new RecordCollection($collection, $total);
     }
 
-    public function setNotIntereseted($propertyId, $requestId)
+    public function setNotIntereseted(string $propertyId, string $requestId)
     {
         $property = $this->getEntity($propertyId);
+
         if (!$property) {
             throw new NotFound();
         }
+
         if (!$this->getAcl()->check($property, 'edit')) {
             throw new Forbidden();
         }
-        return $this->getEntityManager()->getRepository('RealEstateProperty')->relate($property, 'requests', $requestId, array(
-            'interestDegree' => 0
-        ));
+
+        return $this->getEntityManager()->getRepository('RealEstateProperty')
+            ->relate($property, 'requests', $requestId, [
+                'interestDegree' => 0,
+            ]);
     }
 
-    public function unsetNotIntereseted($propertyId, $requestId)
+    public function unsetNotIntereseted(string $propertyId, string $requestId)
     {
         $property = $this->getEntity($propertyId);
+
         if (!$property) {
             throw new NotFound();
         }
+
         if (!$this->getAcl()->check($property, 'edit')) {
             throw new Forbidden();
         }
-        return $this->getEntityManager()->getRepository('RealEstateProperty')->unrelate($property, 'requests', $requestId);
+
+        return $this->getEntityManager()
+            ->getRepository('RealEstateProperty')
+            ->unrelate($property, 'requests', $requestId);
     }
 
     protected function beforeUpdateEntity(Entity $entity, $data)
@@ -298,10 +323,15 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         parent::beforeUpdateEntity($entity, $data);
 
         $matchingRequestCount = null;
+
         if ($entity->isActual()) {
             $selectParams = $this->getMatchingRequestsSelectParams($entity, []);
-            $matchingRequestCount = $this->getEntityManager()->getRepository('RealEstateRequest')->count($selectParams);
+
+            $matchingRequestCount = $this->getEntityManager()
+                ->getRepository('RealEstateRequest')
+                ->count($selectParams);
         }
+
         $entity->set('matchingRequestCount', $matchingRequestCount);
     }
 
@@ -309,13 +339,17 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
     {
         $repository = $this->getEntityManager()->getRepository('RealEstateProperty');
 
-        $notActualList = $repository->select(['id', 'matchingRequestCount'])->where([
-            'status' => ['Completed', 'Canceled', 'Lost'],
-            'matchingRequestCount!=' => null
-        ])->find();
+        $notActualList = $repository
+            ->select(['id', 'matchingRequestCount'])
+            ->where([
+                'status' => ['Completed', 'Canceled', 'Lost'],
+                'matchingRequestCount!=' => null
+            ])
+            ->find();
 
         foreach ($notActualList as $e) {
             $e->set('matchingRequestCount', null);
+
             $this->getRepository()->save($e, [
                 'silent' => true,
                 'skipHooks' => true,
@@ -323,15 +357,22 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             ]);
         }
 
-        $actualList = $repository->where([
-            'status!=' => ['Completed', 'Canceled', 'Lost']
-        ])->find();
+        $actualList = $repository
+            ->where([
+                'status!=' => ['Completed', 'Canceled', 'Lost']
+            ])->find();
 
         foreach ($actualList as $e) {
             $this->loadAdditionalFields($e);
+
             $selectParams = $this->getMatchingRequestsSelectParams($e, []);
-            $matchingRequestCount = $this->getEntityManager()->getRepository('RealEstateRequest')->count($selectParams);
+
+            $matchingRequestCount = $this->getEntityManager()
+                ->getRepository('RealEstateRequest')
+                ->count($selectParams);
+
             $e->set('matchingRequestCount', $matchingRequestCount);
+
             $this->getRepository()->save($e, [
                 'silent' => true,
                 'skipHooks' => true,

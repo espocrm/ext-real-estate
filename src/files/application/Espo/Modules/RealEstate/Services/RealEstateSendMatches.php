@@ -26,84 +26,104 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use \Espo\Core\Exceptions\Forbidden;
-use \Espo\Core\Exceptions\BadRequest;
-use \Espo\Core\Exceptions\NotFound;
-use \Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\NotFound;
+use Espo\Core\Exceptions\Error;
 
-class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
+use Espo\Core\{
+    ServiceFactory,
+    Mail\EmailSender,
+    Utils\Config,
+    ORM\EntityManager,
+};
+
+use Espo\{
+    Entities\Preferences,
+};
+
+use Exception;
+use DateTime;
+
+class RealEstateSendMatches
 {
-    protected function init()
-    {
-        parent::init();
-        $this->addDependencyList([
-            'serviceFactory',
-            'container',
-            'preferences',
-            'crypt'
-        ]);
-    }
+    protected $serviceFactory;
+    protected $emailSender;
+    protected $preferences;
+    protected $config;
+    protected $entityManager;
 
-    protected function getServiceFactory()
-    {
-        return $this->getInjection('serviceFactory');
-    }
-
-    protected function getPreferences()
-    {
-        return $this->getInjection('preferences');
-    }
-
-    protected function getConfig()
-    {
-        return $this->getInjection('config');
-    }
-
-    protected function getMailSender()
-    {
-        return $this->getInjection('container')->get('mailSender');
+    public function __construct(
+        ServiceFactory $serviceFactory,
+        EmailSender $emailSender,
+        Preferences $preferences,
+        Config $config,
+        EntityManager $entityManager
+    ) {
+        $this->serviceFactory = $serviceFactory;
+        $this->emailSender = $emailSender;
+        $this->preferences = $preferences;
+        $this->config = $config;
+        $this->entityManager = $entityManager;
     }
 
     protected function getSmptParams()
     {
-        return $this->getPreferences()->getSmtpParams();
+        return $this->preferences->getSmtpParams();
     }
 
     public function processRequestJob($data)
     {
-        if (empty($data->targetId)) throw new Error();
-        $entity = $this->getEntityManager()->getEntity('RealEstateRequest', $data->targetId);
-        if (!$entity) throw new NotFound();
+        if (empty($data->targetId)) {
+            throw new Error();
+        }
 
-        $service = $this->getServiceFactory()->create($entity->getEntityType());
+        $entity = $this->entityManager->getEntity('RealEstateRequest', $data->targetId);
+
+        if (!$entity) {
+            throw new NotFound();
+        }
+
+        $service = $this->serviceFactory->create($entity->getEntityType());
+
         $service->loadAdditionalFields($entity);
 
         $selectParams = $service->getMatchingPropertiesSelectParams($entity, []);
 
         $selectParams['offset'] = 0;
-        $selectParams['limit'] = $this->getConfig()->get('realEstateEmailSendingLimit', 20);
+        $selectParams['limit'] = $this->config->get('realEstateEmailSendingLimit', 20);
+
         $selectParams['orderBy'] = [
             ['propertiesMiddle.interest_degree'],
             ['LIST:status:New,Assigned,In Process'],
-            ['createdAt', 'DESC']
+            ['createdAt', 'DESC'],
         ];
 
-        $propertyList = $this->getEntityManager()->getRepository('RealEstateProperty')->find($selectParams);
+        $propertyList = $this->entityManager
+            ->getRepository('RealEstateProperty')
+            ->find($selectParams);
 
         foreach ($propertyList as $property) {
             if (
-                $this->getEntityManager()->getRepository('RealEstateSendMatchesQueueItem')->where([
-                    'requestId' => $entity->id,
-                    'propertyId' => $property->id
-                ])->findOne()
-            ) continue;
+                $this->entityManager
+                    ->getRepository('RealEstateSendMatchesQueueItem')
+                    ->where([
+                        'requestId' => $entity->id,
+                        'propertyId' => $property->id
+                    ])
+                    ->findOne()
+            ) {
+                continue;
+            }
 
-            $queueItem = $this->getEntityManager()->getEntity('RealEstateSendMatchesQueueItem');
+            $queueItem = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem');
+
             $queueItem->set([
                 'requestId' => $entity->id,
                 'propertyId' => $property->id
             ]);
-            $this->getEntityManager()->saveEntity($queueItem);
+
+            $this->entityManager->saveEntity($queueItem);
         }
 
         return true;
@@ -111,40 +131,57 @@ class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
 
     public function processPropertyJob($data)
     {
-        if (empty($data->targetId)) throw new Error();
-        $entity = $this->getEntityManager()->getEntity('RealEstateProperty', $data->targetId);
-        if (!$entity) throw new NotFound();
+        if (empty($data->targetId)) {
+            throw new Error();
+        }
 
-        $service = $this->getServiceFactory()->create($entity->getEntityType());
+        $entity = $this->entityManager->getEntity('RealEstateProperty', $data->targetId);
+
+        if (!$entity) {
+            throw new NotFound();
+        }
+
+        $service = $this->serviceFactory->create($entity->getEntityType());
+
         $service->loadAdditionalFields($entity);
 
         $selectParams = $service->getMatchingRequestsSelectParams($entity, []);
 
         $selectParams['offset'] = 0;
-        $selectParams['limit'] = $this->getConfig()->get('realEstateEmailSendingLimit', 20);
+        $selectParams['limit'] = $this->config->get('realEstateEmailSendingLimit', 20);
         $selectParams['orderBy'] = [
             ['requestsMiddle.interest_degree'],
             ['LIST:status:New,Assigned,In Process'],
             ['createdAt', 'DESC']
         ];
 
-        $requestList = $this->getEntityManager()->getRepository('RealEstateRequest')->find($selectParams);
+        $requestList = $this->entityManager->getRepository('RealEstateRequest')->find($selectParams);
 
         foreach ($requestList as $request) {
-            if (!$request->get('contactId')) continue;
-            if (
-                $this->getEntityManager()->getRepository('RealEstateSendMatchesQueueItem')->where([
-                    'propertyId' => $entity->id,
-                    'requestId' => $request->id
-                ])->findOne()
-            ) continue;
+            if (!$request->get('contactId')) {
+                continue;
+            }
 
-            $queueItem = $this->getEntityManager()->getEntity('RealEstateSendMatchesQueueItem');
+            if (
+                $this->entityManager
+                    ->getRepository('RealEstateSendMatchesQueueItem')
+                    ->where([
+                        'propertyId' => $entity->id,
+                        'requestId' => $request->id,
+                    ])
+                    ->findOne()
+            ) {
+                continue;
+            }
+
+            $queueItem = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem');
+
             $queueItem->set([
                 'propertyId' => $entity->id,
                 'requestId' => $request->id
             ]);
-            $this->getEntityManager()->saveEntity($queueItem);
+
+            $this->entityManager->saveEntity($queueItem);
         }
 
         return true;
@@ -152,22 +189,34 @@ class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
 
     public function processSendingQueue()
     {
-        $limit = $this->getConfig()->get('realEstateEmailSendingPortionSize', 30);
-        $itemList = $this->getEntityManager()->getRepository('RealEstateSendMatchesQueueItem')->order('createdAt')->where([
-            'isProcessed' => false
-        ])->limit(0, $limit)->find();
+        $limit = $this->config->get('realEstateEmailSendingPortionSize', 30);
+
+        $itemList = $this->entityManager
+            ->getRepository('RealEstateSendMatchesQueueItem')
+            ->order('createdAt')
+            ->where([
+                'isProcessed' => false
+            ])
+            ->limit(0, $limit)
+            ->find();
 
         foreach ($itemList as $item) {
-            $item = $this->getEntityManager()->getEntity('RealEstateSendMatchesQueueItem', $item->id);
-            if ($item->get('isProcessed')) continue;
+            $item = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem', $item->id);
+
+            if ($item->get('isProcessed')) {
+                continue;
+            }
+
             $item->set('isProcessed', true);
-            $this->getEntityManager()->saveEntity($item);
+
+            $this->entityManager->saveEntity($item);
+
             try {
                 $this->sendMatchesEmail([
                     'requestId' => $item->get('requestId'),
-                    'propertyId' => $item->get('propertyId')
+                    'propertyId' => $item->get('propertyId'),
                 ]);
-            } catch (\Exception $e) {}
+            } catch (Exception $e) {}
         }
 
         $this->processCleanup();
@@ -175,16 +224,23 @@ class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
 
     public function processCleanup()
     {
-        $period = '-' . $this->getConfig()->get('realEstateEmailSendingCleanupPeriod', '3 months');
-        $datetime = new \DateTime();
+        $period = '-' . $this->config->get('realEstateEmailSendingCleanupPeriod', '3 months');
+
+        $datetime = new DateTime();
         $datetime->modify($period);
 
-        $itemList = $this->getEntityManager()->getRepository('RealEstateSendMatchesQueueItem')->where([
-            'isProcessed' => true,
-            'createdAt<' => $datetime->format('Y-m-d H:i:s')
-        ])->find();
+        $itemList = $this->entityManager
+            ->getRepository('RealEstateSendMatchesQueueItem')
+            ->where([
+                'isProcessed' => true,
+                'createdAt<' => $datetime->format('Y-m-d H:i:s')
+            ])
+            ->find();
+
         foreach ($itemList as $item) {
-            $this->getEntityManager()->getRepository('RealEstateSendMatchesQueueItem')->deleteFromDb($item->id);
+            $this->entityManager
+                ->getRepository('RealEstateSendMatchesQueueItem')
+                ->deleteFromDb($item->id);
         }
     }
 
@@ -193,75 +249,90 @@ class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
         if (empty($data['requestId']) || empty($data['propertyId'])) {
             throw new NotFound();
         }
-        $request = $this->getEntityManager()->getEntity('RealEstateRequest', $data['requestId']);
-        $property = $this->getEntityManager()->getEntity('RealEstateProperty', $data['propertyId']);
+
+        $request = $this->entityManager->getEntity('RealEstateRequest', $data['requestId']);
+        $property = $this->entityManager->getEntity('RealEstateProperty', $data['propertyId']);
 
         if (!$request || !$property) {
             throw new NotFound();
         }
 
-        $templateId = $this->getConfig()->get('realEstatePropertyTemplateId');
+        $templateId = $this->config->get('realEstatePropertyTemplateId');
+
         if (empty($templateId)) {
             throw new Error('RealEstate EmailSending[' . $request->id . ']: No Template in config');
         }
 
         $emailBody = '';
 
-        $requestService = $this->getServiceFactory()->create($request->getEntityType());
+        $requestService = $this->serviceFactory->create($request->getEntityType());
         $requestService->loadAdditionalFields($request);
 
-        $propertyService = $this->getServiceFactory()->create($property->getEntityType());
+        $propertyService = $this->serviceFactory->create($property->getEntityType());
         $propertyService->loadAdditionalFields($property);
 
         $contactId = $request->get('contactId');
+
         if (!$contactId) {
             throw new Error('RealEstate EmailSending[' . $request->id . ']: No Contact in Request ');
         }
-        $contact = $this->getEntityManager()->getEntity('Contact', $contactId);
+
+        $contact = $this->entityManager->getEntity('Contact', $contactId);
+
         if (!$contact) {
             throw new Error('RealEstate EmailSending[' . $request->id . ']: Contact not found');
         }
+
         if (!$contact->get('emailAddress')) {
             throw new Error('RealEstate EmailSending[' . $request->id . ']: Contact has no email address');
         }
+
         $toEmailAddress = $contact->get('emailAddress');
-        if (!$toEmailAddress) return;
+
+        if (!$toEmailAddress) {
+            return;
+        }
+
         $ccEmailAddress = false;
 
         $entityHash = [];
         $entityHash[$request->getEntityType()] = $request;
         $entityHash[$property->getEntityType()] = $property;
 
-        if ($this->getConfig()->get('realEstateEmailSendingAssignedUserCc') && $request->get('assignedUserId')) {
-            $assignedUser = $this->getEntityManager()->getEntity('User', $request->get('assignedUserId'));
+        if ($this->config->get('realEstateEmailSendingAssignedUserCc') && $request->get('assignedUserId')) {
+            $assignedUser = $this->entityManager->getEntity('User', $request->get('assignedUserId'));
+
             $entityHash['User'] = $assignedUser;
+
             if ($assignedUser->get('emailAddress')) {
                 $ccEmailAddress = $assignedUser->get('emailAddress');
             }
         }
+
         $entityHash['Person'] = $contact;
 
         $emailTemplateParams = [
             'entityHash' => $entityHash,
             'emailAddress' => $toEmailAddress
         ];
-        if ($request->hasField('parentId') && $request->hasField('parentType')) {
+        if ($request->hasAttribute('parentId') && $request->hasAttribute('parentType')) {
             $emailTemplateParams['parentId'] = $request->get('parentId');
             $emailTemplateParams['parentType'] = $request->get('parentType');
         }
 
-        $emailTemplateService = $this->getServiceFactory()->create('EmailTemplate');
+        $emailTemplateService = $this->serviceFactory->create('EmailTemplate');
         $emailTemplate = $emailTemplateService->parse($templateId, $emailTemplateParams, true);
         $emailBody = $emailTemplate['body'];
 
-        $emailData = array(
+        $emailData = [
             'to' => $toEmailAddress,
             'subject' => $emailTemplate['subject'],
             'body' => $emailBody,
             'isHtml' => $emailTemplate['isHtml'],
             'parentId' => $request->id,
-            'parentType' => $request->getEntityType()
-        );
+            'parentType' => $request->getEntityType(),
+        ];
+
         if ($ccEmailAddress) {
             $emailData['cc'] = $ccEmailAddress;
         }
@@ -269,28 +340,35 @@ class RealEstateSendMatches extends \Espo\Core\Templates\Services\Base
         $attachmentList = [];
 
         foreach ($emailTemplate['attachmentsIds'] as $attachmentId) {
-            $attachment = $this->getEntityManager()->getEntity('Attachment', $attachmentId);
+            $attachment = $this->entityManager->getEntity('Attachment', $attachmentId);
+
             if ($attachment) {
                 $attachmentList[] = $attachment;
             }
         }
 
         foreach ($property->getLinkMultipleIdList('images') as $attachmentId) {
-            $attachment = $this->getEntityManager()->getEntity('Attachment', $attachmentId);
+            $attachment = $this->entityManager->getEntity('Attachment', $attachmentId);
+
             if ($attachment) {
                 $attachmentList[] = $attachment;
             }
         }
 
-        $email = $this->getEntityManager()->getEntity('Email');
+        $email = $this->entityManager->getEntity('Email');
+
         $email->set($emailData);
 
-        $emailSender = $this->getMailSender();
-        if ($this->getSmptParams()) {
-            $emailSender->useSmtp($this->getSmptParams());
+        $emailSender = $this->emailSender()->create();
+
+        $smtpParams = $this->getSmptParams();
+
+        if ($smtpParams) {
+            $emailSender->withSmtpParams($smtpParams);
         }
 
-        $message = new \Zend\Mail\Message();
-        $emailSender->send($email, array(), $message, $attachmentList);
+        $emailSender
+            ->withAttachments($attachmentList)
+            ->send($email);
     }
 }

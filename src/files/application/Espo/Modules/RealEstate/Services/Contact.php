@@ -30,4 +30,3 @@ class Contact extends \Espo\Modules\Crm\Services\Contact
 {
 
 }
-
