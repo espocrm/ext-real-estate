@@ -2,7 +2,7 @@
 
 ## Configuration
 
-Create `config.json` file in the root directory. This config will be merged with `config-default.json`. You can override default parameters in the created config.
+Create `config.json` file in the root directory. When reading, this config will be merged with `config-default.json`. You can override default parameters in the created config.
 
 Parameters:
 
@@ -27,17 +27,18 @@ return [
 
 ## Building
 
-After building, EspoCRM instance with installed extension will be available at `site` directory.
-
-You can access it with credentials:
+After building, EspoCRM instance with installed extension will be available at `site` directory. You will be able to access it with credentials:
 
 * Username: admin
 * Password: 1
+
+Note: You can build on Linux and Windows OS. Commands are the same.
 
 ### Preparation
 
 1. You need to have *node*, *npm*, *composer* installed.
 2. Run `npm install`.
+3. Create a database. The database name is set in the config file.
 
 ### Full EspoCRM instance building
 
@@ -52,6 +53,8 @@ node build --all
 Note: It will remove a previously installed EspoCRM instance, but keep the database intact.
 
 ### Copying extension files to EspoCRM instance
+
+You need to run this command every time you make changes in `src` directory and you want to try these changes on Espo instance.
 
 Command:
 
@@ -85,7 +88,7 @@ Note: The version number is taken from `package.json`.
 
 1. Do development in `src` dir.
 2. Run `node build --copy`.
-3. Test changes in EspoCRM instance at `site` dir.
+3. Test changes in EspoCRM instance at `site` dir by opening it in a browser. A URL will look like: `http://localhost/real-estate/site`, depending on how you named your directory.
 
 ## Tests
 
@@ -106,6 +109,38 @@ Integration tests:
 ```
 vendor/bin/phpunit --bootstrap=./vendor/autoload.php tests/integration/Espo/Modules/RealEstate
 ```
+
+## Versioning
+
+The version number is stored in `package.json` and `package-lock.json`.
+
+Bumping version:
+
+```
+npm version patch
+npm version minor
+npm version major
+```
+
+## Translation
+
+Assuming that you have already built EspoCRM instance.
+
+### Building PO file
+
+1. Change dir: `cd site`
+2. Run: `node po en_US --module=RealEstate` (replace `en_US` with a language code you need to translate to)
+
+This will generate PO file in `site/build/` directory. You will need to translate this file.
+
+### Building langauge files from PO
+
+Assuming you have translated PO file in build directory with the same name as when it was generated.
+
+1. Change dir: `cd site`
+2. Run: `node lang en_US --module=RealEstate` (replace `en_US` with the target language code)
+
+This will generate language files in `site/build/` directory. You will need to copy these files to `src/files/` directory and commit.
 
 ## License
 
