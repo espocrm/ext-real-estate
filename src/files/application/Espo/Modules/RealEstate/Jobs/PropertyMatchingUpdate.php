@@ -26,15 +26,21 @@
 
 namespace Espo\Modules\RealEstate\Jobs;
 
-use \Espo\Core\Exceptions;
+use Espo\Core\ServiceFactory;
+use Espo\Core\Jobs\Job;
 
-class PropertyMatchingUpdate extends \Espo\Core\Jobs\Base
+class PropertyMatchingUpdate implements Job
 {
+    protected $serviceFactory;
+
+    public function __construct(ServiceFactory $serviceFactory)
+    {
+        $this->serviceFactory = $serviceFactory;
+    }
+
     public function run()
     {
-        $this->getServiceFactory()->create('RealEstateProperty')->updateMatchingCount();
-        $this->getServiceFactory()->create('RealEstateRequest')->updateMatchingCount();
-
-        return true;
+        $this->serviceFactory->create('RealEstateProperty')->updateMatchingCount();
+        $this->serviceFactory->create('RealEstateRequest')->updateMatchingCount();
     }
 }

@@ -359,7 +359,7 @@ class RealEstateSendMatches
 
         $email->set($emailData);
 
-        $emailSender = $this->emailSender()->create();
+        $emailSender = $this->emailSender->create();
 
         $smtpParams = $this->getSmptParams();
 

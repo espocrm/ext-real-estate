@@ -26,14 +26,20 @@
 
 namespace Espo\Modules\RealEstate\Jobs;
 
-use \Espo\Core\Exceptions;
+use Espo\Core\ServiceFactory;
+use Espo\Core\Jobs\Job;
 
-class SendPropertyMatches extends \Espo\Core\Jobs\Base
+class SendPropertyMatches implements Job
 {
+    protected $serviceFactory;
+
+    public function __construct(ServiceFactory $serviceFactory)
+    {
+        $this->serviceFactory = $serviceFactory;
+    }
+
     public function run()
     {
-        $this->getServiceFactory()->create('RealEstateSendMatches')->processSendingQueue();
-
-        return true;
+        $this->serviceFactory->create('RealEstateSendMatches')->processSendingQueue();
     }
 }
