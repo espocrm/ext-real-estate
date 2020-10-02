@@ -30,118 +30,80 @@ use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\NotFound;
 use Espo\Core\Exceptions\Forbidden;
 
-use Espo\ORM\Entity;
+use Espo\{
+    ORM\Entity,
+    ORM\QueryParams\Select,
+};
 
-use PDO;
+use Espo\Core\{
+    Select\SelectManagerFactory,
+    Utils\Metadata,
+};
 
-class ActivitiesRealEstateRequest extends \Espo\Core\Services\Base
+class ActivitiesRealEstateRequest
 {
-    protected function init()
-    {
-        $this->addDependencyList([
-            'metadata',
-            'acl',
-            'selectManagerFactory',
-            'serviceFactory'
-        ]);
-    }
+    protected $metadata;
+    protected $selectManagerFactory;
 
-    protected function getPDO()
-    {
-        return $this->getEntityManager()->getPDO();
-    }
-
-    protected function getEntityManager()
-    {
-        return $this->getInjection('entityManager');
-    }
-
-    protected function getUser()
-    {
-        return $this->getInjection('user');
-    }
-
-    protected function getAcl()
-    {
-        return $this->getInjection('acl');
-    }
-
-    protected function getMetadata()
-    {
-        return $this->getInjection('metadata');
-    }
-
-    protected function getSelectManagerFactory()
-    {
-        return $this->getInjection('selectManagerFactory');
-    }
-
-    protected function getServiceFactory()
-    {
-        return $this->getInjection('serviceFactory');
+    public function __construct(
+        Metadata $metadata,
+        SelectManagerFactory $selectManagerFactory
+    ) {
+        $this->metadata = $metadata;
+        $this->selectManagerFactory = $selectManagerFactory;
     }
 
     public function getActivitiesMeetingQuery(Entity $entity, $statusList, $isHistory)
     {
         $scope = $entity->getEntityType();
 
-        $selectManager = $this->getSelectManagerFactory()->create('Meeting');
+        $selectManager = $this->selectManagerFactory->create('Meeting');
 
-        if ($this->getMetadata()->get(['entityDefs', 'Meeting', 'fields', 'isAllDay'])) {
-            $select = [
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['dateStartDate', 'dateStartDate'],
-                ['dateEndDate', 'dateEndDate'],
-                ['VALUE:Meeting', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                ['VALUE:', 'hasAttachment']
-            ];
-        } else {
-            $select = [
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['VALUE:Meeting', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt'
-            ];
-        }
+        $select = [
+            'id',
+            'name',
+            ['dateStart', 'dateStart'],
+            ['dateEnd', 'dateEnd'],
+            ['dateStartDate', 'dateStartDate'],
+            ['dateEndDate', 'dateEndDate'],
+            ['VALUE:Meeting', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            ['VALUE:', 'hasAttachment'],
+        ];
 
         $baseSelectParams = [
             'select' => $select,
-            'customWhere' => " AND
-                (
-                    (
-                        meeting.parent_type = 'RealEstateRequest' AND meeting.parent_id = ".$this->getPDO()->quote($entity->id)."
-                    )
-                    OR
-                    (
-                        meeting.parent_type = 'Opportunity' AND meeting.parent_id IN (
-                            SELECT opportunity.id FROM opportunity WHERE opportunity.request_id = ".$this->getPDO()->quote($entity->id)."
-                        )
-                    )
-                )
-            ",
-            'whereClause' => [],
-            'customJoin' => ''
+            'whereClause' => [
+                [
+                    'OR' => [
+                        [
+                            'parentType' => 'RealEstateRequest',
+                            'parentId' => $entity->id,
+                        ],
+                        [
+                            'parentType' => 'Opportunity',
+                            'parentId=s' => [
+                                'from' => 'Opportunity',
+                                'select' => ['id'],
+                                'whereClause' => [
+                                    'requestId' => $entity->id,
+                                    'deleted' => false,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         if (!empty($statusList)) {
             $baseSelectParams['whereClause'][] = [
-                'status' => $statusList
+                'status' => $statusList,
             ];
         }
 
@@ -149,72 +111,60 @@ class ActivitiesRealEstateRequest extends \Espo\Core\Services\Base
 
         $selectManager->applyAccess($selectParams);
 
-        $sql = $this->getEntityManager()->getQuery()->createSelectQuery('Meeting', $selectParams);
-
-        return $sql;
+        return Select::fromRaw($selectParams);
     }
 
     public function getActivitiesCallQuery(Entity $entity, $statusList, $isHistory)
     {
         $scope = $entity->getEntityType();
 
-        $selectManager = $this->getSelectManagerFactory()->create('Call');
+        $selectManager = $this->selectManagerFactory->create('Call');
 
-        if ($this->getMetadata()->get(['entityDefs', 'Meeting', 'fields', 'isAllDay'])) {
-            $select = [
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['VALUE:', 'dateStartDate'],
-                ['VALUE:', 'dateEndDate'],
-                ['VALUE:Call', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                ['VALUE:', 'hasAttachment']
-            ];
-        } else {
-            $select = [
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['VALUE:Call', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt'
-            ];
-        }
+        $select = [
+            'id',
+            'name',
+            ['dateStart', 'dateStart'],
+            ['dateEnd', 'dateEnd'],
+            ['VALUE:', 'dateStartDate'],
+            ['VALUE:', 'dateEndDate'],
+            ['VALUE:Call', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            ['VALUE:', 'hasAttachment']
+        ];
 
         $baseSelectParams = [
             'select' => $select,
-            'customWhere' => " AND
-                (
-                    (
-                        call.parent_type = 'RealEstateRequest' AND call.parent_id = ".$this->getPDO()->quote($entity->id)."
-                    )
-                    OR
-                    (
-                        call.parent_type = 'Opportunity' AND call.parent_id IN (
-                            SELECT opportunity.id FROM opportunity WHERE opportunity.request_id = ".$this->getPDO()->quote($entity->id)."
-                        )
-                    )
-                )
-            ",
-            'whereClause' => [],
-            'customJoin' => ''
+            'whereClause' => [
+                [
+                    'OR' => [
+                        [
+                            'parentType' => 'RealEstateRequest',
+                            'parentId' => $entity->id,
+                        ],
+                        [
+                            'parentType' => 'Opportunity',
+                            'parentId=s' => [
+                                'from' => 'Opportunity',
+                                'select' => ['id'],
+                                'whereClause' => [
+                                    'requestId' => $entity->id,
+                                    'deleted' => false,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         if (!empty($statusList)) {
             $baseSelectParams['whereClause'][] = [
-                'status' => $statusList
+                'status' => $statusList,
             ];
         }
 
@@ -222,72 +172,60 @@ class ActivitiesRealEstateRequest extends \Espo\Core\Services\Base
 
         $selectManager->applyAccess($selectParams);
 
-        $sql = $this->getEntityManager()->getQuery()->createSelectQuery('Call', $selectParams);
-
-        return $sql;
+        return Select::fromRaw($selectParams);
     }
 
     public function getActivitiesEmailQuery(Entity $entity, $statusList, $isHistory)
     {
         $scope = $entity->getEntityType();
 
-        $selectManager = $this->getSelectManagerFactory()->create('Email');
+        $selectManager = $this->selectManagerFactory->create('Email');
 
-        if ($this->getMetadata()->get(['entityDefs', 'Meeting', 'fields', 'isAllDay'])) {
-            $select = [
-                'id',
-                'name',
-                ['dateSent', 'dateStart'],
-                ['VALUE:', 'dateEnd'],
-                ['VALUE:', 'dateStartDate'],
-                ['VALUE:', 'dateEndDate'],
-                ['VALUE:Email', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                'hasAttachment'
-            ];
-        } else {
-            $select = [
-                'id',
-                'name',
-                ['dateSent', 'dateStart'],
-                ['VALUE:', 'dateEnd'],
-                ['VALUE:Email', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt'
-            ];
-        }
+        $select = [
+            'id',
+            'name',
+            ['dateSent', 'dateStart'],
+            ['VALUE:', 'dateEnd'],
+            ['VALUE:', 'dateStartDate'],
+            ['VALUE:', 'dateEndDate'],
+            ['VALUE:Email', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            'hasAttachment',
+        ];
 
         $baseSelectParams = [
             'select' => $select,
-            'customWhere' => " AND
-                (
-                    (
-                        email.parent_type = 'RealEstateRequest' AND email.parent_id = ".$this->getPDO()->quote($entity->id)."
-                    )
-                    OR
-                    (
-                        email.parent_type = 'Opportunity' AND email.parent_id IN (
-                            SELECT opportunity.id FROM opportunity WHERE opportunity.request_id = ".$this->getPDO()->quote($entity->id)."
-                        )
-                    )
-                )
-            ",
-            'whereClause' => [],
-            'customJoin' => ''
+            'whereClause' => [
+                [
+                    'OR' => [
+                        [
+                            'parentType' => 'RealEstateRequest',
+                            'parentId' => $entity->id,
+                        ],
+                        [
+                            'parentType' => 'Opportunity',
+                            'parentId=s' => [
+                                'from' => 'Opportunity',
+                                'select' => ['id'],
+                                'whereClause' => [
+                                    'requestId' => $entity->id,
+                                    'deleted' => false,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         if (!empty($statusList)) {
             $baseSelectParams['whereClause'][] = [
-                'status' => $statusList
+                'status' => $statusList,
             ];
         }
 
@@ -295,8 +233,6 @@ class ActivitiesRealEstateRequest extends \Espo\Core\Services\Base
 
         $selectManager->applyAccess($selectParams);
 
-        $sql = $this->getEntityManager()->getQuery()->createSelectQuery('Email', $selectParams);
-
-        return $sql;
+        return Select::fromRaw($selectParams);
     }
 }
