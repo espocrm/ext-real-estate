@@ -21,6 +21,9 @@
                 "additionalColumns": {
                     "role": "contactRole"
                 }
+            },
+            "columnAttributeMap": {
+                "role": "propertyRole"
             }
         },
         "requestsPrimary": {
