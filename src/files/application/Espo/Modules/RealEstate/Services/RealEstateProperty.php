@@ -27,14 +27,18 @@
 namespace Espo\Modules\RealEstate\Services;
 
 use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\NotFound;
 
 use Espo\ORM\Entity;
+use Espo\ORM\Query\Select;
+use Espo\ORM\Query\SelectBuilder;
+use Espo\ORM\Query\Part\Condition as Cond;
+use Espo\ORM\Query\Part\Expression as Expr;
+use Espo\ORM\Query\Part\Order;
 
-use Espo\Core\{
-    Record\Collection as RecordCollection,
-};
+use Espo\Core\Select\SearchParams;
+use Espo\Core\Select\Where\Item as WhereItem;
+use Espo\Core\Record\Collection as RecordCollection;
 
 class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 {
@@ -42,98 +46,50 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         'matchingRequestCount',
     ];
 
-    public function find(array $params) : RecordCollection
+    public function find(SearchParams $params): RecordCollection
     {
-        if (!empty($params['where']) && is_array($params['where'])) {
-            foreach ($params['where'] as $i => $item) {
-                if (!is_array($item)) {
-                    continue;
-                }
+        $where = $params->getWhere();
 
-                if (empty($item['attribute']) || $item['attribute'] !== 'matchingRequestId') {
-                    continue;
-                }
+        $itemList = [];
 
-                unset($params['where'][$i]);
+        if ($where && $where->getType() === WhereItem::TYPE_AND) {
+            $itemList = $where->getItemList();
+        }
 
-                if (empty($item['type']) || empty($item['value'])) {
-                    continue;
-                }
-
-                if ($item['type'] == 'equals') {
-                    return $this->getServiceFactory()->create('RealEstateRequest')
-                        ->findLinkedEntitiesMatchingProperties($item['value'], $params, true);
-                }
+        foreach ($itemList as $i => $item) {
+            if ($item->getAttribute() !== 'matchingRequestId') {
+                continue;
             }
+
+            unset($itemList[$i]);
+
+            $where = WhereItem::createBuilder()
+                ->setAttribute(WhereItem::TYPE_AND)
+                ->setItemList(array_values($itemList))
+                ->build();
+
+            $params = $params->withWhere($where);
+
+            if (!$item->getValue() || $item->getType() !== 'equals') {
+                continue;
+            }
+
+            return $this->getServiceFactory()
+                ->create('RealEstateRequest')
+                ->findLinkedEntitiesMatchingProperties($item->getValue(), $params, true);
         }
 
         return parent::find($params);
     }
 
-    public function getMatchingRequestsSelectParams(Entity $entity, array $params) : array
+    public function getMatchingRequestsQuery(Entity $entity, SearchParams $params): Select
     {
-        $selectManager = $this->getSelectManager('RealEstateRequest');
+        $builder = $this->selectBuilderFactory->create();
 
-        $selectParams = $selectManager->getSelectParams($params, true);
-
-        $locationId = $entity->get('locationId');
-
-        if ($locationId) {
-            $selectParams['leftJoins'][] = 'locations';
-
-            $selectParams['leftJoins'][] = [
-                'RealEstateLocationPath',
-                'realEstateLocationPathLeft',
-                [
-                    'realEstateLocationPathLeft.descendorId=:' => 'locationsMiddle.realEstateLocationId',
-                ],
-            ];
-
-            $selectParams['leftJoins'][] = [
-                'RealEstateLocationPath',
-                'realEstateLocationPathRight',
-                [
-                    'realEstateLocationPathLeft.ascendorId=:' => 'locationsMiddle.realEstateLocationId',
-                ],
-            ];
-
-            $selectParams['whereClause'][] = [
-                'OR' => [
-                    ['realEstateLocationPathRight.descendorId' => $locationId],
-                    ['realEstateLocationPathLeft.ascendorId' => $locationId],
-                    ['locations.id' => null],
-                ]
-            ];
-
-            $selectParams['distinct'] = true;
-        }
-
-        $selectParams['whereClause'][] = [
-            'id!=s' => [
-                'from' => 'Opportunity',
-                'select' => ['requestId'],
-                'whereClause' => [
-                    'propertyId=' => $entity->id,
-                    'deleted' => false,
-                ],
-            ],
-        ];
-
-        $selectParams['leftJoins'][] = [
-            'RealEstatePropertyRealEstateRequest',
-            'requestsMiddle',
-            [
-                'requestsMiddle.realEstateRequestId=:' => 'id',
-                'requestsMiddle.deleted' => false,
-                'requestsMiddle.realEstatePropertyId=' => $entity->id,
-            ],
-        ];
-
-        if (empty($selectParams['select'])) {
-            $selectParams['select'] = ['*'];
-        }
-
-        $selectParams['select'][] = ['requestsMiddle.interestDegree', 'interestDegree'];
+        $builder
+            ->from('RealEstateRequest')
+            ->withStrictAccessControl()
+            ->withSearchParams($params);
 
         $primaryFilter = null;
 
@@ -150,11 +106,76 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         }
 
         if ($primaryFilter) {
-            $selectManager->applyPrimaryFilter($primaryFilter, $selectParams);
+            $builder->withPrimaryFilter($primaryFilter);
         }
 
+        $queryBuilder = $builder->buildQueryBuilder();
+
+        $locationId = $entity->get('locationId');
+
+        if ($locationId) {
+            $queryBuilder
+                ->distinct()
+                ->leftJoin('locations')
+                ->leftJoin(
+                    'RealEstateLocationPath',
+                    'realEstateLocationPathLeft',
+                    [
+                        'realEstateLocationPathLeft.descendorId=:' => 'locationsMiddle.realEstateLocationId',
+                    ]
+                )
+                ->leftJoin(
+                    'RealEstateLocationPath',
+                    'realEstateLocationPathRight',
+                    [
+                        'realEstateLocationPathLeft.ascendorId=:' => 'locationsMiddle.realEstateLocationId',
+                    ]
+                )
+                ->where([
+                    'OR' => [
+                        ['realEstateLocationPathRight.descendorId' => $locationId],
+                        ['realEstateLocationPathLeft.ascendorId' => $locationId],
+                        ['locations.id' => null],
+                    ]
+                ]);
+        }
+
+        $queryBuilder->where(
+            Cond::notIn(
+                Cond::column('id'),
+                (new SelectBuilder)
+                    ->from('Opportunity')
+                    ->select('requestId')
+                    ->where([
+                        'propertyId=' => $entity->getId(),
+                        'deleted' => false,
+                    ])
+                    ->build()
+            )
+        );
+
+        $queryBuilder->leftJoin(
+            'RealEstatePropertyRealEstateRequest',
+            'requestsMiddle',
+            [
+                'requestsMiddle.realEstateRequestId=:' => 'id',
+                'requestsMiddle.deleted' => false,
+                'requestsMiddle.realEstatePropertyId=' => $entity->getId(),
+            ]
+        );
+
+        if (count($queryBuilder->build()->getSelect()) === 0) {
+            $queryBuilder->select('*');
+        }
+
+        $queryBuilder
+            ->select('requestsMiddle.interestDegree')
+            ->select('interestDegree');
+
         if ($entity->get('type')) {
-            $selectParams['whereClause']['propertyType'] = $entity->get('type');
+            $queryBuilder->where([
+                'propertyType' => $entity->get('type')
+            ]);
         }
 
         $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
@@ -168,7 +189,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $toField = 'to' . ucfirst($field);
 
             if ($entity->get($field) !== null) {
-                $selectParams['whereClause'][] = [
+                $queryBuilder->where([
                     'OR' => [
                         [
                             $fromField . '!=' => null,
@@ -190,14 +211,16 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                             $fromField . '=' => null,
                             $toField . '=' => null,
                         ]
-                    ],
-                ];
-            } else {
-                $selectParams['whereClause'][] = [
-                    $fromField . '=' => null,
-                    $toField . '=' => null,
-                ];
+                    ]
+                ]);
+
+                continue;
             }
+
+            $queryBuilder->where([
+                $fromField . '=' => null,
+                $toField . '=' => null,
+            ]);
         }
 
         if ($entity->get('price') !== null) {
@@ -226,7 +249,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                 $price = $price / ($rate2);
             }
 
-            $selectParams['whereClause'][] = [
+            $queryBuilder->where([
                 'OR' => [
                     [
                         'fromPrice!=' => null,
@@ -249,36 +272,45 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                         'toPrice=' => null,
                     ],
                 ],
-            ];
-        } else {
-            $selectParams['whereClause'][] = [
+            ]);
+        }
+        else {
+            $queryBuilder->where([
                 'fromPrice=' => null,
                 'toPrice=' => null,
-            ];
+            ]);
         }
 
-        return $selectParams;
+        return $queryBuilder->build();
     }
 
-    public function findLinkedEntitiesMatchingRequests(string $id, $params, $customOrder = false) : RecordCollection
-    {
+    public function findLinkedEntitiesMatchingRequests(
+        string $id,
+        SearchParams $params,
+        bool $customOrder = false
+    ): RecordCollection {
+
         $entity = $this->getRepository()->get($id);
 
         $this->loadAdditionalFields($entity);
 
-        $selectParams = $this->getMatchingRequestsSelectParams($entity, $params);
+        $query = $this->getMatchingRequestsQuery($entity, $params);
 
         if (!$customOrder) {
-            $selectParams['orderBy'] = [
-                ['requestsMiddle.interestDegree'],
-                ['LIST:status:New,Assigned,In Process'],
-                ['createdAt', 'DESC'],
-            ];
+            $query = (new SelectBuilder())
+                ->clone($query)
+                ->order([
+                    Order::fromString('requestsMiddle.interestDegree'),
+                    Order::createByPositionInList(Expr::create('status'), ['New', 'Assigned', 'In Process']),
+                    Order::fromString('createdAt')->withDesc(),
+                ])
+                ->build();
         }
 
         $collection = $this->getEntityManager()
-            ->getRepository('RealEstateRequest')
-            ->find($selectParams);
+            ->getRDBRepository('RealEstateRequest')
+            ->clone($query)
+            ->find();
 
         $recordService = $this->getRecordService('RealEstateRequest');
 
@@ -288,8 +320,9 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         }
 
         $total = $this->getEntityManager()
-            ->getRepository('RealEstateRequest')
-            ->count($selectParams);
+            ->getRDBRepository('RealEstateRequest')
+            ->clone($query)
+            ->count();
 
         if ($entity->isActual()) {
             $entity->set('matchingRequestCount', $total);
@@ -346,11 +379,12 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         $matchingRequestCount = null;
 
         if ($entity->isActual()) {
-            $selectParams = $this->getMatchingRequestsSelectParams($entity, []);
+            $query = $this->getMatchingRequestsQuery($entity, SearchParams::create());
 
             $matchingRequestCount = $this->getEntityManager()
-                ->getRepository('RealEstateRequest')
-                ->count($selectParams);
+                ->getRDBRepository('RealEstateRequest')
+                ->clone($query)
+                ->count();
         }
 
         $entity->set('matchingRequestCount', $matchingRequestCount);
@@ -358,7 +392,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 
     public function updateMatchingCount()
     {
-        $repository = $this->getEntityManager()->getRepository('RealEstateProperty');
+        $repository = $this->getEntityManager()->getRDBRepository('RealEstateProperty');
 
         $notActualList = $repository
             ->select(['id', 'matchingRequestCount'])
@@ -381,16 +415,18 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         $actualList = $repository
             ->where([
                 'status!=' => ['Completed', 'Canceled', 'Lost']
-            ])->find();
+            ])
+            ->find();
 
         foreach ($actualList as $e) {
             $this->loadAdditionalFields($e);
 
-            $selectParams = $this->getMatchingRequestsSelectParams($e, []);
+            $query = $this->getMatchingRequestsQuery($e, SearchParams::create());
 
             $matchingRequestCount = $this->getEntityManager()
-                ->getRepository('RealEstateRequest')
-                ->count($selectParams);
+                ->getRDBRepository('RealEstateRequest')
+                ->clone($query)
+                ->count();
 
             $e->set('matchingRequestCount', $matchingRequestCount);
 
