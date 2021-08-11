@@ -36,17 +36,19 @@ use Espo\Core\{
     ORM\EntityManager,
 };
 
-use Espo\{
-    Entities\Preferences,
-};
+use Espo\Core\Select\SearchParams;
+use Espo\ORM\Query\Part\Order;
+
+use Espo\Entities\Preferences;
 
 use Exception;
 use DateTime;
+use stdClass;
 
 class RealEstateSendMatches
 {
     protected $serviceFactory;
-    
+
     protected $emailSender;
 
     protected $preferences;
@@ -74,7 +76,7 @@ class RealEstateSendMatches
         return $this->preferences->getSmtpParams();
     }
 
-    public function processRequestJob($data)
+    public function processRequestJob(stdClass $data): void
     {
         if (empty($data->targetId)) {
             throw new Error();
@@ -90,20 +92,20 @@ class RealEstateSendMatches
 
         $service->loadAdditionalFields($entity);
 
-        $selectParams = $service->getMatchingPropertiesSelectParams($entity, []);
+        $query = $service->getMatchingPropertiesQuery($entity, SearchParams::create());
 
-        $selectParams['offset'] = 0;
-        $selectParams['limit'] = $this->config->get('realEstateEmailSendingLimit', 20);
-
-        $selectParams['orderBy'] = [
-            ['propertiesMiddle.interest_degree'],
-            ['LIST:status:New,Assigned,In Process'],
-            ['createdAt', 'DESC'],
-        ];
+        $limit = $this->config->get('realEstateEmailSendingLimit', 20);
 
         $propertyList = $this->entityManager
-            ->getRepository('RealEstateProperty')
-            ->find($selectParams);
+            ->getRDBRepository('RealEstateProperty')
+            ->clone($query)
+            ->limit(0, $limit)
+            ->order([
+                Order::fromString('propertiesMiddle.interestDegree'),
+                Order::createByPositionInList(Expr::create('status'), ['New', 'Assigned', 'In Process']),
+                Order::fromString('createdAt')->withDesc(),
+            ])
+            ->find();
 
         foreach ($propertyList as $property) {
             if (
@@ -127,11 +129,9 @@ class RealEstateSendMatches
 
             $this->entityManager->saveEntity($queueItem);
         }
-
-        return true;
     }
 
-    public function processPropertyJob($data)
+    public function processPropertyJob(stdClass $data): void
     {
         if (empty($data->targetId)) {
             throw new Error();
@@ -147,17 +147,20 @@ class RealEstateSendMatches
 
         $service->loadAdditionalFields($entity);
 
-        $selectParams = $service->getMatchingRequestsSelectParams($entity, []);
+        $query = $service->getMatchingRequestsSelectParams($entity, SearchParams::create());
 
-        $selectParams['offset'] = 0;
-        $selectParams['limit'] = $this->config->get('realEstateEmailSendingLimit', 20);
-        $selectParams['orderBy'] = [
-            ['requestsMiddle.interest_degree'],
-            ['LIST:status:New,Assigned,In Process'],
-            ['createdAt', 'DESC']
-        ];
+        $limit = $this->config->get('realEstateEmailSendingLimit', 20);
 
-        $requestList = $this->entityManager->getRepository('RealEstateRequest')->find($selectParams);
+        $requestList = $this->entityManager
+            ->getRDBRepository('RealEstateRequest')
+            ->clone($query)
+            ->limit(0, $limit)
+            ->order([
+                Order::fromString('requestsMiddle.interestDegree'),
+                Order::createByPositionInList(Expr::create('status'), ['New', 'Assigned', 'In Process']),
+                Order::fromString('createdAt')->withDesc(),
+            ])
+            ->find();
 
         foreach ($requestList as $request) {
             if (!$request->get('contactId')) {
@@ -185,8 +188,6 @@ class RealEstateSendMatches
 
             $this->entityManager->saveEntity($queueItem);
         }
-
-        return true;
     }
 
     public function processSendingQueue()

@@ -27,9 +27,9 @@
 namespace Espo\Modules\RealEstate\Jobs;
 
 use Espo\Core\ServiceFactory;
-use Espo\Core\Jobs\Job;
+use Espo\Core\Job\JobDataLess;
 
-class SendPropertyMatches implements Job
+class SendPropertyMatches implements JobDataLess
 {
     protected $serviceFactory;
 
@@ -38,7 +38,7 @@ class SendPropertyMatches implements Job
         $this->serviceFactory = $serviceFactory;
     }
 
-    public function run()
+    public function run(): void
     {
         $this->serviceFactory->create('RealEstateSendMatches')->processSendingQueue();
     }

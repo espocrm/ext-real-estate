@@ -27,18 +27,18 @@
 namespace Espo\Modules\RealEstate\Jobs;
 
 use Espo\Core\ServiceFactory;
-use Espo\Core\Jobs\Job;
+use Espo\Core\Job\JobDataLess;
 
-class PropertyMatchingUpdate implements Job
+class PropertyMatchingUpdate implements JobDataLess
 {
-    protected $serviceFactory;
+    private $serviceFactory;
 
     public function __construct(ServiceFactory $serviceFactory)
     {
         $this->serviceFactory = $serviceFactory;
     }
 
-    public function run()
+    public function run(): void
     {
         $this->serviceFactory->create('RealEstateProperty')->updateMatchingCount();
         $this->serviceFactory->create('RealEstateRequest')->updateMatchingCount();
