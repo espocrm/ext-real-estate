@@ -26,24 +26,30 @@
 
 namespace Espo\Modules\RealEstate\Repositories;
 
-use \Espo\ORM\Entity;
+use Espo\ORM\Entity;
 
 class RealEstateProperty extends \Espo\Core\Templates\Repositories\Base
 {
     protected function init()
     {
         parent::init();
+
         $this->addDependency('serviceFactory');
     }
 
-    public function beforeSave(Entity $entity, array $options = array())
+    public function beforeSave(Entity $entity, array $options = [])
     {
         $propertyType = $entity->get('type');
 
-        $fieldList = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+        $fieldList = $this->getMetadata()
+            ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+
         $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+
         foreach ($fieldDefs as $field => $defs) {
-            if (empty($defs['isMatching'])) continue;
+            if (empty($defs['isMatching'])) {
+                continue;
+            }
 
             if (!in_array($field, $fieldList)) {
                 $entity->set($field, null);
@@ -51,19 +57,24 @@ class RealEstateProperty extends \Espo\Core\Templates\Repositories\Base
         }
 
         $name = '';
+
         if ($entity->get('addressStreet') || $entity->get('addressCity')) {
             if ($entity->get('addressStreet')) {
                 $name .= str_replace("\n", ', ', $entity->get('addressStreet'));
             }
+
             if ($entity->get('addressCity')) {
                 if ($name != '') {
                     $name .= ", ";
                 }
+
                 $name .= $entity->get('addressCity');
             }
-        } else {
+        }
+        else {
             $name = "unknown-address";
         }
+
         $entity->set('name', $name);
 
         return parent::beforeSave($entity, $options);

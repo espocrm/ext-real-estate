@@ -26,4 +26,3 @@ class Contact extends \Espo\Modules\Crm\Repositories\Contact
 {
 
 }
-

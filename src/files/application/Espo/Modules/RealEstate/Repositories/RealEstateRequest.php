@@ -26,21 +26,25 @@
 
 namespace Espo\Modules\RealEstate\Repositories;
 
-use \Espo\ORM\Entity;
+use Espo\ORM\Entity;
 
 class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
 {
-    public function beforeSave(Entity $entity, array $options = array())
+    public function beforeSave(Entity $entity, array $options = [])
     {
         $propertyType = $entity->get('propertyType');
 
-        $fieldList = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+        $fieldList = $this->getMetadata()
+            ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+
         $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+
         foreach ($fieldDefs as $field => $defs) {
-            if (empty($defs['isMatching'])) continue;
+            if (empty($defs['isMatching'])) {
+                continue;
+            }
 
             if (!in_array($field, $fieldList)) {
-                echo $field . ' ';
                 $entity->set('from' . ucfirst($field), null);
                 $entity->set('to' . ucfirst($field), null);
             }
@@ -49,9 +53,10 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
         return parent::beforeSave($entity, $options);
     }
 
-    public function afterSave(Entity $entity, array $options = array())
+    public function afterSave(Entity $entity, array $options = [])
     {
         $result = parent::afterSave($entity, $options);
+
         $this->handleAfterSaveContacts($entity, $options);
 
         if ($entity->isNew() && !$entity->get('name')) {
@@ -70,9 +75,10 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
         return $result;
     }
 
-    protected function handleAfterSaveContacts(Entity $entity, array $options = array())
+    protected function handleAfterSaveContacts(Entity $entity, array $options = [])
     {
-        $contactIdChanged = $entity->has('contactId') && $entity->get('contactId') != $entity->getFetched('contactId');
+        $contactIdChanged =
+            $entity->has('contactId') && $entity->get('contactId') != $entity->getFetched('contactId');
 
         if ($contactIdChanged) {
             $contactId = $entity->get('contactId');
@@ -92,6 +98,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
                     real_estate_request_id = ".$pdo->quote($entity->id)." AND
                     deleted = 0
             ";
+
             $sth = $pdo->prepare($sql);
             $sth->execute();
 
