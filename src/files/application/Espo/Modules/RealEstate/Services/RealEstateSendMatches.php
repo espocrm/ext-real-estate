@@ -26,8 +26,6 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\NotFound;
 use Espo\Core\Exceptions\Error;
 
@@ -48,9 +46,13 @@ use DateTime;
 class RealEstateSendMatches
 {
     protected $serviceFactory;
+    
     protected $emailSender;
+
     protected $preferences;
+
     protected $config;
+
     protected $entityManager;
 
     public function __construct(
