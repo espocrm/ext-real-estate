@@ -23,9 +23,11 @@
  * Section 5 of the GNU General Public License version 3.
  ************************************************************************/
 
-Espo.define('real-estate:views/real-estate-property/fields/location', 'views/fields/link-category-tree', function (Dep) {
+define('real-estate:views/real-estate-property/fields/location', 'views/fields/link-category-tree', function (Dep) {
 
     return Dep.extend({
+
+        forceSelectAllAttributes: true,
 
         select: function (model) {
             Dep.prototype.select.call(this, model);
@@ -35,8 +37,6 @@ Espo.define('real-estate:views/real-estate-property/fields/location', 'views/fie
             this.model.set('addressState', model.get('addressState'));
             this.model.set('addressCountry', model.get('addressCountry'));
             this.model.set('addressPostalCode', model.get('addressPostalCode'));
-        }
-
+        },
     });
-
 });
