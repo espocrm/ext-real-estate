@@ -38,6 +38,7 @@ use Espo\Core\{
 
 use Espo\Core\Select\SearchParams;
 use Espo\ORM\Query\Part\Order;
+use Espo\ORM\Query\Part\Expression as Expr;
 
 use Espo\Entities\Preferences;
 
