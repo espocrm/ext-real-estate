@@ -50,6 +50,27 @@
             }
         ]
     },
+    "bottomPanels": {
+        "detail": [
+            {
+                "name": "matchingProperties",
+                "label": "Matching Properties",
+                "view": "real-estate:views/real-estate-request/record/panels/matching-properties",
+                "create": false,
+                "select": false,
+                "rowActionsView": "real-estate:views/real-estate-request/record/row-actions/matching-properties",
+                "layout": "listForRequest",
+                "actionList": [
+                    {
+                        "name": "listMatching",
+                        "label": "List",
+                        "action": "listMatching"
+                    }
+                ],
+                "order": 4
+            }
+        ]
+    },
     "relationshipPanels": {
         "opportunities": {
             "layout": "listForRequest",
@@ -61,6 +82,19 @@
     "dynamicLogic": {
         "fields": {
             "matchingPropertyCount": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "notIn",
+                            "attribute": "status",
+                            "value": ["Completed", "Canceled", "Lost"]
+                        }
+                    ]
+                }
+            }
+        },
+        "panels": {
+            "matchingProperties": {
                 "visible": {
                     "conditionGroup": [
                         {

@@ -50,6 +50,27 @@
             }
         ]
     },
+    "bottomPanels": {
+        "detail": [
+            {
+                "name": "matchingRequests",
+                "label": "Matching Requests",
+                "view": "real-estate:views/real-estate-property/record/panels/matching-requests",
+                "create": false,
+                "select": false,
+                "rowActionsView": "real-estate:views/real-estate-property/record/row-actions/matching-requests",
+                "layout": "listForProperty",
+                "actionList": [
+                    {
+                        "name": "listMatching",
+                        "label": "List",
+                        "action": "listMatching"
+                    }
+                ],
+                "order": 4
+            }
+        ]
+    },
     "relationshipPanels":{
         "opportunities":{
             "layout":"listForProperty",
@@ -61,6 +82,19 @@
     "dynamicLogic": {
         "fields": {
             "matchingRequestCount": {
+                "visible": {
+                    "conditionGroup": [
+                        {
+                            "type": "notIn",
+                            "attribute": "status",
+                            "value": ["Completed", "Canceled", "Lost"]
+                        }
+                    ]
+                }
+            }
+        },
+        "panels": {
+            "matchingRequests": {
                 "visible": {
                     "conditionGroup": [
                         {

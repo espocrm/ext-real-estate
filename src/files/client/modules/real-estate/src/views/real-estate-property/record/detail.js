@@ -23,12 +23,9 @@
  * Section 5 of the GNU General Public License version 3.
  ************************************************************************/
 
-Espo.define('real-estate:views/real-estate-property/record/detail', 'views/record/detail', function (Dep) {
+define('real-estate:views/real-estate-property/record/detail', 'views/record/detail', function (Dep) {
 
     return Dep.extend({
 
-        bottomView: "real-estate:views/real-estate-property/record/detail-bottom"
-
     });
-
 });

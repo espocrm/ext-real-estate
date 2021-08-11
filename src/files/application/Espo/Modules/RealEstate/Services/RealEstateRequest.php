@@ -146,24 +146,16 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         if (count($locationIdList)) {
             $queryBuilder
                 ->distinct()
-                ->leftJoin([
+                ->leftJoin(
                     'RealEstateLocationPath',
                     'realEstateLocationPath',
                     [
                         'realEstateLocationPath.descendorId=:' => 'locationId',
                     ]
-                ])
+                )
                 ->where([
                     'realEstateLocationPath.ascendorId' => $locationIdList
                 ]);
-
-            $selectParams['leftJoins'][] = [
-                'RealEstateLocationPath',
-                'realEstateLocationPath',
-                [
-                    'realEstateLocationPath.descendorId=:' => 'locationId',
-                ]
-            ];
         }
 
         $queryBuilder->where(

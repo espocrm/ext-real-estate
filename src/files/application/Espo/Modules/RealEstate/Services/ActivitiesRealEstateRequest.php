@@ -26,213 +26,189 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use Espo\Core\Exceptions\Error;
-use Espo\Core\Exceptions\NotFound;
-use Espo\Core\Exceptions\Forbidden;
+use Espo\ORM\Entity;
+use Espo\ORM\Query\Select;
+use Espo\ORM\Query\SelectBuilder;
 
-use Espo\{
-    ORM\Entity,
-    ORM\QueryParams\Select,
-};
+use Espo\Core\Select\SelectManagerFactory;
+use Espo\Core\Select\SelectBuilderFactory;
 
-use Espo\Core\{
-    Select\SelectManagerFactory,
-    Utils\Metadata,
-};
+use Espo\Core\Utils\Metadata;
 
 class ActivitiesRealEstateRequest
 {
     protected $metadata;
+
     protected $selectManagerFactory;
+
+    private $selectBuilderFactory;
 
     public function __construct(
         Metadata $metadata,
-        SelectManagerFactory $selectManagerFactory
+        SelectManagerFactory $selectManagerFactory,
+        SelectBuilderFactory $selectBuilderFactory
     ) {
         $this->metadata = $metadata;
         $this->selectManagerFactory = $selectManagerFactory;
+        $this->selectBuilderFactory = $selectBuilderFactory;
     }
 
-    public function getActivitiesMeetingQuery(Entity $entity, $statusList, $isHistory)
+    public function getActivitiesMeetingQuery(Entity $entity, array $statusList): Select
     {
-        $scope = $entity->getEntityType();
-
-        $selectManager = $this->selectManagerFactory->create('Meeting');
-
-        $select = [
-            'id',
-            'name',
-            ['dateStart', 'dateStart'],
-            ['dateEnd', 'dateEnd'],
-            ['dateStartDate', 'dateStartDate'],
-            ['dateEndDate', 'dateEndDate'],
-            ['VALUE:Meeting', '_scope'],
-            'assignedUserId',
-            'assignedUserName',
-            'parentType',
-            'parentId',
-            'status',
-            'createdAt',
-            ['VALUE:', 'hasAttachment'],
-        ];
-
-        $baseSelectParams = [
-            'select' => $select,
-            'whereClause' => [
-                [
-                    'OR' => [
-                        [
-                            'parentType' => 'RealEstateRequest',
-                            'parentId' => $entity->id,
-                        ],
-                        [
-                            'parentType' => 'Opportunity',
-                            'parentId=s' => [
-                                'from' => 'Opportunity',
-                                'select' => ['id'],
-                                'whereClause' => [
-                                    'requestId' => $entity->id,
-                                    'deleted' => false,
-                                ],
-                            ],
-                        ],
+        $builder = $this->selectBuilderFactory
+            ->create()
+            ->from('Meeting')
+            ->withStrictAccessControl()
+            ->buildQueryBuilder()
+            ->select([
+                'id',
+                'name',
+                ['dateStart', 'dateStart'],
+                ['dateEnd', 'dateEnd'],
+                ['dateStartDate', 'dateStartDate'],
+                ['dateEndDate', 'dateEndDate'],
+                ['"Meeting"', '_scope'],
+                'assignedUserId',
+                'assignedUserName',
+                'parentType',
+                'parentId',
+                'status',
+                'createdAt',
+                ['""', 'hasAttachment'],
+            ])
+            ->where([
+                'OR' => [
+                    [
+                        'parentType' => 'RealEstateRequest',
+                        'parentId' => $entity->getId(),
+                    ],
+                    [
+                        'parentType' => 'Opportunity',
+                        'parentId=s' => SelectBuilder::create()
+                            ->from('Opportunity')
+                            ->select('id')
+                            ->where([
+                                'propertyId' => $entity->getId(),
+                                'deleted' => false,
+                            ])
+                            ->build()
+                            ->getRaw(),
                     ],
                 ],
-            ],
-        ];
+            ]);
 
-        if (!empty($statusList)) {
-            $baseSelectParams['whereClause'][] = [
+        if (count($statusList)) {
+            $builder->where([
                 'status' => $statusList,
-            ];
+            ]);
         }
 
-        $selectParams = $baseSelectParams;
-
-        $selectManager->applyAccess($selectParams);
-
-        return Select::fromRaw($selectParams);
+        return $builder->build();
     }
 
-    public function getActivitiesCallQuery(Entity $entity, $statusList, $isHistory)
+    public function getActivitiesCallQuery(Entity $entity, array $statusList): Select
     {
-        $scope = $entity->getEntityType();
-
-        $selectManager = $this->selectManagerFactory->create('Call');
-
-        $select = [
-            'id',
-            'name',
-            ['dateStart', 'dateStart'],
-            ['dateEnd', 'dateEnd'],
-            ['VALUE:', 'dateStartDate'],
-            ['VALUE:', 'dateEndDate'],
-            ['VALUE:Call', '_scope'],
-            'assignedUserId',
-            'assignedUserName',
-            'parentType',
-            'parentId',
-            'status',
-            'createdAt',
-            ['VALUE:', 'hasAttachment']
-        ];
-
-        $baseSelectParams = [
-            'select' => $select,
-            'whereClause' => [
-                [
-                    'OR' => [
-                        [
-                            'parentType' => 'RealEstateRequest',
-                            'parentId' => $entity->id,
-                        ],
-                        [
-                            'parentType' => 'Opportunity',
-                            'parentId=s' => [
-                                'from' => 'Opportunity',
-                                'select' => ['id'],
-                                'whereClause' => [
-                                    'requestId' => $entity->id,
-                                    'deleted' => false,
-                                ],
-                            ],
-                        ],
+        $builder = $this->selectBuilderFactory
+            ->create()
+            ->from('Call')
+            ->withStrictAccessControl()
+            ->buildQueryBuilder()
+            ->select([
+                'id',
+                'name',
+                ['dateStart', 'dateStart'],
+                ['dateEnd', 'dateEnd'],
+                ['""', 'dateStartDate'],
+                ['""', 'dateEndDate'],
+                ['"Call"', '_scope'],
+                'assignedUserId',
+                'assignedUserName',
+                'parentType',
+                'parentId',
+                'status',
+                'createdAt',
+                ['""', 'hasAttachment'],
+            ])
+            ->where([
+                'OR' => [
+                    [
+                        'parentType' => 'RealEstateRequest',
+                        'parentId' => $entity->getId(),
+                    ],
+                    [
+                        'parentType' => 'Opportunity',
+                        'parentId=s' => SelectBuilder::create()
+                            ->from('Opportunity')
+                            ->select('id')
+                            ->where([
+                                'propertyId' => $entity->getId(),
+                                'deleted' => false,
+                            ])
+                            ->build()
+                            ->getRaw(),
                     ],
                 ],
-            ],
-        ];
+            ]);
 
-        if (!empty($statusList)) {
-            $baseSelectParams['whereClause'][] = [
+        if (count($statusList)) {
+            $builder->where([
                 'status' => $statusList,
-            ];
+            ]);
         }
 
-        $selectParams = $baseSelectParams;
-
-        $selectManager->applyAccess($selectParams);
-
-        return Select::fromRaw($selectParams);
+        return $builder->build();
     }
 
-    public function getActivitiesEmailQuery(Entity $entity, $statusList, $isHistory)
+    public function getActivitiesEmailQuery(Entity $entity, array $statusList): Select
     {
-        $scope = $entity->getEntityType();
-
-        $selectManager = $this->selectManagerFactory->create('Email');
-
-        $select = [
-            'id',
-            'name',
-            ['dateSent', 'dateStart'],
-            ['VALUE:', 'dateEnd'],
-            ['VALUE:', 'dateStartDate'],
-            ['VALUE:', 'dateEndDate'],
-            ['VALUE:Email', '_scope'],
-            'assignedUserId',
-            'assignedUserName',
-            'parentType',
-            'parentId',
-            'status',
-            'createdAt',
-            'hasAttachment',
-        ];
-
-        $baseSelectParams = [
-            'select' => $select,
-            'whereClause' => [
-                [
-                    'OR' => [
-                        [
-                            'parentType' => 'RealEstateRequest',
-                            'parentId' => $entity->id,
-                        ],
-                        [
-                            'parentType' => 'Opportunity',
-                            'parentId=s' => [
-                                'from' => 'Opportunity',
-                                'select' => ['id'],
-                                'whereClause' => [
-                                    'requestId' => $entity->id,
-                                    'deleted' => false,
-                                ],
-                            ],
-                        ],
+        $builder = $this->selectBuilderFactory
+            ->create()
+            ->from('Email')
+            ->withStrictAccessControl()
+            ->buildQueryBuilder()
+            ->select([
+                'id',
+                'name',
+                ['dateSent', 'dateStart'],
+                ['""', 'dateEnd'],
+                ['""', 'dateStartDate'],
+                ['""', 'dateEndDate'],
+                ['"Email"', '_scope'],
+                'assignedUserId',
+                'assignedUserName',
+                'parentType',
+                'parentId',
+                'status',
+                'createdAt',
+                'hasAttachment',
+            ])
+            ->where([
+                'OR' => [
+                    [
+                        'parentType' => 'RealEstateRequest',
+                        'parentId' => $entity->getId(),
+                    ],
+                    [
+                        'parentType' => 'Opportunity',
+                        'parentId=s' => SelectBuilder::create()
+                            ->from('Opportunity')
+                            ->select('id')
+                            ->where([
+                                'propertyId' => $entity->getId(),
+                                'deleted' => false,
+                            ])
+                            ->build()
+                            ->getRaw(),
                     ],
                 ],
-            ],
-        ];
+            ]);
 
-        if (!empty($statusList)) {
-            $baseSelectParams['whereClause'][] = [
+        if (count($statusList)) {
+            $builder->where([
                 'status' => $statusList,
-            ];
+            ]);
         }
 
-        $selectParams = $baseSelectParams;
-
-        $selectManager->applyAccess($selectParams);
-
-        return Select::fromRaw($selectParams);
+        return $builder->build();
     }
 }
