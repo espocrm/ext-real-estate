@@ -190,7 +190,7 @@ class RealEstateSendMatches
         }
     }
 
-    public function processSendingQueue()
+    public function processSendingQueue(): void
     {
         $limit = $this->config->get('realEstateEmailSendingPortionSize', 30);
 
@@ -219,13 +219,14 @@ class RealEstateSendMatches
                     'requestId' => $item->get('requestId'),
                     'propertyId' => $item->get('propertyId'),
                 ]);
-            } catch (Exception $e) {}
+            }
+            catch (Exception $e) {}
         }
 
         $this->processCleanup();
     }
 
-    public function processCleanup()
+    public function processCleanup(): void
     {
         $period = '-' . $this->config->get('realEstateEmailSendingCleanupPeriod', '3 months');
 
@@ -247,7 +248,7 @@ class RealEstateSendMatches
         }
     }
 
-    public function sendMatchesEmail($data)
+    public function sendMatchesEmail($data): void
     {
         if (empty($data['requestId']) || empty($data['propertyId'])) {
             throw new NotFound();

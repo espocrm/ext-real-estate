@@ -26,24 +26,37 @@
 
 namespace Espo\Modules\RealEstate\Hooks\RealEstateProperty;
 
-class EmailRequester extends \Espo\Core\Hooks\Base
+use Espo\Core\Utils\Config;
+use Espo\Core\Utils\Metadata;
+use Espo\ORM\EntityManager;
+use Espo\ORM\Entity;
+
+class EmailRequester
 {
     public static $order = 16;
 
-    protected function init()
+    private $config;
+
+    private $metadata;
+
+    private $entityManager;
+
+    public function __construct(Config $config, Metadata $metadata, EntityManager $entityManager)
     {
-        $this->addDependency('serviceFactory');
+        $this->config = $config;
+        $this->metadata = $metadata;
+        $this->entityManager = $entityManager;
     }
 
-    protected function getServiceFactory()
+    public function afterSave(Entity $entity): void
     {
-        return $this->getInjection('serviceFactory');
-    }
+        if (!$this->config->get('realEstateEmailSending')) {
+            return;
+        }
 
-    public function afterSave($entity)
-    {
-        if (!$this->getConfig()->get('realEstateEmailSending')) return;
-        if (!$entity->get('type')) return;
+        if (!$entity->get('type')) {
+            return;
+        }
 
         $toSend = $entity->isNew();
 
@@ -51,38 +64,43 @@ class EmailRequester extends \Espo\Core\Hooks\Base
             'type',
             'propertyType',
             'locationId',
-            'price'
+            'price',
         ];
 
-        foreach (
-            $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $entity->get('type'), 'fieldList'], [])
-            as
-            $field
-        ) {
+        $matchFieldList = $this->metadata
+            ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $entity->get('type'), 'fieldList'])
+            ?? [];
+
+        foreach ($matchFieldList as $field) {
             $fieldList[] = $field;
         }
-
 
         if (!$toSend) {
             foreach ($fieldList as $field) {
                 if ($entity->hasFetched($field) && $entity->isAttributeChanged($field)) {
                     $toSend = true;
+
                     break;
                 }
             }
         }
 
-        if ($toSend) {
-            $job = $this->getEntityManager()->getEntity('Job');
-            $job->set([
-                'serviceName' => 'RealEstateSendMatches',
-                'methodName' => 'processPropertyJob',
-                'data' => [
-                    'targetId' => $entity->id,
-                    'isUpdated' => !$entity->isNew()
-                ]
-            ]);
-            $this->getEntityManager()->saveEntity($job);
+        if (!$toSend) {
+            return;
         }
+
+        $job = $this->getEntityManager()->getEntity('Job');
+
+        $job->set([
+            'serviceName' => 'RealEstateSendMatches',
+            'methodName' => 'processPropertyJob',
+            'data' => [
+                'targetId' => $entity->id,
+                'isUpdated' => !$entity->isNew(),
+            ],
+            'queue' => 'e0',
+        ]);
+
+        $this->getEntityManager()->saveEntity($job);
     }
 }
