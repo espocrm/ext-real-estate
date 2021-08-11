@@ -147,7 +147,7 @@ class RealEstateSendMatches
 
         $service->loadAdditionalFields($entity);
 
-        $query = $service->getMatchingRequestsSelectParams($entity, SearchParams::create());
+        $query = $service->getMatchingRequestsQuery($entity, SearchParams::create());
 
         $limit = $this->config->get('realEstateEmailSendingLimit', 20);
 
