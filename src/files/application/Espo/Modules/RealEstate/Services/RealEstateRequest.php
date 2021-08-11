@@ -187,8 +187,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         }
 
         $queryBuilder
-            ->select('propertiesMiddle.interestDegree')
-            ->select('interestDegree');
+            ->select('propertiesMiddle.interestDegree', 'interestDegree');
 
         if ($entity->get('propertyType')) {
             $queryBuilder->where([
