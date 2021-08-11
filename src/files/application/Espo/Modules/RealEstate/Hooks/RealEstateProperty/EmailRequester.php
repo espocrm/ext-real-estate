@@ -89,7 +89,7 @@ class EmailRequester
             return;
         }
 
-        $job = $this->getEntityManager()->getEntity('Job');
+        $job = $this->entityManager->getEntity('Job');
 
         $job->set([
             'serviceName' => 'RealEstateSendMatches',
@@ -101,6 +101,6 @@ class EmailRequester
             'queue' => 'e0',
         ]);
 
-        $this->getEntityManager()->saveEntity($job);
+        $this->entityManager->saveEntity($job);
     }
 }
