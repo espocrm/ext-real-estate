@@ -408,7 +408,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $this->getRepository()->save($e, [
                 'silent' => true,
                 'skipHooks' => true,
-                'skipAll' => true
+                'skipAll' => true,
             ]);
         }
 
@@ -433,7 +433,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $this->getRepository()->save($e, [
                 'silent' => true,
                 'skipHooks' => true,
-                'skipAll' => true
+                'skipAll' => true,
             ]);
         }
     }
