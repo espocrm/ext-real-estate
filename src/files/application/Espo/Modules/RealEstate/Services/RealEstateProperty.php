@@ -76,7 +76,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 
             return $this->getServiceFactory()
                 ->create('RealEstateRequest')
-                ->findLinkedEntitiesMatchingProperties($item->getValue(), $params, true);
+                ->findLinkedMatchingProperties($item->getValue(), $params, true);
         }
 
         return parent::find($params);
@@ -284,7 +284,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         return $queryBuilder->build();
     }
 
-    public function findLinkedEntitiesMatchingRequests(
+    public function findLinkedMatchingRequests(
         string $id,
         SearchParams $params,
         bool $customOrder = false
