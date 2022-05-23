@@ -42,6 +42,7 @@ use Espo\ORM\Query\Part\Order;
 use Espo\Core\Select\SearchParams;
 use Espo\Core\Select\Where\Item as WhereItem;
 use Espo\Core\Record\Collection as RecordCollection;
+use Espo\Core\Record\FindParams;
 
 class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 {
@@ -49,7 +50,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         'matchingRequestCount',
     ];
 
-    public function find(SearchParams $params): RecordCollection
+    public function find(SearchParams $params, ?FindParams $findParams = null): RecordCollection
     {
         $where = $params->getWhere();
 
