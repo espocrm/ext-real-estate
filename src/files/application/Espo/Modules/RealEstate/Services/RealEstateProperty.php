@@ -132,7 +132,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                     'RealEstateLocationPath',
                     'realEstateLocationPathRight',
                     [
-                        'realEstateLocationPathLeft.ascendorId=:' => 'locationsMiddle.realEstateLocationId',
+                        'realEstateLocationPathRight.ascendorId=:' => 'locationsMiddle.realEstateLocationId',
                     ]
                 )
                 ->where([
