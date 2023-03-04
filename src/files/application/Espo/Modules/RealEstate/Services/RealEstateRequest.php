@@ -334,6 +334,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
     public function setNotIntereseted($requestId, $propertyId)
     {
         $request = $this->getEntity($requestId);
+
         if (!$request) {
             throw new NotFound();
         }
@@ -342,11 +343,10 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             throw new Forbidden();
         }
 
-        return $this->getEntityManager()
-            ->getRepository('RealEstateRequest')
-            ->relate($request, 'properties', $propertyId, [
-                'interestDegree' => 0
-            ]);
+        $this->entityManager
+            ->getRDBRepository('RealEstateRequest')
+            ->getRelation($request, 'properties')
+            ->relateById($propertyId, ['interestDegree' => 0]);
     }
 
     public function unsetNotIntereseted($requestId, $propertyId)
@@ -361,14 +361,15 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             throw new Forbidden();
         }
 
-        return $this->getEntityManager()
-            ->getRepository('RealEstateRequest')
-            ->unrelate($request, 'properties', $propertyId);
+        $this->entityManager
+            ->getRDBRepository('RealEstateRequest')
+            ->getRelation($request, 'properties')
+            ->unrelateById($propertyId);
     }
 
     public function updateMatchingCount()
     {
-        $repository = $this->getEntityManager()->getRDBRepository('RealEstateRequest');
+        $repository = $this->entityManager->getRDBRepository('RealEstateRequest');
 
         $notActualList = $repository
             ->select(['id', 'matchingPropertyCount'])
@@ -398,7 +399,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
 
             $query = $this->getMatchingPropertiesQuery($e, SearchParams::create());
 
-            $matchingPropertyCount = $this->getEntityManager()
+            $matchingPropertyCount = $this->entityManager
                 ->getRDBRepository('RealEstateProperty')
                 ->clone($query)
                 ->count();

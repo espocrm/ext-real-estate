@@ -89,6 +89,7 @@
       <excludeFolder url="file://$MODULE_DIR$/site/application/Espo/Modules/RealEstate" />
       <excludeFolder url="file://$MODULE_DIR$/site/tests/unit/Espo/Modules/RealEstate" />
       <excludeFolder url="file://$MODULE_DIR$/site/tests/integration/Espo/Modules/RealEstate" />
+      <excludeFolder url="file://$MODULE_DIR$/site/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

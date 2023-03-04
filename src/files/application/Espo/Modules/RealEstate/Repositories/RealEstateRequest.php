@@ -84,28 +84,32 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
 
         if ($contactIdChanged) {
             $contactId = $entity->get('contactId');
+
             if (empty($contactId)) {
-                $this->unrelate($entity, 'contacts', $entity->getFetched('contactId'));
+                $this->getRelation($entity, 'contacts')
+                    ->unrelateById($entity->getFetched('contactId'));
+
                 return;
             }
         }
 
         if ($contactIdChanged) {
-            $pdo = $this->getEntityManager()->getPDO();
+            $query = $this->entityManager
+                ->getQueryBuilder()
+                ->select('id')
+                ->from('ContactRealEstateRequest')
+                ->where([
+                    'contactId' => $contactId,
+                    'realEstateRequestId' => $entity->getId(),
+                    'deleted' => false,
+                ])
+                ->build();
 
-            $sql = "
-                SELECT id FROM contact_real_estate_request
-                WHERE
-                    contact_id = ".$pdo->quote($contactId)." AND
-                    real_estate_request_id = ".$pdo->quote($entity->getId())." AND
-                    deleted = 0
-            ";
-
-            $sth = $pdo->prepare($sql);
-            $sth->execute();
+            $sth = $this->entityManager->getQueryExecutor()->execute($query);
 
             if (!$sth->fetch()) {
-                $this->relate($entity, 'contacts', $contactId);
+                $this->getRelation($entity, 'contacts')
+                    ->relateById($contactId);
             }
         }
     }

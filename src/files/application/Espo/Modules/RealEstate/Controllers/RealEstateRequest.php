@@ -39,7 +39,9 @@ class RealEstateRequest extends \Espo\Core\Templates\Controllers\Base
             throw new BadRequest();
         }
 
-        return $this->getRecordService()->setNotIntereseted($data->requestId, $data->propertyId);
+        $this->getRecordService()->setNotIntereseted($data->requestId, $data->propertyId);
+
+        return true;
     }
 
     public function postActionUnsetNotInterested($params, $data, $request)
@@ -48,6 +50,8 @@ class RealEstateRequest extends \Espo\Core\Templates\Controllers\Base
             throw new BadRequest();
         }
 
-        return $this->getRecordService()->unsetNotIntereseted($data->requestId, $data->propertyId);
+        $this->getRecordService()->unsetNotIntereseted($data->requestId, $data->propertyId);
+
+        return true;
     }
 }

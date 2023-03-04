@@ -42,15 +42,15 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
             !$entity->get('closeDate') &&
             $entity->get('stage') == 'Closed Won' &&
             (
-                $entity->isFieldChanged('stage') || $entity->isNew()
+                $entity->isAttributeChanged('stage') || $entity->isNew()
             )
         ) {
             $entity->set('closeDate', date('Y-m-d'));
         }
 
         if ($entity->get('requestId') && $entity->get('propertyId')) {
-            $request = $this->getEntityManager()->getEntity('RealEstateRequest', $entity->get('requestId'));
-            $property = $this->getEntityManager()->getEntity('RealEstateProperty', $entity->get('propertyId'));
+            $request = $this->entityManager->getEntity('RealEstateRequest', $entity->get('requestId'));
+            $property = $this->entityManager->getEntity('RealEstateProperty', $entity->get('propertyId'));
 
             if ($request && $property) {
                 $name = $property->get('name') . ' - ' . $request->get('name');
@@ -70,19 +70,19 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
         if (
             $entity->get('stage') == 'Closed Won' &&
             (
-                $entity->isFieldChanged('stage') || $entity->isNew()
+                $entity->isAttributeChanged('stage') || $entity->isNew()
             )
         ) {
             if ($entity->get('requestId') && $entity->get('propertyId')) {
-                $request = $this->getEntityManager()->getEntity('RealEstateRequest', $entity->get('requestId'));
+                $request = $this->entityManager->getEntity('RealEstateRequest', $entity->get('requestId'));
 
                 $request->set('status', 'Completed');
 
-                $this->getEntityManager()->saveEntity($request);
+                $this->entityManager->saveEntity($request);
 
-                $property = $this->getEntityManager()->getEntity('RealEstateProperty', $entity->get('propertyId'));
+                $property = $this->entityManager->getEntity('RealEstateProperty', $entity->get('propertyId'));
                 $property->set('status', 'Completed');
-                $this->getEntityManager()->saveEntity($property);
+                $this->entityManager->saveEntity($property);
 
                 $opportunityList = $this
                     ->where([
@@ -106,7 +106,7 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
 
         if ($entity->isNew() && $entity->get('status') !== 'Closed Lost') {
             if ($entity->get('requestId') && $entity->get('propertyId')) {
-                $note = $this->getEntityManager()->getEntity('Note');
+                $note = $this->entityManager->getEntity('Note');
 
                 $note->set([
                     'type' => 'CreateRelated',
@@ -119,9 +119,9 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
                     'relatedType' => 'Opportunity'
                 ]);
 
-                $this->getEntityManager()->saveEntity($note);
+                $this->entityManager->saveEntity($note);
 
-                $note = $this->getEntityManager()->getEntity('Note');
+                $note = $this->entityManager->getEntity('Note');
 
                 $note->set([
                     'type' => 'CreateRelated',
@@ -134,26 +134,26 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
                     'relatedType' => 'Opportunity'
                 ]);
 
-                $this->getEntityManager()->saveEntity($note);
+                $this->entityManager->saveEntity($note);
             }
         }
 
-        if ($entity->isNew() || $entity->isFieldChanged('stage')) {
+        if ($entity->isNew() || $entity->isAttributeChanged('stage')) {
             if ($entity->get('requestId') && $entity->get('propertyId')) {
-                $property = $this->getEntityManager()->getEntity('RealEstateProperty', $entity->get('propertyId'));
+                $property = $this->entityManager->getEntity('RealEstateProperty', $entity->get('propertyId'));
 
                 if ($property) {
                     if ($entity->get('stage') !== 'Closed Lost') {
-                        $this->getEntityManager()
-                            ->getRepository('RealEstateProperty')
-                            ->unrelate($property, 'requests', $entity->get('requestId'));
+                        $this->entityManager
+                            ->getRDBRepository('RealEstateProperty')
+                            ->getRelation($property, 'requests')
+                            ->unrelateById($entity->get('requestId'));
                     }
                     else {
-                        $this->getEntityManager()
-                            ->getRepository('RealEstateProperty')
-                            ->relate($property, 'requests', $entity->get('requestId'), [
-                                'interestDegree' => 0
-                            ]);
+                        $this->entityManager
+                            ->getRDBRepository('RealEstateProperty')
+                            ->getRelation($property, 'requests')
+                            ->relateById($entity->get('requestId'), ['interestDegree' => 0]);
                     }
                 }
             }

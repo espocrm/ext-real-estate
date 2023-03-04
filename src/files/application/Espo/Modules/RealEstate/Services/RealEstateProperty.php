@@ -352,10 +352,10 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             throw new Forbidden();
         }
 
-        return $this->getEntityManager()->getRepository('RealEstateProperty')
-            ->relate($property, 'requests', $requestId, [
-                'interestDegree' => 0,
-            ]);
+        $this->entityManager
+            ->getRDBRepository('RealEstateProperty')
+            ->getRelation($property, 'requests')
+            ->relateById($requestId, ['interestDegree' => 0]);
     }
 
     public function unsetNotIntereseted(string $propertyId, string $requestId)
@@ -370,9 +370,10 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             throw new Forbidden();
         }
 
-        return $this->getEntityManager()
-            ->getRepository('RealEstateProperty')
-            ->unrelate($property, 'requests', $requestId);
+        $this->entityManager
+            ->getRDBRepository('RealEstateProperty')
+            ->getRelation($property, 'requests')
+            ->unrelateById($requestId);
     }
 
     protected function beforeUpdateEntity(Entity $entity, $data)
