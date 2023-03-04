@@ -98,7 +98,7 @@ class EmailRequester
             'serviceName' => 'RealEstateSendMatches',
             'methodName' => 'processPropertyJob',
             'data' => [
-                'targetId' => $entity->id,
+                'targetId' => $entity->getId(),
                 'isUpdated' => !$entity->isNew(),
             ],
             'queue' => 'e0',

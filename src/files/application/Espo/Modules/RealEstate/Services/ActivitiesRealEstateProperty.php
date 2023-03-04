@@ -83,7 +83,7 @@ class ActivitiesRealEstateProperty
                 'OR' => [
                     [
                         'parentType' => 'RealEstateProperty',
-                        'parentId' => $entity->id,
+                        'parentId' => $entity->getId(),
                     ],
                     [
                         'parentType' => 'Opportunity',

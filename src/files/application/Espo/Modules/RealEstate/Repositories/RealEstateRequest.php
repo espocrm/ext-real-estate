@@ -63,8 +63,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
         $this->handleAfterSaveContacts($entity, $options);
 
         if ($entity->isNew() && !$entity->get('name')) {
-
-            $e = $this->get($entity->id);
+            $e = $this->get($entity->getId());
             $name = strval($e->get('number'));
             $name = str_pad($name, 6, '0', STR_PAD_LEFT);
             $name = 'R ' . $name;
@@ -98,7 +97,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
                 SELECT id FROM contact_real_estate_request
                 WHERE
                     contact_id = ".$pdo->quote($contactId)." AND
-                    real_estate_request_id = ".$pdo->quote($entity->id)." AND
+                    real_estate_request_id = ".$pdo->quote($entity->getId())." AND
                     deleted = 0
             ";
 

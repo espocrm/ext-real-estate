@@ -92,7 +92,7 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
                     ->find();
 
                 foreach ($opportunityList as $opportunity) {
-                    if ($entity->id == $opportunity->id) {
+                    if ($entity->getId() == $opportunity->getId()) {
                         continue;
                     }
 
@@ -115,7 +115,7 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
                     'data' => [
                         'action' => 'created',
                     ],
-                    'relatedId' => $entity->id,
+                    'relatedId' => $entity->getId(),
                     'relatedType' => 'Opportunity'
                 ]);
 
@@ -130,7 +130,7 @@ class Opportunity extends \Espo\Modules\Crm\Repositories\Opportunity
                     'data' => [
                         'action' => 'created',
                     ],
-                    'relatedId' => $entity->id,
+                    'relatedId' => $entity->getId(),
                     'relatedType' => 'Opportunity'
                 ]);
 

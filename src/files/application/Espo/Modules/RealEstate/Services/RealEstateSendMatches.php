@@ -116,8 +116,8 @@ class RealEstateSendMatches
                 $this->entityManager
                     ->getRepository('RealEstateSendMatchesQueueItem')
                     ->where([
-                        'requestId' => $entity->id,
-                        'propertyId' => $property->id
+                        'requestId' => $entity->getId(),
+                        'propertyId' => $property->getId()
                     ])
                     ->findOne()
             ) {
@@ -127,8 +127,8 @@ class RealEstateSendMatches
             $queueItem = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem');
 
             $queueItem->set([
-                'requestId' => $entity->id,
-                'propertyId' => $property->id
+                'requestId' => $entity->getId(),
+                'propertyId' => $property->getId()
             ]);
 
             $this->entityManager->saveEntity($queueItem);
@@ -175,8 +175,8 @@ class RealEstateSendMatches
                 $this->entityManager
                     ->getRepository('RealEstateSendMatchesQueueItem')
                     ->where([
-                        'propertyId' => $entity->id,
-                        'requestId' => $request->id,
+                        'propertyId' => $entity->getId(),
+                        'requestId' => $request->getId(),
                     ])
                     ->findOne()
             ) {
@@ -186,8 +186,8 @@ class RealEstateSendMatches
             $queueItem = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem');
 
             $queueItem->set([
-                'propertyId' => $entity->id,
-                'requestId' => $request->id
+                'propertyId' => $entity->getId(),
+                'requestId' => $request->getId()
             ]);
 
             $this->entityManager->saveEntity($queueItem);
@@ -208,7 +208,7 @@ class RealEstateSendMatches
             ->find();
 
         foreach ($itemList as $item) {
-            $item = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem', $item->id);
+            $item = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem', $item->getId());
 
             if ($item->get('isProcessed')) {
                 continue;
@@ -248,7 +248,7 @@ class RealEstateSendMatches
         foreach ($itemList as $item) {
             $this->entityManager
                 ->getRepository('RealEstateSendMatchesQueueItem')
-                ->deleteFromDb($item->id);
+                ->deleteFromDb($item->getId());
         }
     }
 
@@ -268,7 +268,7 @@ class RealEstateSendMatches
         $templateId = $this->config->get('realEstatePropertyTemplateId');
 
         if (empty($templateId)) {
-            throw new Error('RealEstate EmailSending[' . $request->id . ']: No Template in config');
+            throw new Error('RealEstate EmailSending[' . $request->getId() . ']: No Template in config');
         }
 
         $emailBody = '';
@@ -282,17 +282,17 @@ class RealEstateSendMatches
         $contactId = $request->get('contactId');
 
         if (!$contactId) {
-            throw new Error('RealEstate EmailSending[' . $request->id . ']: No Contact in Request ');
+            throw new Error('RealEstate EmailSending[' . $request->getId() . ']: No Contact in Request ');
         }
 
         $contact = $this->entityManager->getEntity('Contact', $contactId);
 
         if (!$contact) {
-            throw new Error('RealEstate EmailSending[' . $request->id . ']: Contact not found');
+            throw new Error('RealEstate EmailSending[' . $request->getId() . ']: Contact not found');
         }
 
         if (!$contact->get('emailAddress')) {
-            throw new Error('RealEstate EmailSending[' . $request->id . ']: Contact has no email address');
+            throw new Error('RealEstate EmailSending[' . $request->getId() . ']: Contact has no email address');
         }
 
         $toEmailAddress = $contact->get('emailAddress');
@@ -337,7 +337,7 @@ class RealEstateSendMatches
             'subject' => $emailTemplate['subject'],
             'body' => $emailBody,
             'isHtml' => $emailTemplate['isHtml'],
-            'parentId' => $request->id,
+            'parentId' => $request->getId(),
             'parentType' => $request->getEntityType(),
         ];
 
