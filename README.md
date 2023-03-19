@@ -54,26 +54,6 @@ node build --all
 
 Note: It will remove a previously installed EspoCRM instance, but keep the database intact.
 
-### Copying extension files to EspoCRM instance
-
-You need to run this command every time you make changes in `src` directory and you want to try these changes on Espo instance.
-
-Command:
-
-```
-node build --copy
-```
-
-### Running after-install script
-
-AfterInstall.php will be applied for EspoCRM instance.
-
-Command:
-
-```
-node build --after-install
-```
-
 ### Extension package building
 
 Command:
