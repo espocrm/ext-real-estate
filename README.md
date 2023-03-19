@@ -1,5 +1,7 @@
 # Real State extension for EspoCRM
 
+[See more](https://www.espocrm.com/extensions/real-estate/) on the website.
+
 ## Configuration
 
 Create `config.json` file in the root directory. When reading, this config will be merged with `config-default.json`. You can override default parameters in the created config.
