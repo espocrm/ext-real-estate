@@ -204,14 +204,6 @@
             "relationName": "EntityTeam",
             "layoutRelationshipsDisabled": true
         },
-        "minPrice": {
-            "type": "currency",
-            "required": false
-        },
-        "maxPrice": {
-            "type": "currency",
-            "required": false
-        },
         "contact": {
             "type": "belongsTo",
             "entity": "Contact",
