@@ -86,6 +86,19 @@
       <path value="$PROJECT_DIR$/site/vendor/league/flysystem-async-aws-s3" />
       <path value="$PROJECT_DIR$/site/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/site/vendor/league/mime-type-detection" />
+      <path value="$PROJECT_DIR$/site/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/site/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/site/vendor/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/site/vendor/openspout/openspout" />
+      <path value="$PROJECT_DIR$/site/vendor/laravel/serializable-closure" />
+      <path value="$PROJECT_DIR$/site/vendor/laminas/laminas-crypt" />
+      <path value="$PROJECT_DIR$/site/vendor/laminas/laminas-math" />
+      <path value="$PROJECT_DIR$/site/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/site/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/site/vendor/phpseclib/phpseclib" />
+      <path value="$PROJECT_DIR$/site/vendor/phenx/php-font-lib" />
+      <path value="$PROJECT_DIR$/site/vendor/phenx/php-svg-lib" />
+      <path value="$PROJECT_DIR$/site/vendor/masterminds/html5" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">

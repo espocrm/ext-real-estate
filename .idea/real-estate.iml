@@ -90,6 +90,20 @@
       <excludeFolder url="file://$MODULE_DIR$/site/tests/unit/Espo/Modules/RealEstate" />
       <excludeFolder url="file://$MODULE_DIR$/site/tests/integration/Espo/Modules/RealEstate" />
       <excludeFolder url="file://$MODULE_DIR$/site/build" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/openspout/openspout" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/laravel/serializable-closure" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/laminas/laminas-crypt" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/laminas/laminas-math" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpseclib/phpseclib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phenx/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phenx/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
