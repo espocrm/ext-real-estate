@@ -1,0 +1,6 @@
+{
+    "selectAttributesDependencyMap": {
+        "fromPrice": ["fromPriceCurrency"],
+        "toPrice": ["toPriceCurrency"]
+    }
+}

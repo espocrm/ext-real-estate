@@ -80,11 +80,7 @@
             "type": "rangeFloat"
         },
         "price": {
-            "type": "rangeCurrency",
-            "additionalAttributeList": [
-                "fromPriceCurrency",
-                "toPriceCurrency"
-            ]
+            "type": "rangeCurrency"
         },
         "yearBuilt": {
             "type": "rangeInt"
