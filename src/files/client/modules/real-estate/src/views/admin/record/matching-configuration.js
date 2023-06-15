@@ -94,15 +94,18 @@ Espo.define('real-estate:views/admin/record/matching-configuration', 'views/reco
             Espo.Ui.notify(this.translate('pleaseWait', 'messages'));
             this.disableButtons();
 
-            this.model.save().then(function () {
-                this.getMetadata().load(function () {
-                    this.getMetadata().storeToCache();
-                    Espo.Ui.success(this.translate('Saved'));
+            this.model.save()
+                .then(() => {
+                    this.getMetadata().load(() => {
+                        this.getMetadata().storeToCache();
+                        Espo.Ui.success(this.translate('Saved'));
+
+                        this.enableButtons();
+                    }, true);
+                })
+                .catch(() => {
                     this.enableButtons();
-                }.bind(this), true);
-            }.bind(this)).fail(function () {
-                this.enableButtons();
-            }.bind(this));
+                });
         },
 
         actionCancel: function () {

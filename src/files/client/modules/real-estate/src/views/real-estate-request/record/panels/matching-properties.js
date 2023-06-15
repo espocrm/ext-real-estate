@@ -130,14 +130,10 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
 
             model.set('interestDegree', 0);
 
-            $.ajax({
-                url: 'RealEstateRequest/action/setNotInterested',
-                type: 'POST',
-                data: JSON.stringify({
-                    propertyId: model.id,
-                    requestId: this.model.id
-                })
-            }).done(function () {
+            Espo.Ajax.postRequest('RealEstateRequest/action/setNotInterested', {
+                propertyId: model.id,
+                requestId: this.model.id,
+            }).then(() => {
                 model.set('interestDegree', 0);
             });
         },
@@ -146,18 +142,17 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
             var id = data.id;
 
             var model = this.collection.get(id);
-            if (!model) return;
+
+            if (!model) {
+                return;
+            }
 
             model.set('interestDegree', null);
 
-            $.ajax({
-                url: 'RealEstateRequest/action/unsetNotInterested',
-                type: 'POST',
-                data: JSON.stringify({
-                    propertyId: model.id,
-                    requestId: this.model.id
-                })
-            }).done(function () {
+            Espo.Ajax.postRequest('RealEstateRequest/action/unsetNotInterested', {
+                propertyId: model.id,
+                requestId: this.model.id,
+            }).then(() => {
                 model.set('interestDegree', null);
             });
         },
@@ -170,6 +165,7 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
             data.viewOptions = {
                 listViewUrl: '#RealEstateRequest/listMatching?id=' + this.model.id
             };
+
             Dep.prototype.actionViewRelatedList.call(this, data);
         }
     });

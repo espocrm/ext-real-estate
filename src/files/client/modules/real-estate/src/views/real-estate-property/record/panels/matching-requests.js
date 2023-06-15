@@ -142,13 +142,9 @@ define(
 
             model.set('interestDegree', 0);
 
-            $.ajax({
-                url: 'RealEstateProperty/action/setNotInterested',
-                type: 'POST',
-                data: JSON.stringify({
-                    propertyId: this.model.id,
-                    requestId: model.id,
-                })
+            Espo.Ajax.postRequest('RealEstateProperty/action/setNotInterested', {
+                propertyId: this.model.id,
+                requestId: model.id,
             }).then(() => {
                 model.set('interestDegree', 0);
             });
@@ -165,13 +161,9 @@ define(
 
             model.set('interestDegree', null);
 
-            $.ajax({
-                url: 'RealEstateProperty/action/unsetNotInterested',
-                type: 'POST',
-                data: JSON.stringify({
-                    propertyId: this.model.id,
-                    requestId: model.id,
-                })
+            Espo.Ajax.postRequest('RealEstateProperty/action/unsetNotInterested', {
+                propertyId: this.model.id,
+                requestId: model.id,
             }).then(() => {
                 model.set('interestDegree', null);
             });
@@ -188,6 +180,5 @@ define(
 
             Dep.prototype.actionViewRelatedList.call(this, data);
         },
-
     });
 });
