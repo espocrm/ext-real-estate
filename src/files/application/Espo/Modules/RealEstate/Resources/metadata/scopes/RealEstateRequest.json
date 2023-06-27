@@ -10,7 +10,8 @@
     "type": "Base",
     "module": "RealEstate",
     "object": true,
-    "isCustom": true,
-    "aclPortal": "recordAllOwnNo",
+    "isCustom": false,
+    "aclPortal": true,
+    "aclPortalLevelList": ["all", "contact", "own", "no"],
     "statusField": "status"
 }
