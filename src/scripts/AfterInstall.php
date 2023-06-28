@@ -48,8 +48,8 @@ class AfterInstall
 
         $quickCreateList = $config->get('quickCreateList', []);
 
-        if (!in_array('RealEstateRequest', $quickCreateList)) {
-            array_unshift($quickCreateList, 'RealEstateRequest');
+        if (!in_array('RealEstateProperty', $quickCreateList)) {
+            array_unshift($quickCreateList, 'RealEstateProperty');
         }
         if (!in_array('RealEstateRequest', $quickCreateList)) {
             array_unshift($quickCreateList, 'RealEstateRequest');
