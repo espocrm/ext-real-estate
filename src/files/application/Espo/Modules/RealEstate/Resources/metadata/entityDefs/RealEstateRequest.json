@@ -167,7 +167,8 @@
         "interestDegree": {
             "type": "int",
             "notStorable": true,
-            "disabled": true
+            "utility": true,
+            "layoutAvailabilityList": []
         },
         "matchingPropertyCount": {
             "type": "int",
@@ -244,7 +245,7 @@
             "type": "hasMany",
             "foreign": "requests",
             "entity": "RealEstateProperty",
-            "disabled": true,
+            "utility": true,
             "layoutRelationshipsDisabled": true
         }
     },

@@ -3,7 +3,8 @@
         "propertyRole": {
             "type": "enum",
             "notStorable": true,
-            "disabled": true,
+            "utility": true,
+            "layoutAvailabilityList": [],
             "default": "",
             "options": ["", "Landlord", "Tenant", "Property Manager"]
         },
