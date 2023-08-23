@@ -54,15 +54,15 @@ Espo.define('real-estate:views/admin/real-estate-settings', 'views/settings/reco
         setup: function () {
             Dep.prototype.setup.call(this);
 
-            this.contolEmailingFields();
-            this.listenTo(this.model, 'change:realEstateEmailSending', this.contolEmailingFields, this);
+            this.controlEmailingFields();
+            this.listenTo(this.model, 'change:realEstateEmailSending', this.controlEmailingFields, this);
         },
 
         afterRender: function () {
             Dep.prototype.afterRender.call(this);
         },
 
-        contolEmailingFields: function () {
+        controlEmailingFields: function () {
             if (this.model.get('realEstateEmailSending')) {
                 this.showField('realEstatePropertyTemplate');
                 this.showField('realEstateEmailSendingAssignedUserCc');
