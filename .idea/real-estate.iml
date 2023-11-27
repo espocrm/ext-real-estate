@@ -106,6 +106,7 @@
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/phenx/php-svg-lib" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/masterminds/html5" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/site/custom/Espo/Modules/RealEstate" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
