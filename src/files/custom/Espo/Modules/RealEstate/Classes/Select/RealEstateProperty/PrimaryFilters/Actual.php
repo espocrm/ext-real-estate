@@ -3,7 +3,7 @@
  * This file is part of Real Estate extension for EspoCRM.
  *
  * EspoCRM - Open Source CRM application.
- * Copyright (C) 2014-2022 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
  * Website: https://www.espocrm.com
  *
  * Real Estate extension is free software: you can redistribute it and/or modify
@@ -27,39 +27,17 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-namespace Espo\Modules\RealEstate\SelectManagers;
+namespace Espo\Modules\RealEstate\Classes\Select\RealEstateProperty\PrimaryFilters;
 
-class RealEstateProperty extends \Espo\Core\SelectManagers\Base
+use Espo\Core\Select\Primary\Filter;
+use Espo\ORM\Query\SelectBuilder as QueryBuilder;
+
+class Actual implements Filter
 {
-
-    protected function filterActualSale(&$result)
+    public function apply(QueryBuilder $queryBuilder): void
     {
-        $result['whereClause'][] = array(
-            'requestType' => 'Sale',
+        $queryBuilder->where([
             'status!=' => ['Completed', 'Canceled', 'Lost']
-        );
-    }
-
-    protected function filterActualRent(&$result)
-    {
-        $result['whereClause'][] = array(
-            'requestType' => 'Rent',
-            'status!=' => ['Completed', 'Canceled', 'Lost']
-        );
-    }
-
-    protected function filterActual(&$result)
-    {
-        $result['whereClause'][] = array(
-            'status!=' => ['Completed', 'Canceled', 'Lost']
-        );
-    }
-
-    protected function filterCompleted(&$result)
-    {
-        $result['whereClause'][] = array(
-            'status=' => 'Completed'
-        );
+        ]);
     }
 }
-

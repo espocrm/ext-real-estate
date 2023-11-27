@@ -2,5 +2,11 @@
     "selectAttributesDependencyMap": {
         "fromPrice": ["fromPriceCurrency"],
         "toPrice": ["toPriceCurrency"]
+    },
+    "primaryFilterClassNameMap": {
+        "actual": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateRequest\\PrimaryFilters\\Actual",
+        "actualRent": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateRequest\\PrimaryFilters\\ActualRent",
+        "actualSale": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateRequest\\PrimaryFilters\\ActualSale",
+        "completed": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateRequest\\PrimaryFilters\\Completed"
     }
 }
