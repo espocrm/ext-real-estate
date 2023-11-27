@@ -1,7 +1,7 @@
 {
     "module": "RealEstate",
     "name": "Real Estate",
-    "description": "Provides the ability to manage real estate properties and requests.",
+    "description": "Real estate properties and requests.",
     "author": "EspoCRM",
     "acceptableVersions": [
         ">=7.1.0"
