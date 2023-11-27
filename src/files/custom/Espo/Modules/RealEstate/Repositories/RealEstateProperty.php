@@ -29,25 +29,19 @@
 
 namespace Espo\Modules\RealEstate\Repositories;
 
+use Espo\Core\Repositories\Database;
 use Espo\ORM\Entity;
 
-class RealEstateProperty extends \Espo\Core\Templates\Repositories\Base
+class RealEstateProperty extends Database
 {
-    protected function init()
-    {
-        parent::init();
-
-        $this->addDependency('serviceFactory');
-    }
-
     public function beforeSave(Entity $entity, array $options = [])
     {
         $propertyType = $entity->get('type');
 
-        $fieldList = $this->getMetadata()
+        $fieldList = $this->metadata
             ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
         foreach ($fieldDefs as $field => $defs) {
             if (empty($defs['isMatching'])) {
@@ -80,6 +74,6 @@ class RealEstateProperty extends \Espo\Core\Templates\Repositories\Base
 
         $entity->set('name', $name);
 
-        return parent::beforeSave($entity, $options);
+        parent::beforeSave($entity, $options);
     }
 }

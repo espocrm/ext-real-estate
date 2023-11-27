@@ -29,24 +29,44 @@
 
 namespace Espo\Modules\RealEstate\Controllers;
 
-use \Espo\Core\Exceptions\Forbidden;
-use \Espo\Core\Exceptions\BadRequest;
-use \Espo\Core\Exceptions\NotFound;
+use Espo\Core\Api\Request;
+use Espo\Core\DataManager;
+use Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\ServiceFactory;
+use Espo\Entities\User;
 
-class RealEstateMatchingConfiguration extends \Espo\Core\Controllers\Base
+class RealEstateMatchingConfiguration
 {
-    protected function checkControllerAccess()
-    {
-        if (!$this->getUser()->isAdmin()) {
+    /**
+     * @throws Forbidden
+     */
+    public function __construct(
+        private ServiceFactory $serviceFactory,
+        private User $user,
+        private DataManager $dataManager
+    ) {
+
+        if (!$this->user->isAdmin()) {
             throw new Forbidden();
         }
     }
 
-    public function putActionUpdate($params, $data, $request)
+    /**
+     * @throws Forbidden
+     * @throws Error
+     */
+    public function putActionUpdate(Request $request): bool
     {
-        $this->getServiceFactory()->create('RealEstateMatchingConfiguration')->setMatchingParameters($data);
+        if (!$this->user->isAdmin()) {
+            throw new Forbidden();
+        }
 
-        $this->getContainer()->get('dataManager')->rebuild();
+        $data = $request->getParsedBody();
+
+        $this->serviceFactory->create('RealEstateMatchingConfiguration')->setMatchingParameters($data);
+
+        $this->dataManager->rebuild();
 
         return true;
     }

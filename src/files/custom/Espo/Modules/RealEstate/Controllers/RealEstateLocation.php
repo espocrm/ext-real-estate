@@ -29,7 +29,8 @@
 
 namespace Espo\Modules\RealEstate\Controllers;
 
-class RealEstateLocation extends \Espo\Core\Templates\Controllers\CategoryTree
-{
+use Espo\Core\Templates\Controllers\CategoryTree;
 
+class RealEstateLocation extends CategoryTree
+{
 }

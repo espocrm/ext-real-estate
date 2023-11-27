@@ -29,28 +29,40 @@
 
 namespace Espo\Modules\RealEstate\Controllers;
 
+use Espo\Core\Api\Request;
+use Espo\Core\Controllers\Record;
 use Espo\Core\Exceptions\BadRequest;
 
-class RealEstateRequest extends \Espo\Core\Templates\Controllers\Base
+class RealEstateRequest extends Record
 {
-    public function postActionSetNotInterested($params, $data, $request)
+    /**
+     * @throws BadRequest
+     */
+    public function postActionSetNotInterested(Request $request): bool
     {
+        $data = $request->getParsedBody();
+
         if (empty($data->requestId) || empty($data->propertyId)) {
             throw new BadRequest();
         }
 
-        $this->getRecordService()->setNotIntereseted($data->requestId, $data->propertyId);
+        $this->getRecordService()->setNotInterested($data->requestId, $data->propertyId);
 
         return true;
     }
 
-    public function postActionUnsetNotInterested($params, $data, $request)
+    /**
+     * @throws BadRequest
+     */
+    public function postActionUnsetNotInterested(Request $request): bool
     {
+        $data = $request->getParsedBody();
+
         if (empty($data->requestId) || empty($data->propertyId)) {
             throw new BadRequest();
         }
 
-        $this->getRecordService()->unsetNotIntereseted($data->requestId, $data->propertyId);
+        $this->getRecordService()->unsetNotInterested($data->requestId, $data->propertyId);
 
         return true;
     }

@@ -29,7 +29,8 @@
 
 namespace Espo\Modules\RealEstate\Repositories;
 
-class RealEstateLocation extends \Espo\Core\Repositories\CategoryTree
-{
+use Espo\Core\Repositories\CategoryTree;
 
+class RealEstateLocation extends CategoryTree
+{
 }

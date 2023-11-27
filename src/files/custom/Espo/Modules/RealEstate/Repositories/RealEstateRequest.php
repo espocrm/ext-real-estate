@@ -29,18 +29,19 @@
 
 namespace Espo\Modules\RealEstate\Repositories;
 
+use Espo\Core\Repositories\Database;
 use Espo\ORM\Entity;
 
-class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
+class RealEstateRequest extends Database
 {
     public function beforeSave(Entity $entity, array $options = [])
     {
         $propertyType = $entity->get('propertyType');
 
-        $fieldList = $this->getMetadata()
+        $fieldList = $this->metadata
             ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
         foreach ($fieldDefs as $field => $defs) {
             if (empty($defs['isMatching'])) {
@@ -53,31 +54,32 @@ class RealEstateRequest extends \Espo\Core\Templates\Repositories\Base
             }
         }
 
-        return parent::beforeSave($entity, $options);
+        parent::beforeSave($entity, $options);
     }
 
     public function afterSave(Entity $entity, array $options = [])
     {
-        $result = parent::afterSave($entity, $options);
+        parent::afterSave($entity, $options);
 
-        $this->handleAfterSaveContacts($entity, $options);
+        $this->handleAfterSaveContacts($entity);
 
         if ($entity->isNew() && !$entity->get('name')) {
-            $e = $this->get($entity->getId());
+            $e = $this->getById($entity->getId());
+
             $name = strval($e->get('number'));
             $name = str_pad($name, 6, '0', STR_PAD_LEFT);
             $name = 'R ' . $name;
 
             $e->set('name', $name);
+
             $this->save($e);
+
             $entity->set('name', $name);
             $entity->set('number', $e->get('number'));
         }
-
-        return $result;
     }
 
-    protected function handleAfterSaveContacts(Entity $entity, array $options = [])
+    private function handleAfterSaveContacts(Entity $entity): void
     {
         $contactIdChanged =
             $entity->has('contactId') && $entity->get('contactId') != $entity->getFetched('contactId');

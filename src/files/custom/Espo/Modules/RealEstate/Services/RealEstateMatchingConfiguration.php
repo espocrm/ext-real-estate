@@ -29,21 +29,15 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\BadRequest;
-use Espo\Core\Exceptions\NotFound;
+use Espo\Core\Utils\Language;
+use Espo\Core\Utils\Metadata;
 
-use Espo\Core\{
-    Utils\Metadata,
-    Utils\Language,
-};
-
-use StdClass;
+use stdClass;
 
 class RealEstateMatchingConfiguration
 {
-    protected $metadata;
-    protected $baseLanguage;
+    private Metadata $metadata;
+    private Language $baseLanguage;
 
     public function __construct(Metadata $metadata, Language $baseLanguage)
     {
@@ -51,9 +45,8 @@ class RealEstateMatchingConfiguration
         $this->baseLanguage = $baseLanguage;
     }
 
-    public function setMatchingParameters(StdClass $data)
+    public function setMatchingParameters(stdClass $data)
     {
-        $isMetadataChanged = false;
         $isLanguageChanged = false;
 
         $matchingFieldList = [];
@@ -133,8 +126,6 @@ class RealEstateMatchingConfiguration
 
         if (!empty($entityDefsData)) {
             $this->metadata->set('entityDefs', 'RealEstateProperty', $entityDefsData);
-
-            $isMetadataChanged = true;
         }
 
         $requestFieldDefs = [];

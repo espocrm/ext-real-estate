@@ -29,33 +29,29 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\Forbidden;
 use Espo\ORM\Entity;
 use Espo\ORM\Query\Select;
 use Espo\ORM\Query\SelectBuilder;
-
-use Espo\Core\Select\SelectManagerFactory;
 use Espo\Core\Select\SelectBuilderFactory;
-
-use Espo\Core\Utils\Metadata;
 
 class ActivitiesRealEstateRequest
 {
-    protected $metadata;
-
-    protected $selectManagerFactory;
-
-    private $selectBuilderFactory;
+    private SelectBuilderFactory $selectBuilderFactory;
 
     public function __construct(
-        Metadata $metadata,
-        SelectManagerFactory $selectManagerFactory,
         SelectBuilderFactory $selectBuilderFactory
     ) {
-        $this->metadata = $metadata;
-        $this->selectManagerFactory = $selectManagerFactory;
         $this->selectBuilderFactory = $selectBuilderFactory;
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function getActivitiesMeetingQuery(Entity $entity, array $statusList): Select
     {
         $builder = $this->selectBuilderFactory

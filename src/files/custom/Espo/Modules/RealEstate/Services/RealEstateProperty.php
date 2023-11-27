@@ -29,7 +29,10 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\ForbiddenSilent;
 use Espo\Core\Exceptions\NotFound;
 
 use Espo\ORM\Entity;
@@ -43,16 +46,17 @@ use Espo\Core\Select\SearchParams;
 use Espo\Core\Select\Where\Item as WhereItem;
 use Espo\Core\Record\Collection as RecordCollection;
 use Espo\Core\Record\FindParams;
+use Espo\Services\Record;
 
-class RealEstateProperty extends \Espo\Core\Templates\Services\Base
+class RealEstateProperty extends Record
 {
     protected $readOnlyAttributeList = [
         'matchingRequestCount',
     ];
 
-    public function find(SearchParams $params, ?FindParams $findParams = null): RecordCollection
+    public function find(SearchParams $searchParams, ?FindParams $findParams = null): RecordCollection
     {
-        $where = $params->getWhere();
+        $where = $searchParams->getWhere();
 
         $itemList = [];
 
@@ -72,20 +76,25 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                 ->setItemList(array_values($itemList))
                 ->build();
 
-            $params = $params->withWhere($where);
+            $searchParams = $searchParams->withWhere($where);
 
             if (!$item->getValue() || $item->getType() !== 'equals') {
                 continue;
             }
 
-            return $this->getServiceFactory()
+            return $this->serviceFactory
                 ->create('RealEstateRequest')
-                ->findLinkedMatchingProperties($item->getValue(), $params, true);
+                ->findLinkedMatchingProperties($item->getValue(), $searchParams, true);
         }
 
-        return parent::find($params);
+        return parent::find($searchParams);
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function getMatchingRequestsQuery(Entity $entity, SearchParams $params): Select
     {
         $builder = $this->selectBuilderFactory->create();
@@ -181,7 +190,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             ]);
         }
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
         foreach ($fieldDefs as $field => $defs) {
             if (empty($defs['isMatching'])) {
@@ -227,14 +236,13 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         }
 
         if ($entity->get('price') !== null) {
-            $defaultCurrency = $this->getConfig()->get('defaultCurrency');
+            $defaultCurrency = $this->config->get('defaultCurrency');
 
             $price = $entity->get('price');
             $priceCurrency = $entity->get('priceCurrency');
 
             if ($defaultCurrency !== $priceCurrency) {
-                $rates = $this->getConfig()->get('currencyRates');
-                $rate1 = $this->getConfig()->get('currencyRates.' . $priceCurrency, 1.0);
+                $rates = $this->config->get('currencyRates');
 
                 $rate1 = 1.0;
 
@@ -287,13 +295,18 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         return $queryBuilder->build();
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function findLinkedMatchingRequests(
         string $id,
         SearchParams $params,
         bool $customOrder = false
     ): RecordCollection {
 
-        $entity = $this->getRepository()->get($id);
+        $entity = $this->getRepository()->getById($id);
 
         $this->loadAdditionalFields($entity);
 
@@ -310,7 +323,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
                 ->build();
         }
 
-        $collection = $this->getEntityManager()
+        $collection = $this->entityManager
             ->getRDBRepository('RealEstateRequest')
             ->clone($query)
             ->find();
@@ -322,7 +335,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             $recordService->prepareEntityForOutput($e);
         }
 
-        $total = $this->getEntityManager()
+        $total = $this->entityManager
             ->getRDBRepository('RealEstateRequest')
             ->clone($query)
             ->count();
@@ -340,7 +353,12 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         return new RecordCollection($collection, $total);
     }
 
-    public function setNotIntereseted(string $propertyId, string $requestId)
+    /**
+     * @throws Forbidden
+     * @throws NotFound
+     * @throws ForbiddenSilent
+     */
+    public function setNotInterested(string $propertyId, string $requestId): void
     {
         $property = $this->getEntity($propertyId);
 
@@ -358,7 +376,12 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             ->relateById($requestId, ['interestDegree' => 0]);
     }
 
-    public function unsetNotIntereseted(string $propertyId, string $requestId)
+    /**
+     * @throws Forbidden
+     * @throws NotFound
+     * @throws ForbiddenSilent
+     */
+    public function unsetNotInterested(string $propertyId, string $requestId): void
     {
         $property = $this->getEntity($propertyId);
 
@@ -366,7 +389,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
             throw new NotFound();
         }
 
-        if (!$this->getAcl()->check($property, 'edit')) {
+        if (!$this->acl->check($property, 'edit')) {
             throw new Forbidden();
         }
 
@@ -394,9 +417,14 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
         $entity->set('matchingRequestCount', $matchingRequestCount);
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function updateMatchingCount()
     {
-        $repository = $this->getEntityManager()->getRDBRepository('RealEstateProperty');
+        $repository = $this->entityManager->getRDBRepository('RealEstateProperty');
 
         $notActualList = $repository
             ->select(['id', 'matchingRequestCount'])
@@ -427,7 +455,7 @@ class RealEstateProperty extends \Espo\Core\Templates\Services\Base
 
             $query = $this->getMatchingRequestsQuery($e, SearchParams::create());
 
-            $matchingRequestCount = $this->getEntityManager()
+            $matchingRequestCount = $this->entityManager
                 ->getRDBRepository('RealEstateRequest')
                 ->clone($query)
                 ->count();

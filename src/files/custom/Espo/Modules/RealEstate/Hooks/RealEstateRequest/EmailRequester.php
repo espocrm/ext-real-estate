@@ -38,11 +38,9 @@ class EmailRequester
 {
     public static $order = 16;
 
-    private $config;
-
-    private $metadata;
-
-    private $entityManager;
+    private Config $config;
+    private Metadata $metadata;
+    private EntityManager $entityManager;
 
     public function __construct(Config $config, Metadata $metadata, EntityManager $entityManager)
     {

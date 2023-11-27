@@ -32,18 +32,16 @@ namespace Espo\Modules\RealEstate\Services;
 use Espo\Core\Exceptions\NotFound;
 use Espo\Core\Exceptions\Error;
 
-use Espo\Core\{
-    ServiceFactory,
-    Mail\EmailSender,
-    Utils\Config,
-    ORM\EntityManager,
-};
+use Espo\Core\Mail\EmailSender;
+use Espo\Core\Mail\Exceptions\SendingError;
+use Espo\Core\ORM\EntityManager;
+use Espo\Core\ServiceFactory;
+use Espo\Core\Utils\Config;
 
 use Espo\Core\Select\SearchParams;
+use Espo\Entities\Email;
 use Espo\ORM\Query\Part\Order;
 use Espo\ORM\Query\Part\Expression as Expr;
-
-use Espo\Entities\Preferences;
 
 use Exception;
 use DateTime;
@@ -51,35 +49,27 @@ use stdClass;
 
 class RealEstateSendMatches
 {
-    protected $serviceFactory;
-
-    protected $emailSender;
-
-    protected $preferences;
-
-    protected $config;
-
-    protected $entityManager;
+    private ServiceFactory $serviceFactory;
+    private EmailSender $emailSender;
+    private Config $config;
+    private EntityManager $entityManager;
 
     public function __construct(
         ServiceFactory $serviceFactory,
         EmailSender $emailSender,
-        Preferences $preferences,
         Config $config,
         EntityManager $entityManager
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->emailSender = $emailSender;
-        $this->preferences = $preferences;
         $this->config = $config;
         $this->entityManager = $entityManager;
     }
 
-    protected function getSmptParams()
-    {
-        return $this->preferences->getSmtpParams();
-    }
-
+    /**
+     * @throws NotFound
+     * @throws Error
+     */
     public function processRequestJob(stdClass $data): void
     {
         if (empty($data->targetId)) {
@@ -114,7 +104,7 @@ class RealEstateSendMatches
         foreach ($propertyList as $property) {
             if (
                 $this->entityManager
-                    ->getRepository('RealEstateSendMatchesQueueItem')
+                    ->getRDBRepository('RealEstateSendMatchesQueueItem')
                     ->where([
                         'requestId' => $entity->getId(),
                         'propertyId' => $property->getId()
@@ -135,6 +125,10 @@ class RealEstateSendMatches
         }
     }
 
+    /**
+     * @throws NotFound
+     * @throws Error
+     */
     public function processPropertyJob(stdClass $data): void
     {
         if (empty($data->targetId)) {
@@ -173,7 +167,7 @@ class RealEstateSendMatches
 
             if (
                 $this->entityManager
-                    ->getRepository('RealEstateSendMatchesQueueItem')
+                    ->getRDBRepository('RealEstateSendMatchesQueueItem')
                     ->where([
                         'propertyId' => $entity->getId(),
                         'requestId' => $request->getId(),
@@ -199,7 +193,7 @@ class RealEstateSendMatches
         $limit = $this->config->get('realEstateEmailSendingPortionSize', 30);
 
         $itemList = $this->entityManager
-            ->getRepository('RealEstateSendMatchesQueueItem')
+            ->getRDBRepository('RealEstateSendMatchesQueueItem')
             ->order('createdAt')
             ->where([
                 'isProcessed' => false
@@ -224,7 +218,7 @@ class RealEstateSendMatches
                     'propertyId' => $item->get('propertyId'),
                 ]);
             }
-            catch (Exception $e) {}
+            catch (Exception) {}
         }
 
         $this->processCleanup();
@@ -238,7 +232,7 @@ class RealEstateSendMatches
         $datetime->modify($period);
 
         $itemList = $this->entityManager
-            ->getRepository('RealEstateSendMatchesQueueItem')
+            ->getRDBRepository('RealEstateSendMatchesQueueItem')
             ->where([
                 'isProcessed' => true,
                 'createdAt<' => $datetime->format('Y-m-d H:i:s')
@@ -252,6 +246,11 @@ class RealEstateSendMatches
         }
     }
 
+    /**
+     * @throws Error
+     * @throws SendingError
+     * @throws NotFound
+     */
     public function sendMatchesEmail($data): void
     {
         if (empty($data['requestId']) || empty($data['propertyId'])) {
@@ -270,8 +269,6 @@ class RealEstateSendMatches
         if (empty($templateId)) {
             throw new Error('RealEstate EmailSending[' . $request->getId() . ']: No Template in config');
         }
-
-        $emailBody = '';
 
         $requestService = $this->serviceFactory->create($request->getEntityType());
         $requestService->loadAdditionalFields($request);
@@ -363,17 +360,12 @@ class RealEstateSendMatches
             }
         }
 
+        /** @var Email $email */
         $email = $this->entityManager->getEntity('Email');
 
         $email->set($emailData);
 
         $emailSender = $this->emailSender->create();
-
-        $smtpParams = $this->getSmptParams();
-
-        if ($smtpParams) {
-            $emailSender->withSmtpParams($smtpParams);
-        }
 
         $emailSender
             ->withAttachments($attachmentList)

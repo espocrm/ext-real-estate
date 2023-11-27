@@ -29,6 +29,9 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Error;
+use Espo\Core\Exceptions\ForbiddenSilent;
 use Espo\ORM\Entity;
 
 use Espo\Core\Exceptions\Forbidden;
@@ -44,8 +47,9 @@ use Espo\Core\Select\SearchParams;
 use Espo\Core\Select\Where\Item as WhereItem;
 use Espo\Core\Record\Collection as RecordCollection;
 use Espo\Core\Record\FindParams;
+use Espo\Services\Record;
 
-class RealEstateRequest extends \Espo\Core\Templates\Services\Base
+class RealEstateRequest extends Record
 {
     protected $readOnlyAttributeList = [
         'matchingPropertyCount',
@@ -69,7 +73,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         if ($entity->isActual()) {
             $query = $this->getMatchingPropertiesQuery($entity, SearchParams::create());
 
-            $matchingPropertyCount = $this->getEntityManager()
+            $matchingPropertyCount = $this->entityManager
                 ->getRDBRepository('RealEstateProperty')
                 ->clone($query)
                 ->count();
@@ -78,9 +82,9 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         $entity->set('matchingPropertyCount', $matchingPropertyCount);
     }
 
-    public function find(SearchParams $params, ?FindParams $findParams = null): RecordCollection
+    public function find(SearchParams $searchParams, ?FindParams $findParams = null): RecordCollection
     {
-        $where = $params->getWhere();
+        $where = $searchParams->getWhere();
 
         $itemList = [];
 
@@ -100,20 +104,25 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
                 ->setItemList(array_values($itemList))
                 ->build();
 
-            $params = $params->withWhere($where);
+            $searchParams = $searchParams->withWhere($where);
 
             if (!$item->getValue() || $item->getType() !== 'equals') {
                 continue;
             }
 
-            return $this->getServiceFactory()
+            return $this->serviceFactory
                 ->create('RealEstateProperty')
-                ->findLinkedMatchingRequests($item->getValue(), $params, true);
+                ->findLinkedMatchingRequests($item->getValue(), $searchParams, true);
         }
 
-        return parent::find($params);
+        return parent::find($searchParams, $findParams);
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function getMatchingPropertiesQuery(Entity $entity, SearchParams $params): Select
     {
         $builder = $this->selectBuilderFactory->create();
@@ -144,8 +153,6 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         $locationIdList = $entity->getLinkMultipleIdList('locations');
 
         $queryBuilder = $builder->buildQueryBuilder();
-
-        //$selectParams['leftJoins'] = $selectParams['leftJoins'] ?? [];
 
         if (count($locationIdList)) {
             $queryBuilder
@@ -199,7 +206,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             ]);
         }
 
-        $fieldDefs = $this->getMetadata()->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
         foreach ($fieldDefs as $field => $defs) {
             if (empty($defs['isMatching'])) {
@@ -219,14 +226,14 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             }
         }
 
-        $defaultCurrency = $this->getConfig()->get('defaultCurrency');
+        $defaultCurrency = $this->config->get('defaultCurrency');
 
         if ($entity->get('fromPrice') !== null) {
             $fromPrice = $entity->get('fromPrice');
             $fromPriceCurrency = $entity->get('fromPriceCurrency');
 
-            $rates = $this->getConfig()->get('currencyRates');
-            $rate1 = $this->getConfig()->get('currencyRates.' . $fromPriceCurrency, 1.0);
+            $rates = $this->config->get('currencyRates');
+            $rate1 = $this->config->get('currencyRates.' . $fromPriceCurrency, 1.0);
 
             $rate1 = 1.0;
 
@@ -252,8 +259,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             $toPrice = $entity->get('toPrice');
             $toPriceCurrency = $entity->get('toPriceCurrency');
 
-            $rates = $this->getConfig()->get('currencyRates');
-            $rate1 = $this->getConfig()->get('currencyRates.' . $toPriceCurrency, 1.0);
+            $rates = $this->config->get('currencyRates');
 
             $rate1 = 1.0;
 
@@ -278,6 +284,11 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         return $queryBuilder->build();
     }
 
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws Error
+     */
     public function findLinkedMatchingProperties(
         string $id,
         SearchParams $params,
@@ -301,7 +312,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
                 ->build();
         }
 
-        $collection = $this->getEntityManager()
+        $collection = $this->entityManager
             ->getRDBRepository('RealEstateProperty')
             ->clone($query)
             ->find();
@@ -313,7 +324,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             $recordService->prepareEntityForOutput($e);
         }
 
-        $total = $this->getEntityManager()
+        $total = $this->entityManager
             ->getRDBRepository('RealEstateProperty')
             ->clone($query)
             ->count();
@@ -331,7 +342,12 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
         return new RecordCollection($collection, $total);
     }
 
-    public function setNotIntereseted($requestId, $propertyId)
+    /**
+     * @throws Forbidden
+     * @throws ForbiddenSilent
+     * @throws NotFound
+     */
+    public function setNotInterested($requestId, $propertyId)
     {
         $request = $this->getEntity($requestId);
 
@@ -339,7 +355,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             throw new NotFound();
         }
 
-        if (!$this->getAcl()->check($request, 'edit')) {
+        if (!$this->acl->check($request, 'edit')) {
             throw new Forbidden();
         }
 
@@ -349,7 +365,12 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             ->relateById($propertyId, ['interestDegree' => 0]);
     }
 
-    public function unsetNotIntereseted($requestId, $propertyId)
+    /**
+     * @throws Forbidden
+     * @throws ForbiddenSilent
+     * @throws NotFound
+     */
+    public function unsetNotInterested($requestId, $propertyId)
     {
         $request = $this->getEntity($requestId);
 
@@ -357,7 +378,7 @@ class RealEstateRequest extends \Espo\Core\Templates\Services\Base
             throw new NotFound();
         }
 
-        if (!$this->getAcl()->check($request, 'edit')) {
+        if (!$this->acl->check($request, 'edit')) {
             throw new Forbidden();
         }
 

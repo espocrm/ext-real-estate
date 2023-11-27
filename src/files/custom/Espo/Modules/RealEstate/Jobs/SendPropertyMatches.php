@@ -34,7 +34,7 @@ use Espo\Core\Job\JobDataLess;
 
 class SendPropertyMatches implements JobDataLess
 {
-    protected $serviceFactory;
+    private ServiceFactory $serviceFactory;
 
     public function __construct(ServiceFactory $serviceFactory)
     {
