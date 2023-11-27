@@ -1,6 +1,6 @@
 {
   "name": "espocrm-ext-real-estate",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "Real Estate extension for EspoCRM.",
   "repository": {
     "type": "git",
