@@ -75,7 +75,7 @@ class Service
             ->find();
 
         foreach ($itemList as $item) {
-            $item = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem', $item->getId());
+            $item = $this->entityManager->getEntityById('RealEstateSendMatchesQueueItem', $item->getId());
 
             if ($item->get('isProcessed')) {
                 continue;
