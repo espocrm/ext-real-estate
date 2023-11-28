@@ -29,21 +29,26 @@
 
 namespace Espo\Modules\RealEstate\Jobs;
 
-use Espo\Core\ServiceFactory;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Job\JobDataLess;
+use Espo\Modules\RealEstate\Tools\Property\Service as PropertyService;
+use Espo\Modules\RealEstate\Tools\Request\Service as RequestService;
 
 class PropertyMatchingUpdate implements JobDataLess
 {
-    private ServiceFactory $serviceFactory;
+    public function __construct(
+        private PropertyService $propertyService,
+        private RequestService $requestService
+    ) {}
 
-    public function __construct(ServiceFactory $serviceFactory)
-    {
-        $this->serviceFactory = $serviceFactory;
-    }
-
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     */
     public function run(): void
     {
-        $this->serviceFactory->create('RealEstateProperty')->updateMatchingCount();
-        $this->serviceFactory->create('RealEstateRequest')->updateMatchingCount();
+        $this->propertyService->updateMatchingCount();
+        $this->requestService->updateMatchingCount();
     }
 }

@@ -3,7 +3,7 @@
  * This file is part of Real Estate extension for EspoCRM.
  *
  * EspoCRM - Open Source CRM application.
- * Copyright (C) 2014-2022 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
  * Website: https://www.espocrm.com
  *
  * Real Estate extension is free software: you can redistribute it and/or modify
@@ -27,54 +27,60 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-namespace Espo\Modules\RealEstate\Controllers;
+namespace Espo\Modules\RealEstate\Tools\Property\Api;
 
+use Espo\Core\Acl;
+use Espo\Core\Api\Action;
 use Espo\Core\Api\Request;
-use Espo\Core\Controllers\Record;
+use Espo\Core\Api\Response;
+use Espo\Core\Api\ResponseComposer;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
-use Espo\Modules\RealEstate\Tools\Request\Service;
+use Espo\Core\Record\SearchParamsFetcher;
+use Espo\Core\Record\ServiceContainer;
+use Espo\Modules\RealEstate\Entities\RealEstateProperty;
+use Espo\Modules\RealEstate\Tools\Property\Service;
 
-class RealEstateRequest extends Record
+/**
+ * @noinspection PhpUnused
+ */
+class GetMatchingRequests implements Action
 {
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
-    public function postActionSetNotInterested(Request $request): bool
-    {
-        $data = $request->getParsedBody();
+    public function __construct(
+        private Service $service,
+        private Acl $acl,
+        private ServiceContainer $serviceContainer,
+        private SearchParamsFetcher $searchParamsFetcher
+    ) {}
 
-        if (empty($data->requestId) || empty($data->propertyId)) {
+    public function process(Request $request): Response
+    {
+        $id = $request->getRouteParam('id');
+
+        if (!$id) {
             throw new BadRequest();
         }
 
-        $this->injectableFactory
-            ->create(Service::class)
-            ->setNotInterested($data->requestId, $data->propertyId);
+        $entity = $this->serviceContainer
+            ->getByClass(RealEstateProperty::class)
+            ->getEntity($id);
 
-        return true;
-    }
-
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
-    public function postActionUnsetNotInterested(Request $request): bool
-    {
-        $data = $request->getParsedBody();
-
-        if (empty($data->requestId) || empty($data->propertyId)) {
-            throw new BadRequest();
+        if (!$entity) {
+            throw new NotFound();
         }
 
-        $this->injectableFactory
-            ->create(Service::class)
-            ->unsetNotInterested($data->requestId, $data->propertyId);
+        if (!$this->acl->checkEntityRead($entity)) {
+            throw new Forbidden();
+        }
 
-        return true;
+        $searchParams = $this->searchParamsFetcher->fetch($request);
+
+        $collection = $this->service->findLinkedMatchingRequests($id, $searchParams);
+
+        return ResponseComposer::json([
+            'list' => $collection->getValueMapList(),
+            'total' => $collection->getTotal(),
+        ]);
     }
 }

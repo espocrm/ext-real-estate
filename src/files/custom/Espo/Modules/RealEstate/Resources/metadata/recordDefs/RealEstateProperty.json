@@ -1,0 +1,5 @@
+{
+    "beforeUpdateHookClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Record\\Hooks\\RealEstateProperty\\BeforeUpdate"
+    ]
+}

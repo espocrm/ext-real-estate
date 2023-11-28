@@ -32,11 +32,16 @@ namespace Espo\Modules\RealEstate\Controllers;
 use Espo\Core\Api\Request;
 use Espo\Core\Controllers\Record;
 use Espo\Core\Exceptions\BadRequest;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\NotFound;
+use Espo\Modules\RealEstate\Tools\Property\Service;
 
 class RealEstateProperty extends Record
 {
     /**
      * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotFound
      */
     public function postActionSetNotInterested(Request $request): bool
     {
@@ -46,13 +51,17 @@ class RealEstateProperty extends Record
             throw new BadRequest();
         }
 
-        $this->getRecordService()->setNotInterested($data->propertyId, $data->requestId);
+        $this->injectableFactory
+            ->create(Service::class)
+            ->setNotInterested($data->propertyId, $data->requestId);;
 
         return true;
     }
 
     /**
      * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotFound
      */
     public function postActionUnsetNotInterested(Request $request): bool
     {
@@ -62,7 +71,9 @@ class RealEstateProperty extends Record
             throw new BadRequest();
         }
 
-        $this->getRecordService()->unsetNotInterested($data->propertyId, $data->requestId);
+        $this->injectableFactory
+            ->create(Service::class)
+            ->unsetNotInterested($data->propertyId, $data->requestId);;
 
         return true;
     }

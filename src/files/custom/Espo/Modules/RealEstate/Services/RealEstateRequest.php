@@ -29,60 +29,35 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use Espo\Core\Exceptions\BadRequest;
-use Espo\Core\Exceptions\Error;
-use Espo\Core\Exceptions\ForbiddenSilent;
+use Espo\Core\Record\CreateParams;
+use Espo\Modules\RealEstate\Entities\RealEstateRequest as RequestEntity;
+use Espo\Modules\RealEstate\Tools\Property\Service;
 use Espo\ORM\Entity;
-
-use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\NotFound;
-
-use Espo\ORM\Query\Select;
-use Espo\ORM\Query\SelectBuilder;
-use Espo\ORM\Query\Part\Condition as Cond;
-use Espo\ORM\Query\Part\Expression as Expr;
-use Espo\ORM\Query\Part\Order;
-
 use Espo\Core\Select\SearchParams;
 use Espo\Core\Select\Where\Item as WhereItem;
 use Espo\Core\Record\Collection as RecordCollection;
 use Espo\Core\Record\FindParams;
 use Espo\Services\Record;
 
+use stdClass;
+
+/**
+ * @extends Record<RequestEntity>
+ */
 class RealEstateRequest extends Record
 {
-    protected $readOnlyAttributeList = [
-        'matchingPropertyCount',
-    ];
-
-    protected function afterCreateEntity(Entity $entity, $data)
+    public function create(stdClass $data, CreateParams $params): Entity
     {
-        parent::afterCreateEntity($entity, $data);
+        $entity = parent::create($data, $params);
 
         if (!$entity->get('name')) {
             $entity->set('name', $entity->get('number'));
         }
+
+        return $entity;
     }
 
-    protected function beforeUpdateEntity(Entity $entity, $data)
-    {
-        parent::beforeUpdateEntity($entity, $data);
-
-        $matchingPropertyCount = null;
-
-        if ($entity->isActual()) {
-            $query = $this->getMatchingPropertiesQuery($entity, SearchParams::create());
-
-            $matchingPropertyCount = $this->entityManager
-                ->getRDBRepository('RealEstateProperty')
-                ->clone($query)
-                ->count();
-        }
-
-        $entity->set('matchingPropertyCount', $matchingPropertyCount);
-    }
-
-    public function find(SearchParams $searchParams, ?FindParams $findParams = null): RecordCollection
+    public function find(SearchParams $searchParams, ?FindParams $params = null): RecordCollection
     {
         $where = $searchParams->getWhere();
 
@@ -110,328 +85,11 @@ class RealEstateRequest extends Record
                 continue;
             }
 
-            return $this->serviceFactory
-                ->create('RealEstateProperty')
+            return $this->injectableFactory
+                ->create(Service::class)
                 ->findLinkedMatchingRequests($item->getValue(), $searchParams, true);
         }
 
-        return parent::find($searchParams, $findParams);
-    }
-
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
-    public function getMatchingPropertiesQuery(Entity $entity, SearchParams $params): Select
-    {
-        $builder = $this->selectBuilderFactory->create();
-
-        $builder
-            ->from('RealEstateProperty')
-            ->withStrictAccessControl()
-            ->withSearchParams($params);
-
-        $primaryFilter = null;
-
-        switch ($entity->get('type')) {
-            case 'Rent':
-                $primaryFilter = 'actualRent';
-
-                break;
-
-            case 'Sale':
-                $primaryFilter = 'actualSale';
-
-                break;
-        }
-
-        if ($primaryFilter) {
-            $builder->withPrimaryFilter($primaryFilter);
-        }
-
-        $locationIdList = $entity->getLinkMultipleIdList('locations');
-
-        $queryBuilder = $builder->buildQueryBuilder();
-
-        if (count($locationIdList)) {
-            $queryBuilder
-                ->distinct()
-                ->leftJoin(
-                    'RealEstateLocationPath',
-                    'realEstateLocationPath',
-                    [
-                        'realEstateLocationPath.descendorId=:' => 'locationId',
-                    ]
-                )
-                ->where([
-                    'realEstateLocationPath.ascendorId' => $locationIdList
-                ]);
-        }
-
-        $queryBuilder->where(
-            Cond::notIn(
-                Cond::column('id'),
-                (new SelectBuilder)
-                    ->from('Opportunity')
-                    ->select('propertyId')
-                    ->where([
-                        'requestId=' => $entity->getId(),
-                        'deleted' => false,
-                    ])
-                    ->build()
-            )
-        );
-
-        $queryBuilder->leftJoin(
-            'RealEstatePropertyRealEstateRequest',
-            'propertiesMiddle',
-            [
-                'propertiesMiddle.realEstatePropertyId=:' => 'id',
-                'propertiesMiddle.deleted' => false,
-                'propertiesMiddle.realEstateRequestId=' => $entity->getId(),
-            ]
-        );
-
-        if (count($queryBuilder->build()->getSelect()) === 0) {
-            $queryBuilder->select('*');
-        }
-
-        $queryBuilder
-            ->select('propertiesMiddle.interestDegree', 'interestDegree');
-
-        if ($entity->get('propertyType')) {
-            $queryBuilder->where([
-                'type' => $entity->get('propertyType')
-            ]);
-        }
-
-        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
-
-        foreach ($fieldDefs as $field => $defs) {
-            if (empty($defs['isMatching'])) {
-                continue;
-            }
-
-            if ($entity->get('from'. ucfirst($field)) !== null) {
-                $queryBuilder->where([
-                    $field . '>=' => $entity->get('from' . ucfirst($field))
-                ]);
-            }
-
-            if ($entity->get('to'. ucfirst($field)) !== null) {
-                $queryBuilder->where([
-                    $field . '<=' => $entity->get('to' . ucfirst($field))
-                ]);
-            }
-        }
-
-        $defaultCurrency = $this->config->get('defaultCurrency');
-
-        if ($entity->get('fromPrice') !== null) {
-            $fromPrice = $entity->get('fromPrice');
-            $fromPriceCurrency = $entity->get('fromPriceCurrency');
-
-            $rates = $this->config->get('currencyRates');
-            $rate1 = $this->config->get('currencyRates.' . $fromPriceCurrency, 1.0);
-
-            $rate1 = 1.0;
-
-            if (!empty($rates[$fromPriceCurrency])) {
-                $rate1 = $rates[$fromPriceCurrency];
-            }
-
-            $rate2 = 1.0;
-
-            if (!empty($rates[$defaultCurrency])) {
-                $rate2 = $rates[$defaultCurrency];
-            }
-
-            $fromPrice = $fromPrice * ($rate1);
-            $fromPrice = $fromPrice / ($rate2);
-
-            $queryBuilder->where([
-                'priceConverted>=' => $fromPrice
-            ]);
-        }
-
-        if ($entity->get('toPrice') !== null) {
-            $toPrice = $entity->get('toPrice');
-            $toPriceCurrency = $entity->get('toPriceCurrency');
-
-            $rates = $this->config->get('currencyRates');
-
-            $rate1 = 1.0;
-
-            if (!empty($rates[$toPriceCurrency])) {
-                $rate1 = $rates[$toPriceCurrency];
-            }
-
-            $rate2 = 1.0;
-
-            if (!empty($rates[$defaultCurrency])) {
-                $rate2 = $rates[$defaultCurrency];
-            }
-
-            $toPrice = $toPrice * ($rate1);
-            $toPrice = $toPrice / ($rate2);
-
-            $queryBuilder->where([
-                'priceConverted<=' => $toPrice
-            ]);
-        }
-
-        return $queryBuilder->build();
-    }
-
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
-    public function findLinkedMatchingProperties(
-        string $id,
-        SearchParams $params,
-        bool $customOrder = false
-    ): RecordCollection {
-
-        $entity = $this->getRepository()->get($id);
-
-        $this->loadAdditionalFields($entity);
-
-        $query = $this->getMatchingPropertiesQuery($entity, $params);
-
-        if (!$customOrder) {
-            $query = (new SelectBuilder())
-                ->clone($query)
-                ->order([
-                    Order::fromString('propertiesMiddle.interestDegree'),
-                    Order::createByPositionInList(Expr::create('status'), ['New', 'Assigned', 'In Process']),
-                    Order::fromString('createdAt')->withDesc(),
-                ])
-                ->build();
-        }
-
-        $collection = $this->entityManager
-            ->getRDBRepository('RealEstateProperty')
-            ->clone($query)
-            ->find();
-
-        $recordService = $this->getRecordService('RealEstateProperty');
-
-        foreach ($collection as $e) {
-            $recordService->loadAdditionalFieldsForList($e);
-            $recordService->prepareEntityForOutput($e);
-        }
-
-        $total = $this->entityManager
-            ->getRDBRepository('RealEstateProperty')
-            ->clone($query)
-            ->count();
-
-        if ($entity->isActual()) {
-            $entity->set('matchingPropertyCount', $total);
-
-            $this->getRepository()->save($entity, [
-                'silent' => true,
-                'skipHooks' => true,
-                'skipAll' => true,
-            ]);
-        }
-
-        return new RecordCollection($collection, $total);
-    }
-
-    /**
-     * @throws Forbidden
-     * @throws ForbiddenSilent
-     * @throws NotFound
-     */
-    public function setNotInterested($requestId, $propertyId)
-    {
-        $request = $this->getEntity($requestId);
-
-        if (!$request) {
-            throw new NotFound();
-        }
-
-        if (!$this->acl->check($request, 'edit')) {
-            throw new Forbidden();
-        }
-
-        $this->entityManager
-            ->getRDBRepository('RealEstateRequest')
-            ->getRelation($request, 'properties')
-            ->relateById($propertyId, ['interestDegree' => 0]);
-    }
-
-    /**
-     * @throws Forbidden
-     * @throws ForbiddenSilent
-     * @throws NotFound
-     */
-    public function unsetNotInterested($requestId, $propertyId)
-    {
-        $request = $this->getEntity($requestId);
-
-        if (!$request) {
-            throw new NotFound();
-        }
-
-        if (!$this->acl->check($request, 'edit')) {
-            throw new Forbidden();
-        }
-
-        $this->entityManager
-            ->getRDBRepository('RealEstateRequest')
-            ->getRelation($request, 'properties')
-            ->unrelateById($propertyId);
-    }
-
-    public function updateMatchingCount()
-    {
-        $repository = $this->entityManager->getRDBRepository('RealEstateRequest');
-
-        $notActualList = $repository
-            ->select(['id', 'matchingPropertyCount'])
-            ->where([
-                'status' => ['Completed', 'Canceled', 'Lost'],
-                'matchingPropertyCount!=' => null,
-            ])
-            ->find();
-
-        foreach ($notActualList as $e) {
-            $e->set('matchingPropertyCount', null);
-            $this->getRepository()->save($e, [
-                'silent' => true,
-                'skipHooks' => true,
-                'skipAll' => true,
-            ]);
-        }
-
-        $actualList = $repository
-            ->where([
-                'status!=' => ['Completed', 'Canceled', 'Lost'],
-            ])
-            ->find();
-
-        foreach ($actualList as $e) {
-            $this->loadAdditionalFields($e);
-
-            $query = $this->getMatchingPropertiesQuery($e, SearchParams::create());
-
-            $matchingPropertyCount = $this->entityManager
-                ->getRDBRepository('RealEstateProperty')
-                ->clone($query)
-                ->count();
-
-            $e->set('matchingPropertyCount', $matchingPropertyCount);
-
-            $this->getRepository()->save($e, [
-                'silent' => true,
-                'skipHooks' => true,
-                'skipAll' => true,
-            ]);
-        }
+        return parent::find($searchParams, $params);
     }
 }

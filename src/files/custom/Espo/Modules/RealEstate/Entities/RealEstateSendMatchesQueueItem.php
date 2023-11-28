@@ -29,7 +29,8 @@
 
 namespace Espo\Modules\RealEstate\Entities;
 
-class RealEstateSendMatchesQueueItem extends \Espo\Core\Templates\Entities\Base
-{
+use Espo\Core\ORM\Entity;
 
+class RealEstateSendMatchesQueueItem extends Entity
+{
 }

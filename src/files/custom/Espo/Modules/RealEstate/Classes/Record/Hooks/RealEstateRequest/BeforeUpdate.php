@@ -3,7 +3,7 @@
  * This file is part of Real Estate extension for EspoCRM.
  *
  * EspoCRM - Open Source CRM application.
- * Copyright (C) 2014-2022 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
  * Website: https://www.espocrm.com
  *
  * Real Estate extension is free software: you can redistribute it and/or modify
@@ -27,54 +27,48 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-namespace Espo\Modules\RealEstate\Controllers;
+namespace Espo\Modules\RealEstate\Classes\Record\Hooks\RealEstateRequest;
 
-use Espo\Core\Api\Request;
-use Espo\Core\Controllers\Record;
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\NotFound;
+use Espo\Core\Record\Hook\UpdateHook;
+use Espo\Core\Record\UpdateParams;
+use Espo\Core\Select\SearchParams;
+use Espo\Modules\RealEstate\Entities\RealEstateProperty;
+use Espo\Modules\RealEstate\Entities\RealEstateRequest;
 use Espo\Modules\RealEstate\Tools\Request\Service;
+use Espo\ORM\Entity;
+use Espo\ORM\EntityManager;
 
-class RealEstateRequest extends Record
+/**
+ * @noinspection PhpUnused
+ * @implements UpdateHook<RealEstateRequest>
+ */
+class BeforeUpdate implements UpdateHook
 {
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
-    public function postActionSetNotInterested(Request $request): bool
-    {
-        $data = $request->getParsedBody();
-
-        if (empty($data->requestId) || empty($data->propertyId)) {
-            throw new BadRequest();
-        }
-
-        $this->injectableFactory
-            ->create(Service::class)
-            ->setNotInterested($data->requestId, $data->propertyId);
-
-        return true;
-    }
+    public function __construct(
+        private Service $service,
+        private EntityManager $entityManager
+    ) {}
 
     /**
+     * @param RealEstateRequest $entity
      * @throws BadRequest
      * @throws Forbidden
-     * @throws NotFound
      */
-    public function postActionUnsetNotInterested(Request $request): bool
+    public function process(Entity $entity, UpdateParams $params): void
     {
-        $data = $request->getParsedBody();
+        $matchingRequestCount = null;
 
-        if (empty($data->requestId) || empty($data->propertyId)) {
-            throw new BadRequest();
+        if ($entity->isActual()) {
+            $query = $this->service->getMatchingPropertiesQuery($entity, SearchParams::create());
+
+            $matchingRequestCount = $this->entityManager
+                ->getRDBRepository(RealEstateProperty::ENTITY_TYPE)
+                ->clone($query)
+                ->count();
         }
 
-        $this->injectableFactory
-            ->create(Service::class)
-            ->unsetNotInterested($data->requestId, $data->propertyId);
-
-        return true;
+        $entity->set('matchingRequestCount', $matchingRequestCount);
     }
 }

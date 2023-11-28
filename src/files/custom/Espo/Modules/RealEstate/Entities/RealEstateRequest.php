@@ -29,11 +29,13 @@
 
 namespace Espo\Modules\RealEstate\Entities;
 
-class RealEstateRequest extends \Espo\Core\Templates\Entities\Base
-{
-    protected $entityType = "RealEstateRequest";
+use Espo\Core\ORM\Entity;
 
-    public function isActual()
+class RealEstateRequest extends Entity
+{
+    public const ENTITY_TYPE = 'RealEstateRequest';
+
+    public function isActual(): bool
     {
         return !in_array($this->get('status'), ['Completed', 'Canceled', 'Lost']);
     }

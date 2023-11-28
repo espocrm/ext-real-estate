@@ -29,25 +29,26 @@
 
 namespace Espo\Modules\RealEstate\Hooks\RealEstateRequest;
 
+use Espo\Core\Job\Job\Data;
+use Espo\Core\Job\JobSchedulerFactory;
+use Espo\Core\Job\QueueName;
 use Espo\Core\Utils\Config;
 use Espo\Core\Utils\Metadata;
-use Espo\ORM\EntityManager;
+use Espo\Modules\RealEstate\Tools\Matches\Jobs\SendRequestMatches;
 use Espo\ORM\Entity;
 
+/**
+ * @noinspection PhpUnused
+ */
 class EmailRequester
 {
     public static $order = 16;
 
-    private Config $config;
-    private Metadata $metadata;
-    private EntityManager $entityManager;
-
-    public function __construct(Config $config, Metadata $metadata, EntityManager $entityManager)
-    {
-        $this->config = $config;
-        $this->metadata = $metadata;
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(
+        private Config $config,
+        private Metadata $metadata,
+        private JobSchedulerFactory $jobSchedulerFactory
+    ) {}
 
     public function afterSave(Entity $entity): void
     {
@@ -96,18 +97,14 @@ class EmailRequester
             return;
         }
 
-        $job = $this->entityManager->getEntity('Job');
-
-        $job->set([
-            'serviceName' => 'RealEstateSendMatches',
-            'methodName' => 'processRequestJob',
-            'data' => [
-                'targetId' => $entity->getId(),
-                'isUpdated' => !$entity->isNew(),
-            ],
-            'queue' => 'e0',
-        ]);
-
-        $this->entityManager->saveEntity($job);
+        $this->jobSchedulerFactory
+            ->create()
+            ->setClassName(SendRequestMatches::class)
+            ->setData(
+                Data::create(['isUpdated' => !$entity->isNew()])
+                    ->withTargetId($entity->getId())
+            )
+            ->setQueue(QueueName::E0)
+            ->schedule();
     }
 }

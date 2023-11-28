@@ -27,54 +27,54 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-namespace Espo\Modules\RealEstate\Controllers;
+namespace Espo\Modules\RealEstate\Hooks\RealEstateProperty;
 
-use Espo\Core\Api\Request;
-use Espo\Core\Controllers\Record;
-use Espo\Core\Exceptions\BadRequest;
-use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\Exceptions\NotFound;
-use Espo\Modules\RealEstate\Tools\Request\Service;
+use Espo\Core\Utils\Metadata;
+use Espo\ORM\Entity;
 
-class RealEstateRequest extends Record
+class SetValues
 {
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
-    public function postActionSetNotInterested(Request $request): bool
-    {
-        $data = $request->getParsedBody();
+    public function __construct(private Metadata $metadata)
+    {}
 
-        if (empty($data->requestId) || empty($data->propertyId)) {
-            throw new BadRequest();
+    public function beforeSave(Entity $entity): void
+    {
+        $propertyType = $entity->get('type');
+
+        $fieldList = $this->metadata
+            ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+
+        $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
+
+        foreach ($fieldDefs as $field => $defs) {
+            if (empty($defs['isMatching'])) {
+                continue;
+            }
+
+            if (!in_array($field, $fieldList)) {
+                $entity->set($field, null);
+            }
         }
 
-        $this->injectableFactory
-            ->create(Service::class)
-            ->setNotInterested($data->requestId, $data->propertyId);
+        $name = '';
 
-        return true;
-    }
+        if ($entity->get('addressStreet') || $entity->get('addressCity')) {
+            if ($entity->get('addressStreet')) {
+                $name .= str_replace("\n", ', ', $entity->get('addressStreet'));
+            }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
-    public function postActionUnsetNotInterested(Request $request): bool
-    {
-        $data = $request->getParsedBody();
+            if ($entity->get('addressCity')) {
+                if ($name != '') {
+                    $name .= ", ";
+                }
 
-        if (empty($data->requestId) || empty($data->propertyId)) {
-            throw new BadRequest();
+                $name .= $entity->get('addressCity');
+            }
+        }
+        else {
+            $name = "unknown-address";
         }
 
-        $this->injectableFactory
-            ->create(Service::class)
-            ->unsetNotInterested($data->requestId, $data->propertyId);
-
-        return true;
+        $entity->set('name', $name);
     }
 }

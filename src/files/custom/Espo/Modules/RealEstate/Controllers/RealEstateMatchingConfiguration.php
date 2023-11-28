@@ -33,8 +33,8 @@ use Espo\Core\Api\Request;
 use Espo\Core\DataManager;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
-use Espo\Core\ServiceFactory;
 use Espo\Entities\User;
+use Espo\Modules\RealEstate\Tools\Matches\ConfigurationService;
 
 class RealEstateMatchingConfiguration
 {
@@ -42,7 +42,7 @@ class RealEstateMatchingConfiguration
      * @throws Forbidden
      */
     public function __construct(
-        private ServiceFactory $serviceFactory,
+        private ConfigurationService $service,
         private User $user,
         private DataManager $dataManager
     ) {
@@ -64,7 +64,7 @@ class RealEstateMatchingConfiguration
 
         $data = $request->getParsedBody();
 
-        $this->serviceFactory->create('RealEstateMatchingConfiguration')->setMatchingParameters($data);
+        $this->service->setMatchingParameters($data);
 
         $this->dataManager->rebuild();
 

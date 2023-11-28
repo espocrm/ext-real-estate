@@ -29,20 +29,16 @@
 
 namespace Espo\Modules\RealEstate\Jobs;
 
-use Espo\Core\ServiceFactory;
 use Espo\Core\Job\JobDataLess;
+use Espo\Modules\RealEstate\Tools\Matches\Service;
 
 class SendPropertyMatches implements JobDataLess
 {
-    private ServiceFactory $serviceFactory;
-
-    public function __construct(ServiceFactory $serviceFactory)
-    {
-        $this->serviceFactory = $serviceFactory;
-    }
+    public function __construct(private Service $service)
+    {}
 
     public function run(): void
     {
-        $this->serviceFactory->create('RealEstateSendMatches')->processSendingQueue();
+        $this->service->processSendingQueue();
     }
 }

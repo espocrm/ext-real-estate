@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/site/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/site/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/files/custom" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/zmq" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/robthree/twofactorauth" />
