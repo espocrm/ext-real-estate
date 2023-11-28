@@ -1,12 +1,14 @@
 
 <div class="button-container">
     <div class="btn-group">
-        <button type="button" class="btn btn-primary" data-action="save">{{translate 'Save'}}</button>
-        <button type="button" class="btn btn-default" data-action="cancel">{{translate 'Cancel'}}</button>
+        <button type="button" class="btn btn-primary btn-xs-wide" data-action="save">{{translate 'Save'}}</button>
+        <button type="button" class="btn btn-default btn-xs-wide" data-action="cancel">{{translate 'Cancel'}}</button>
     </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading"><h4 class="panel-title">{{translate 'typeFieldsMap' category='messages' scope='RealEstateMatchingConfiguration'}}</h4></div>
+    <div class="panel-heading">
+        <h4 class="panel-title">{{translate 'typeFieldsMap' category='messages' scope='RealEstateMatchingConfiguration'}}</h4>
+    </div>
     <div class="panel-body panel-body-form">
         {{#each typeDataList}}
         <div class="row">
