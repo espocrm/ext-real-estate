@@ -114,7 +114,7 @@ class Service
 
         foreach ($itemList as $item) {
             $this->entityManager
-                ->getRepository('RealEstateSendMatchesQueueItem')
+                ->getRDBRepository('RealEstateSendMatchesQueueItem')
                 ->deleteFromDb($item->getId());
         }
     }
