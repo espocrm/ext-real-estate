@@ -346,7 +346,7 @@ class Service
     public function setNotInterested(string $propertyId, string $requestId): void
     {
         $property = $this->serviceContainer
-            ->getByClass(RealEstateProperty::ENTITY_TYPE)
+            ->getByClass(RealEstateProperty::class)
             ->getEntity($propertyId);
 
         if (!$property) {
@@ -371,7 +371,7 @@ class Service
     public function unsetNotInterested(string $propertyId, string $requestId): void
     {
         $property = $this->serviceContainer
-            ->getByClass(RealEstateProperty::ENTITY_TYPE)
+            ->getByClass(RealEstateProperty::class)
             ->getEntity($propertyId);
 
         if (!$property) {

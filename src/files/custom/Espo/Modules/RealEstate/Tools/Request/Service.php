@@ -117,7 +117,7 @@ class Service
             $entity->set('matchingPropertyCount', $total);
 
             $this->entityManager
-                ->getRDBRepositoryByClass(RealEstateProperty::ENTITY_TYPE)
+                ->getRDBRepositoryByClass(RealEstateRequest::class)
                 ->save($entity, [
                     'silent' => true,
                     'skipHooks' => true,
@@ -305,7 +305,7 @@ class Service
     public function setNotInterested(string $requestId, string $propertyId): void
     {
         $request = $this->serviceContainer
-            ->getByClass(RealEstateRequest::ENTITY_TYPE)
+            ->getByClass(RealEstateRequest::class)
             ->getEntity($requestId);
 
         if (!$request) {
@@ -330,7 +330,7 @@ class Service
     public function unsetNotInterested(string $requestId, string $propertyId): void
     {
         $request = $this->serviceContainer
-            ->getByClass(RealEstateRequest::ENTITY_TYPE)
+            ->getByClass(RealEstateRequest::class)
             ->getEntity($requestId);
 
         if (!$request) {
