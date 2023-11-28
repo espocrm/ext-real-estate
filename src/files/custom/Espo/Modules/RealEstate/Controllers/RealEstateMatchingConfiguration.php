@@ -35,6 +35,7 @@ use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Entities\User;
 use Espo\Modules\RealEstate\Tools\Matches\ConfigurationService;
+use stdClass;
 
 class RealEstateMatchingConfiguration
 {
@@ -56,7 +57,7 @@ class RealEstateMatchingConfiguration
      * @throws Forbidden
      * @throws Error
      */
-    public function putActionUpdate(Request $request): bool
+    public function putActionUpdate(Request $request): stdClass
     {
         if (!$this->user->isAdmin()) {
             throw new Forbidden();
@@ -68,6 +69,6 @@ class RealEstateMatchingConfiguration
 
         $this->dataManager->rebuild();
 
-        return true;
+        return (object) [];
     }
 }
