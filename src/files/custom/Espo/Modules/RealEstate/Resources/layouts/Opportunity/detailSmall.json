@@ -1,0 +1,50 @@
+[
+    {
+        "label": "",
+        "rows": [
+            [
+                {
+                    "name": "property",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "request",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "stage"
+                },
+                {
+                    "name": "closeDate"
+                }
+            ],
+            [
+                {
+                    "name": "amount",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "account",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "contacts",
+                    "fullWidth": true
+                }
+            ],
+            [
+                {
+                    "name": "description"
+                }
+            ]
+        ]
+    }
+]

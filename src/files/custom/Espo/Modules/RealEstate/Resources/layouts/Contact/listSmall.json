@@ -1,0 +1,5 @@
+[
+    {"name":"name", "link":"true"},
+    {"name":"emailAddress", "notSortable": true, "width": 30},
+    {"name":"addressCity", "width": 25}
+]
