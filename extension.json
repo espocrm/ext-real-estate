@@ -4,9 +4,9 @@
     "description": "Real estate properties and requests.",
     "author": "EspoCRM",
     "acceptableVersions": [
-        ">=7.4.0"
+        ">=8.1"
     ],
     "php": [
-        ">=8.0"
+        ">=8.1"
     ]
 }

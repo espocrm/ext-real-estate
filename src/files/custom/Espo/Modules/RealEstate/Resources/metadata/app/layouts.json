@@ -1,0 +1,33 @@
+{
+	"Opportunity": {
+		"detail": {
+			"module": "RealEstate"
+		},
+		"detailSmall": {
+			"module": "RealEstate"
+		},
+		"filters": {
+			"module": "RealEstate"
+		},
+		"list": {
+			"module": "RealEstate"
+		},
+		"listSmall": {
+			"module": "RealEstate"
+		},
+		"listForProperty": {
+			"module": "RealEstate"
+		},
+		"listForRequest": {
+			"module": "RealEstate"
+		},
+		"detailConvert": {
+			"module": "RealEstate"
+		}
+	},
+	"Contact": {
+		"relationships": {
+			"module": "RealEstate"
+		}
+	}
+}
