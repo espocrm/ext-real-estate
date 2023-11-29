@@ -1,6 +1,6 @@
 {
     "labels": {
-        "Create Location": "Create Location"
+        "Create RealEstateLocation": "Create Location"
     },
     "fields": {
         "address": "Address"
