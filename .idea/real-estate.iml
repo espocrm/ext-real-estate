@@ -114,6 +114,35 @@
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/giggsey/libphonenumber-for-php" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/giggsey/locale" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/picqer/php-barcode-generator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpstan/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/php-invoker" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/cli-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/code-unit" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/complexity" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/lines-of-code" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/type" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/theseer/tokenizer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

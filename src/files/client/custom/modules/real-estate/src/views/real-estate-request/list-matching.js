@@ -148,13 +148,15 @@ Espo.define('real-estate:views/real-estate-request/list-matching', ['views/main'
         },
 
         loadList: function () {
-            this.notify('Loading...');
+            Espo.Ui.notify(' ... ');
+
             if (this.collection.isFetched) {
                 this.createListRecordView(false);
             } else {
                 this.listenToOnce(this.collection, 'sync', function () {
                     this.createListRecordView();
                 }, this);
+
                 this.collection.fetch();
             }
         },
