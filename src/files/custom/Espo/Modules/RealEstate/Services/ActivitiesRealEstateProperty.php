@@ -73,7 +73,7 @@ class ActivitiesRealEstateProperty
                 'parentId',
                 'status',
                 'createdAt',
-                ['""', 'hasAttachment'],
+                ['false', 'hasAttachment'],
             ])
             ->where([
                 'OR' => [
@@ -122,8 +122,8 @@ class ActivitiesRealEstateProperty
                 'name',
                 ['dateStart', 'dateStart'],
                 ['dateEnd', 'dateEnd'],
-                ['""', 'dateStartDate'],
-                ['""', 'dateEndDate'],
+                ['null', 'dateStartDate'],
+                ['null', 'dateEndDate'],
                 ['"Call"', '_scope'],
                 'assignedUserId',
                 'assignedUserName',
@@ -131,7 +131,7 @@ class ActivitiesRealEstateProperty
                 'parentId',
                 'status',
                 'createdAt',
-                ['""', 'hasAttachment'],
+                ['false', 'hasAttachment'],
             ])
             ->where([
                 'OR' => [
@@ -174,9 +174,9 @@ class ActivitiesRealEstateProperty
                 'id',
                 'name',
                 ['dateSent', 'dateStart'],
-                ['""', 'dateEnd'],
-                ['""', 'dateStartDate'],
-                ['""', 'dateEndDate'],
+                ['null', 'dateEnd'],
+                ['null', 'dateStartDate'],
+                ['null', 'dateEndDate'],
                 ['"Email"', '_scope'],
                 'assignedUserId',
                 'assignedUserName',
