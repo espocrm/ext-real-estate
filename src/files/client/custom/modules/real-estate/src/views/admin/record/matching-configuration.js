@@ -91,17 +91,16 @@ Espo.define('real-estate:views/admin/record/matching-configuration', 'views/reco
         },
 
         actionSave: function () {
-            Espo.Ui.notify(this.translate('pleaseWait', 'messages'));
+            Espo.Ui.notify(' ... ');
             this.disableButtons();
 
             this.model.save()
                 .then(() => {
-                    this.getMetadata().load(() => {
-                        this.getMetadata().storeToCache();
+                    this.getMetadata().loadSkipCache().then(() => {
                         Espo.Ui.success(this.translate('Saved'));
 
                         this.enableButtons();
-                    }, true);
+                    });
                 })
                 .catch(() => {
                     this.enableButtons();
