@@ -83,7 +83,8 @@
             "type": "rangeCurrency"
         },
         "yearBuilt": {
-            "type": "rangeInt"
+            "type": "rangeInt",
+            "disableFormatting": true
         },
         "bedroomCount": {
             "type": "rangeInt"
@@ -108,12 +109,14 @@
         "fromYearBuilt": {
             "type": "int",
             "min": 0,
-            "max": 2100
+            "max": 2100,
+            "disableFormatting": true
         },
         "toYearBuilt": {
             "type": "int",
             "min": 0,
-            "max": 2100
+            "max": 2100,
+            "disableFormatting": true
         },
         "fromPrice": {
             "type": "currency"
