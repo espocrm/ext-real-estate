@@ -16,7 +16,7 @@ Parameters:
 
 ## Config for EspoCRM instance
 
-You can override EspoCRM config. Create `config.php` in the root directory of the repository. This file will be applied after EspoCRM intallation (when building).
+You can override EspoCRM config. Create `config.php` in the root directory of the repository. This file will be applied after EspoCRM installation (when building).
 
 Example:
 
@@ -115,7 +115,7 @@ Assuming that you have already built EspoCRM instance.
 
 This will generate PO file in `site/build/` directory. You will need to translate this file.
 
-### Building langauge files from PO
+### Building language files from PO
 
 Assuming you have translated PO file in build directory with the same name as when it was generated.
 
