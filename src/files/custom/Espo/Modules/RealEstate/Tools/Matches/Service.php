@@ -233,7 +233,7 @@ class Service
         }
 
         foreach ($property->getLinkMultipleIdList('images') as $attachmentId) {
-            $attachment = $this->entityManager->getEntity('Attachment', $attachmentId);
+            $attachment = $this->entityManager->getEntityById('Attachment', $attachmentId);
 
             if ($attachment) {
                 $attachmentList[] = $attachment;

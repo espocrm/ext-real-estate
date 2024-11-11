@@ -135,7 +135,7 @@ class AfterInstall
 
         $entityManager = $container->get('entityManager');
         if (!$entityManager->getRepository('ScheduledJob')->where(['job' => 'PropertyMatchingUpdate'])->findOne()) {
-            $job = $entityManager->getEntity('ScheduledJob');
+            $job = $entityManager->getNewEntity('ScheduledJob');
             $job->set([
                'name' => 'Property Matching Update',
                'job' => 'PropertyMatchingUpdate',
@@ -145,9 +145,9 @@ class AfterInstall
             $entityManager->saveEntity($job);
         }
         if (!$entityManager->getRepository('ScheduledJob')->where(['job' => 'SendPropertyMatches'])->findOne()) {
-            $job = $entityManager->getEntity('ScheduledJob');
+            $job = $entityManager->getNewEntity('ScheduledJob');
             $job->set([
-               'name' => 'Send Matched Properties to Requestors',
+               'name' => 'Send Matched Properties to Requesters',
                'job' => 'SendPropertyMatches',
                'status' => 'Active',
                'scheduling' => '*/2 * * * *'

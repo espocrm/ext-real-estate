@@ -112,7 +112,7 @@ class SendRequestMatches implements Job
                 continue;
             }
 
-            $queueItem = $this->entityManager->getEntity('RealEstateSendMatchesQueueItem');
+            $queueItem = $this->entityManager->getNewEntity('RealEstateSendMatchesQueueItem');
 
             $queueItem->set([
                 'requestId' => $entity->getId(),
