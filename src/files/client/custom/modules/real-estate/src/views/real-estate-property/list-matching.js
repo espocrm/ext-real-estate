@@ -26,7 +26,9 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-Espo.define('real-estate:views/real-estate-property/list-matching', ['views/main', 'search-manager', 'real-estate:views/real-estate-property/record/panels/matching-requests'], function (Dep, SearchManager, Panel) {
+define('real-estate:views/real-estate-property/list-matching',
+['views/main', 'search-manager', 'real-estate:views/real-estate-property/record/panels/matching-requests'],
+function (Dep, SearchManager, Panel) {
 
     return Dep.extend({
 
@@ -55,20 +57,20 @@ Espo.define('real-estate:views/real-estate-property/list-matching', ['views/main
             var countLoaded = 0;
 
             var proceed = function () {
-                if (countLoaded == 2) {
+                if (countLoaded === 2) {
                     this.wait(false);
                 }
             }.bind(this);
 
-            this.getModelFactory().create('RealEstateProperty', function (model) {
+            this.getModelFactory().create('RealEstateProperty', (model) => {
                 this.model = model;
                 model.id = this.options.id;
 
-                this.model.fetch().done(function () {
+                this.model.fetch().then(() => {
                     countLoaded++;
                     proceed();
-                }.bind(this));
-            }, this);
+                });
+            });
 
             this.getCollectionFactory().create('RealEstateRequest', function (collection) {
                 this.collection = collection;
@@ -204,4 +206,3 @@ Espo.define('real-estate:views/real-estate-property/list-matching', ['views/main
 
     });
 });
-

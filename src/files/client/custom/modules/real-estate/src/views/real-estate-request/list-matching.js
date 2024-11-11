@@ -64,7 +64,7 @@ Espo.define('real-estate:views/real-estate-request/list-matching', ['views/main'
                 this.model = model;
                 model.id = this.options.id;
 
-                this.model.fetch().done(function () {
+                this.model.fetch().then(function () {
                     countLoaded++;
                     proceed();
                 }.bind(this));
