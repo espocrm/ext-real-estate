@@ -4,10 +4,11 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/site/tests/integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/site/tests/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/site/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/site/tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/files/custom" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests" isTestSource="true" packagePrefix="tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/application/Espo" isTestSource="false" packagePrefix="Espo\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Custom" isTestSource="false" packagePrefix="Espo\Custom\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Modules" isTestSource="false" packagePrefix="Espo\Modules\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/dev" isTestSource="true" packagePrefix="EspoDev\" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/zmq" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/robthree/twofactorauth" />
@@ -143,6 +144,23 @@
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/type" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/sebastian/version" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/site/client/custom/modules" />
+      <excludeFolder url="file://$MODULE_DIR$/site/client/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/carbonphp/carbon-doctrine-types" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/dompdf/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/dompdf/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/intervention/image" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/lasserafn/php-initial-avatar-generator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/lasserafn/php-initials" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/lasserafn/php-string-script-language" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/league/flysystem-local" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/meyfa/php-svg" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/overtrue/pinyin" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/php-di/invoker" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/php-di/php-di" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/psr/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/tholu/php-cidr-match" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
