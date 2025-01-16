@@ -68,6 +68,7 @@ class Service
     /**
      * @throws BadRequest
      * @throws Forbidden
+     * @throws NotFound
      */
     public function findLinkedMatchingRequests(
         string $id,
@@ -78,6 +79,10 @@ class Service
         $entity = $this->entityManager
             ->getRDBRepositoryByClass(RealEstateProperty::class)
             ->getById($id);
+
+        if (!$entity) {
+            throw new NotFound();
+        }
 
         $this->serviceContainer
             ->getByClass(RealEstateProperty::class)
