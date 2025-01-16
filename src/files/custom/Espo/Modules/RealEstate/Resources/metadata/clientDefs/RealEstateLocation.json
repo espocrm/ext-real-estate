@@ -1,6 +1,7 @@
 {
     "controller": "controllers/record-tree",
     "collection": "collections/tree",
+    "mergeDisabled": true,
     "menu": {
         "listTree": {
             "buttons": [
