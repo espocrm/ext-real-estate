@@ -26,7 +26,7 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-Espo.define('real-estate:views/real-estate-request/record/panels/matching-properties', 'views/record/panels/relationship', function (Dep) {
+define('real-estate:views/real-estate-request/record/panels/matching-properties', ['views/record/panels/relationship'], function (Dep) {
 
     return Dep.extend({
 
@@ -35,9 +35,13 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
         setup: function () {
             Dep.prototype.setup.call(this);
 
-            this.listenTo(this.model, 'sync', function () {
+            this.listenTo(this.model, 'sync', (m, r, o) => {
+                if (!o.patch && !o.highlight) {
+                    return;
+                }
+
                 this.collection.fetch();
-            }, this);
+            });
         },
 
         setupActions: function () {
@@ -45,11 +49,13 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
 
             if (Dep.prototype.actionViewRelatedList) {
                 var index = -1;
-                this.actionList.forEach(function (item, i) {
-                    if (item.action == 'listMatching') {
+
+                this.actionList.forEach((item, i) => {
+                    if (item.action === 'listMatching') {
                         index = i;
                     }
-                }, this);
+                });
+
                 if (~index) {
                     this.actionList.splice(index, 1);
                 }
@@ -66,6 +72,7 @@ Espo.define('real-estate:views/real-estate-request/record/panels/matching-proper
 
             this.getModelFactory().create('RealEstateProperty', function (model) {
                 model.id = id;
+
                 this.listenToOnce(model, 'sync', function () {
                     this.notify(false);
 

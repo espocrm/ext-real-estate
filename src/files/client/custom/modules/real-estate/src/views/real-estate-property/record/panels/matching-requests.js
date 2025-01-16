@@ -26,9 +26,8 @@
  * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
  ************************************************************************/
 
-define(
-    'real-estate:views/real-estate-property/record/panels/matching-requests',
-    'views/record/panels/relationship',
+define('real-estate:views/real-estate-property/record/panels/matching-requests',
+    ['views/record/panels/relationship'],
     function (Dep) {
 
     return Dep.extend({
@@ -38,7 +37,11 @@ define(
         setup: function () {
             Dep.prototype.setup.call(this);
 
-            this.listenTo(this.model, 'sync', () => {
+            this.listenTo(this.model, 'sync', (m, r, o) => {
+                if (!o.patch && !o.highlight) {
+                    return;
+                }
+
                 this.collection.fetch();
             });
         },
