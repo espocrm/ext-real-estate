@@ -12,6 +12,7 @@
     "integration-tests": "node build --copy && node build --composer-install && cd site && php vendor/bin/phpunit tests/integration/Espo/Modules/RealEstate",
     "copy": "node build --copy",
     "composer-install": "node build --composer-install",
+    "sync": "node build --copy && node build --composer-install",
     "extension": "node build --extension",
     "clear-cache": "php site/clear_cache.php",
     "rebuild": "node build --rebuild",
@@ -22,6 +23,6 @@
   "author": "EspoCRM",
   "license": "GPL-3.0",
   "dependencies": {
-    "espo-extension-tools": "github:espocrm/extension-tools#0.3.1"
+    "espo-extension-tools": "github:espocrm/extension-tools#0.3.4"
   }
 }
