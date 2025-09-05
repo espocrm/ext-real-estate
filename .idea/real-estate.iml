@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Custom" isTestSource="false" packagePrefix="Espo\Custom\" />
       <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Modules" isTestSource="false" packagePrefix="Espo\Modules\" />
       <sourceFolder url="file://$MODULE_DIR$/site/dev" isTestSource="true" packagePrefix="EspoDev\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/spec" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/zmq" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/robthree/twofactorauth" />
@@ -161,6 +162,19 @@
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/psr/clock" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/tholu/php-cidr-match" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/league/html-to-markdown" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/league/oauth2-client" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/psr/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/child-process" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/staabm/side-effects-detector" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/mailer" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/mime" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
