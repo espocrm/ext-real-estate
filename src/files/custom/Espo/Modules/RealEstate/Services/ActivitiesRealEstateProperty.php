@@ -30,8 +30,12 @@
 namespace Espo\Modules\RealEstate\Services;
 
 use Espo\Core\Exceptions\BadRequest;
-use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Utils\Config;
+use Espo\Modules\Crm\Entities\Call;
+use Espo\Modules\Crm\Entities\Meeting;
+use Espo\Modules\Crm\Entities\Opportunity;
+use Espo\Modules\RealEstate\Entities\RealEstateProperty as RealEstatePropertyEntity;
 use Espo\ORM\Entity;
 use Espo\ORM\Query\Select;
 use Espo\ORM\Query\SelectBuilder;
@@ -39,13 +43,10 @@ use Espo\Core\Select\SelectBuilderFactory;
 
 class ActivitiesRealEstateProperty
 {
-    private SelectBuilderFactory $selectBuilderFactory;
-
     public function __construct(
-        SelectBuilderFactory $selectBuilderFactory
-    ) {
-        $this->selectBuilderFactory = $selectBuilderFactory;
-    }
+        private SelectBuilderFactory $selectBuilderFactory,
+        private Config $config,
+    ) {}
 
     /**
      * @throws BadRequest
@@ -53,27 +54,104 @@ class ActivitiesRealEstateProperty
      */
     public function getActivitiesMeetingQuery(Entity $entity, array $statusList): Select
     {
+        $select = [
+            'id',
+            'name',
+            ['dateStart', 'dateStart'],
+            ['dateEnd', 'dateEnd'],
+            ['dateStartDate', 'dateStartDate'],
+            ['dateEndDate', 'dateEndDate'],
+            ['"Meeting"', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            ['false', 'hasAttachment'],
+        ];
+
+        if ($this->toAddFrom()) {
+            $select = [
+                ...$select,
+                ['null', 'fromEmailAddressName'],
+                ['null', 'fromString'],
+            ];
+        }
+
         $builder = $this->selectBuilderFactory
             ->create()
-            ->from('Meeting')
+            ->from(Meeting::ENTITY_TYPE)
             ->withStrictAccessControl()
             ->buildQueryBuilder()
-            ->select([
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['dateStartDate', 'dateStartDate'],
-                ['dateEndDate', 'dateEndDate'],
-                ['"Meeting"', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                ['false', 'hasAttachment'],
-            ])
+            ->select($select)
+            ->where([
+                'OR' => [
+                    [
+                        'parentType' => RealEstatePropertyEntity::ENTITY_TYPE,
+                        'parentId' => $entity->getId(),
+                    ],
+                    [
+                        'parentType' => Opportunity::ENTITY_TYPE,
+                        'parentId=s' => SelectBuilder::create()
+                            ->from(Opportunity::ENTITY_TYPE)
+                            ->select('id')
+                            ->where([
+                                'propertyId' => $entity->getId(),
+                                'deleted' => false,
+                            ])
+                            ->build()
+                            ->getRaw(),
+                    ],
+                ],
+            ]);
+
+        if (count($statusList)) {
+            $builder->where([
+                'status' => $statusList,
+            ]);
+        }
+
+        return $builder->build();
+    }
+
+    /**
+     * @throws BadRequest
+     * @throws Forbidden
+     */
+    public function getActivitiesCallQuery(Entity $entity, array $statusList): Select
+    {
+        $select =[
+            'id',
+            'name',
+            ['dateStart', 'dateStart'],
+            ['dateEnd', 'dateEnd'],
+            ['null', 'dateStartDate'],
+            ['null', 'dateEndDate'],
+            ['"Call"', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            ['false', 'hasAttachment'],
+        ];
+
+        if ($this->toAddFrom()) {
+            $select = [
+                ...$select,
+                ['null', 'fromEmailAddressName'],
+                ['null', 'fromString'],
+            ];
+        }
+
+        $builder = $this->selectBuilderFactory
+            ->create()
+            ->from(Call::ENTITY_TYPE)
+            ->withStrictAccessControl()
+            ->buildQueryBuilder()
+            ->select($select)
             ->where([
                 'OR' => [
                     [
@@ -107,31 +185,40 @@ class ActivitiesRealEstateProperty
     /**
      * @throws BadRequest
      * @throws Forbidden
-     * @throws Error
      */
-    public function getActivitiesCallQuery(Entity $entity, array $statusList): Select
+    public function getActivitiesEmailQuery(Entity $entity, array $statusList): Select
     {
+        $select = [
+            'id',
+            'name',
+            ['dateSent', 'dateStart'],
+            ['null', 'dateEnd'],
+            ['null', 'dateStartDate'],
+            ['null', 'dateEndDate'],
+            ['"Email"', '_scope'],
+            'assignedUserId',
+            'assignedUserName',
+            'parentType',
+            'parentId',
+            'status',
+            'createdAt',
+            'hasAttachment',
+        ];
+
+        if ($this->toAddFrom()) {
+            $select = [
+                ...$select,
+                'fromEmailAddressName',
+                'fromString',
+            ];
+        }
+
         $builder = $this->selectBuilderFactory
             ->create()
-            ->from('Call')
+            ->from('Email')
             ->withStrictAccessControl()
             ->buildQueryBuilder()
-            ->select([
-                'id',
-                'name',
-                ['dateStart', 'dateStart'],
-                ['dateEnd', 'dateEnd'],
-                ['null', 'dateStartDate'],
-                ['null', 'dateEndDate'],
-                ['"Call"', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                ['false', 'hasAttachment'],
-            ])
+            ->select($select)
             ->where([
                 'OR' => [
                     [
@@ -162,56 +249,9 @@ class ActivitiesRealEstateProperty
         return $builder->build();
     }
 
-    public function getActivitiesEmailQuery(Entity $entity, array $statusList): Select
+    private function toAddFrom(): bool
     {
-        $builder = $this->selectBuilderFactory
-            ->create()
-            ->from('Email')
-            ->withStrictAccessControl()
-            ->buildQueryBuilder()
-            ->select([
-                'id',
-                'name',
-                ['dateSent', 'dateStart'],
-                ['null', 'dateEnd'],
-                ['null', 'dateStartDate'],
-                ['null', 'dateEndDate'],
-                ['"Email"', '_scope'],
-                'assignedUserId',
-                'assignedUserName',
-                'parentType',
-                'parentId',
-                'status',
-                'createdAt',
-                'hasAttachment',
-            ])
-            ->where([
-                'OR' => [
-                    [
-                        'parentType' => 'RealEstateProperty',
-                        'parentId' => $entity->getId(),
-                    ],
-                    [
-                        'parentType' => 'Opportunity',
-                        'parentId=s' => SelectBuilder::create()
-                            ->from('Opportunity')
-                            ->select('id')
-                            ->where([
-                                'propertyId' => $entity->getId(),
-                                'deleted' => false,
-                            ])
-                            ->build()
-                            ->getRaw(),
-                    ],
-                ],
-            ]);
-
-        if (count($statusList)) {
-            $builder->where([
-                'status' => $statusList,
-            ]);
-        }
-
-        return $builder->build();
+        return version_compare($this->config->get('version'), '9.2.0') >= 0 ||
+            $this->config->get('version') === '@@version';
     }
 }
