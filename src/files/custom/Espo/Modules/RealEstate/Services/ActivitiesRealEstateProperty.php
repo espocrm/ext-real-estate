@@ -50,7 +50,6 @@ class ActivitiesRealEstateProperty
     /**
      * @throws BadRequest
      * @throws Forbidden
-     * @throws Error
      */
     public function getActivitiesMeetingQuery(Entity $entity, array $statusList): Select
     {
