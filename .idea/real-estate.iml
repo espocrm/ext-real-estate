@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/site/dev" isTestSource="true" packagePrefix="EspoDev\" />
       <sourceFolder url="file://$MODULE_DIR$/site/tests/integration/Espo" isTestSource="true" packagePrefix="tests\integration\Espo\" />
       <sourceFolder url="file://$MODULE_DIR$/site/tests/unit/Espo" isTestSource="true" packagePrefix="tests\unit\Espo\" />
+      <sourceFolder url="file://$MODULE_DIR$/src/files/custom" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/zmq" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/robthree/twofactorauth" />
