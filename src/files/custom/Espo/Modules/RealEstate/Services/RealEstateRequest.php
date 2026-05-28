@@ -29,34 +29,23 @@
 
 namespace Espo\Modules\RealEstate\Services;
 
-use Espo\Core\Record\CreateParams;
 use Espo\Modules\RealEstate\Entities\RealEstateRequest as RequestEntity;
 use Espo\Modules\RealEstate\Tools\Property\Service;
-use Espo\ORM\Entity;
 use Espo\Core\Select\SearchParams;
 use Espo\Core\Select\Where\Item as WhereItem;
 use Espo\Core\Record\Collection as RecordCollection;
 use Espo\Core\Record\FindParams;
 use Espo\Services\Record;
 
-use stdClass;
 
 /**
  * @extends Record<RequestEntity>
  */
 class RealEstateRequest extends Record
 {
-    public function create(stdClass $data, CreateParams $params): Entity
-    {
-        $entity = parent::create($data, $params);
-
-        if (!$entity->get('name')) {
-            $entity->set('name', $entity->get('number'));
-        }
-
-        return $entity;
-    }
-
+    /**
+     * @inheritDoc
+     */
     public function find(SearchParams $searchParams, ?FindParams $params = null): RecordCollection
     {
         $where = $searchParams->getWhere();

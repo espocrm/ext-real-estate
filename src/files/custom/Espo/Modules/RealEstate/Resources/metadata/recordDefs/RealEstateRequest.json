@@ -1,5 +1,8 @@
 {
     "beforeUpdateHookClassNameList": [
         "Espo\\Modules\\RealEstate\\Classes\\Record\\Hooks\\RealEstateRequest\\BeforeUpdate"
+    ],
+    "afterCreateHookClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Record\\Hooks\\RealEstateRequest\\AfterCreate"
     ]
 }
