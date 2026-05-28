@@ -1,0 +1,79 @@
+{
+  "labels": {
+    "Create RealEstateRequest": "Utwórz zapytanie",
+    "Matching Properties": "Dopasowane parametry",
+    "Create Opportunity": "Utwórz szansę sprzedaży",
+    "Not Interested": "Nie zainteresowany",
+    "Unset Not Interested": "Usuń status 'Niezainteresowany'",
+    "Locations": "Lokalizacje"
+  },
+  "fields": {
+    "assignedUser": "Przypisany użytkownik",
+    "type": "Typ",
+    "propertyType": "Typ nieruchomości",
+    "number": "Numer",
+    "contact": "Kontakt",
+    "contacts": "Kontakty",
+    "fromPrice": "Cena minimalna",
+    "toPrice": "Cena maksymalna",
+    "fromSquare": "Powierzchnia minimalna",
+    "toSquare": "Powierzchnia maksymalna",
+    "fromBedroomCount": "Min. liczba sypialni",
+    "toBedroomCount": "Max. liczba sypialni",
+    "fromBathroomCount": "Min. liczba łazienek",
+    "toBathroomCount": "Max. liczba łazienek",
+    "fromFloor": "Min. piętro",
+    "toFloor": "Max. piętro",
+    "fromFloorCount": "Min. liczba pięter",
+    "toFloorCount": "Max. liczba pięter",
+    "fromPriceConverted": "Min. cena (przeliczona)",
+    "toPriceConverted": "Max. cena (przeliczona)",
+    "price": "Cena",
+    "bedroomCount": "Liczba sypialni",
+    "bathroomCount": "Liczba łazienek",
+    "floor": "Piętro",
+    "floorCount": "Liczba pięter",
+    "square": "Powierzchnia",
+    "locations": "Lokalizacje",
+    "matchingProperty": "Dopasowana nieruchomość",
+    "yearBuilt": "Rok budowy",
+    "fromYearBuilt": "Rok budowy od",
+    "toYearBuilt": "Rok budowy do",
+    "matchingPropertyCount": "Liczba dopasowań"
+  },
+  "links": {
+    "contact": "Kontakt",
+    "contacts": "Kontakty",
+    "opportunities": "Szanse sprzedaży",
+    "locations": "Lokalizacje",
+    "matchingProperties": "Dopasowane nieruchomości"
+  },
+  "options": {
+    "status": {
+      "New": "Nowe",
+      "Assigned": "Przypisane",
+      "In Process": "W trakcie",
+      "Completed": "Zakończone",
+      "Canceled": "Anulowane",
+      "Lost": "Utracone"
+    },
+    "type": {
+      "Rent": "Wynajem",
+      "Sale": "Sprzedaż"
+    },
+    "propertyType": {
+      "Apartment": "Mieszkanie",
+      "Separate House": "Dom wolnostojący",
+      "Office": "Biuro",
+      "Warehouse": "Magazyn",
+      "Retail": "Lokal handlowy",
+      "Farm": "Gospodarstwo"
+    }
+  },
+  "presetFilters": {
+    "completed": "Zakończone",
+    "actual": "Aktualne",
+    "actualRent": "Aktualne - wynajem",
+    "actualSale": "Aktualne - sprzedaż"
+  }
+}

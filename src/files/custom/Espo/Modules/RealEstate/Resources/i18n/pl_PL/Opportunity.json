@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "property": "Nieruchomość",
+    "request": "Zapytanie"
+  },
+  "options": {
+    "contactRole": {
+      "Landlord": "Właściciel",
+      "Tenant": "Najemca",
+      "Property Manager": "Zarządca nieruchomości"
+    }
+  },
+  "links": {
+    "property": "Nieruchomość",
+    "request": "Zapytanie"
+  }
+}

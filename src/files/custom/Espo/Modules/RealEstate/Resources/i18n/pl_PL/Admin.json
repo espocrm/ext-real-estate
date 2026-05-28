@@ -1,0 +1,16 @@
+{
+  "layouts": {
+    "listForProperty": "Lista (dla nieruchomości)",
+    "listForRequest": "Lista (dla zapytania)"
+  },
+  "labels": {
+    "Real Estate": "Nieruchomości",
+    "Locations": "Lokalizacje",
+    "Property Matching": "Dopasowanie nieruchomości"
+  },
+  "descriptions": {
+    "realEstateSettings": "Parametry rozszerzenia Nieruchomości.",
+    "realEstateLocations": "Zarządzaj lokalizacjami dla Nieruchomości.",
+    "propertyMatching": "Konfiguracja dopasowania."
+  }
+}

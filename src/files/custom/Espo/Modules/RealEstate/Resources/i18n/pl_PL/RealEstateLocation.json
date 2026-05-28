@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "Create RealEstateLocation": "Utwórz lokalizację"
+  },
+  "fields": {
+    "address": "Adres"
+  },
+  "tooltips": {
+    "address": "Ten adres zostanie wstawiony do pola adresu nieruchomości po wybraniu tej lokalizacji. Pozostaw niepotrzebne pola adresu puste."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "fields": {
+    "saleMarkup": "Domyślna marża dla sprzedaży (%)",
+    "rentMarkup": "Domyślna marża dla wynajmu (%)",
+    "realEstateEmailSending": "Wyślij e-mail do poszukujących o dopasowanych nieruchomościach",
+    "realEstatePropertyTemplate": "Szablon e-mail dla nieruchomości",
+    "realEstateEmailSendingAssignedUserCc": "Dodaj przypisanego użytkownika do DW"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "fields": {
+    "properties": "Nieruchomości",
+    "propertyRole": "Rola"
+  },
+  "options": {
+    "propertyRole": {
+      "Landlord": "Właściciel",
+      "Tenant": "Najemca",
+      "Property Manager": "Zarządca nieruchomości",
+      "Requester": "Poszukujący"
+    }
+  },
+  "links": {
+    "properties": "Nieruchomości",
+    "requests": "Zapytania",
+    "requestsPrimary": "Zapytania (główne)"
+  }
+}

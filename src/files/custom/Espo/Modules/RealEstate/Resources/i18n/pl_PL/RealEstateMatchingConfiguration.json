@@ -1,0 +1,8 @@
+{
+  "fields": {
+    "fieldList": "Lista pól używanych do dopasowania"
+  },
+  "messages": {
+    "typeFieldsMap": "Pola dostępne dla typów nieruchomości"
+  }
+}

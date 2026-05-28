@@ -1,0 +1,70 @@
+{
+  "labels": {
+    "Create RealEstateProperty": "Utwórz nieruchomość",
+    "Matching Requests": "Dopasowane zapytania",
+    "Locations": "Lokalizacje"
+  },
+  "fields": {
+    "type": "Typ",
+    "address": "Adres",
+    "contacts": "Kontakty",
+    "assignedUser": "Przypisany użytkownik",
+    "images": "Zdjęcia",
+    "sellers": "Sprzedający",
+    "square": "Powierzchnia",
+    "yearBuilt": "Rok budowy",
+    "documents": "Dokumenty",
+    "requestType": "Typ zapytania",
+    "price": "Cena",
+    "priceConverted": "Cena (przeliczona)",
+    "bedroomCount": "Liczba sypialni",
+    "bathroomCount": "Liczba łazienek",
+    "floor": "Piętro",
+    "floorCount": "Liczba pięter",
+    "location": "Lokalizacja",
+    "matchingRequest": "Dopasowane zapytanie",
+    "number": "Numer",
+    "account": "Konto",
+    "addressMap": "Mapa",
+    "matchingRequestCount": "Liczba dopasowań",
+    "contactRole": "Rola"
+  },
+  "options": {
+    "type": {
+      "Apartment": "Mieszkanie",
+      "Separate House": "Dom wolnostojący",
+      "Office": "Biuro",
+      "Warehouse": "Magazyn",
+      "Retail": "Lokal handlowy",
+      "Farm": "Gospodarstwo",
+      "Room": "Pokój",
+      "Land Lot": "Działka"
+    },
+    "status": {
+      "New": "Nowe",
+      "Assigned": "Przypisane",
+      "In Process": "W trakcie",
+      "Completed": "Zakończone",
+      "Canceled": "Anulowane",
+      "Lost": "Utracone"
+    },
+    "requestType": {
+      "Rent": "Wynajem",
+      "Sale": "Sprzedaż"
+    }
+  },
+  "links": {
+    "contacts": "Kontakty",
+    "documents": "Dokumenty",
+    "opportunities": "Szanse sprzedaży",
+    "location": "Lokalizacja",
+    "account": "Konto",
+    "matchingRequests": "Dopasowane zapytania"
+  },
+  "presetFilters": {
+    "completed": "Zakończone",
+    "actual": "Aktualne",
+    "actualRent": "Aktualne - wynajem",
+    "actualSale": "Aktualne - sprzedaż"
+  }
+}
