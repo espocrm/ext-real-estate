@@ -3,5 +3,6 @@
 !/codeStyles
 !/fileTemplates
 !/inspectionProfiles
+!misc.xml
 !/jsonSchemas.xml
-!/misc.xml
+!/watcherTasks.xml
