@@ -2,14 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/site/tests/integration" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/site/tests/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/site/tests" isTestSource="true" packagePrefix="tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests/integration" isTestSource="true" packagePrefix="tests\integration\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests/unit" isTestSource="true" packagePrefix="tests\unit\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/site/application/Espo" isTestSource="false" packagePrefix="Espo\" />
       <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Custom" isTestSource="false" packagePrefix="Espo\Custom\" />
       <sourceFolder url="file://$MODULE_DIR$/site/custom/Espo/Modules" isTestSource="false" packagePrefix="Espo\Modules\" />
       <sourceFolder url="file://$MODULE_DIR$/site/dev" isTestSource="true" packagePrefix="EspoDev\" />
-      <sourceFolder url="file://$MODULE_DIR$/site/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests/integration/Espo" isTestSource="true" packagePrefix="tests\integration\Espo\" />
+      <sourceFolder url="file://$MODULE_DIR$/site/tests/unit/Espo" isTestSource="true" packagePrefix="tests\unit\Espo\" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/react/zmq" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/robthree/twofactorauth" />
@@ -175,6 +176,18 @@
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/event-dispatcher-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/mailer" />
       <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/devtheorem/php-handlebars" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/devtheorem/php-handlebars-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/directorytree/imapengine" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/illuminate/collections" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/illuminate/conditionable" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/illuminate/contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/illuminate/macroable" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/intervention/gif" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/polyfill-php84" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/symfony/polyfill-php85" />
+      <excludeFolder url="file://$MODULE_DIR$/site/vendor/thecodingmachine/safe" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
