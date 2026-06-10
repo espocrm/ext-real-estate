@@ -7,8 +7,8 @@
     "url": "git://github.com/espocrm/ext-real-estate.git"
   },
   "scripts": {
-    "sa": "node build --copy && node build --composer-install && php site/vendor/bin/phpstan",
-    "unit-tests": "node build --copy && node build --composer-install && cd site && php vendor/bin/phpunit tests/unit/Espo/Modules/RealEstate",
+    "sa": "vendor/bin/phpstan",
+    "unit-tests": "vendor/bin/phpunit",
     "integration-tests": "node build --copy && node build --composer-install && cd site && php vendor/bin/phpunit tests/integration/Espo/Modules/RealEstate",
     "copy": "node build --copy",
     "composer-install": "node build --composer-install",
