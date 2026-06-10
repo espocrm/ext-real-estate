@@ -23,6 +23,6 @@
   "author": "EspoCRM",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "espo-extension-tools": "github:espocrm/extension-tools#0.3.4"
+    "espo-extension-tools": "github:espocrm/extension-tools#0.4.3"
   }
 }

@@ -1,0 +1,17 @@
+{
+    "name": "espocrm/ext-real-estate",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Espo\\Modules\\RealEstate\\": "src/files/custom/Espo/Modules/RealEstate",
+            "tests\\unit\\Espo\\Modules\\RealEstate\\": "tests/unit/Espo/Modules/RealEstate",
+            "tests\\integration\\Espo\\Modules\\MeetiRealEstatengScheduler\\": "tests/integration/Espo/Modules/RealEstate"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5",
+        "phpstan/phpstan": "^2.1"
+    }
+}

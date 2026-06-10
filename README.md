@@ -1,4 +1,4 @@
-# Real State extension for EspoCRM
+# Real Estate extension for EspoCRM
 
 [See more](https://www.espocrm.com/extensions/real-estate/) on the website.
 
