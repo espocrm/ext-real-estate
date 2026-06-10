@@ -21,7 +21,7 @@
   },
   "type": "module",
   "author": "EspoCRM",
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "espo-extension-tools": "github:espocrm/extension-tools#0.3.4"
   }
