@@ -30,6 +30,16 @@
         "matchingRequestCount": "Matching Count",
         "contactRole": "Role"
     },
+    "type": {
+        "Apartment": "Apartment",
+        "Separate House": "Separate House",
+        "Room": "Room",
+        "Land Lot": "Land Lot",
+        "Office": "Office",
+        "Warehouse": "Warehouse",
+        "Retail": "Retail",
+        "Farm": "Farm"
+    },
     "options": {
         "type": {
             "Apartment": "Apartment",
