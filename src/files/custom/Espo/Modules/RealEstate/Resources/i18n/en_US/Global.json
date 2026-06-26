@@ -12,5 +12,9 @@
     "dashlets": {
         "Properties": "My Properties",
         "Requests": "My Requests"
+    },
+    "labels": {
+        "Matching Requests": "Matching Requests",
+        "Matching Properties": "Matching Properties"
     }
 }
