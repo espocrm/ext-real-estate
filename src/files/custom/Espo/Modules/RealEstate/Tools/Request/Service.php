@@ -219,9 +219,12 @@ class Service
         $queryBuilder
             ->select('propertiesMiddle.interestDegree', 'interestDegree');
 
-        if ($entity->get('propertyType')) {
+        $propertyType = $entity->get('propertyType');
+        
+        if (!empty($propertyType)) {
+            
             $queryBuilder->where([
-                'type' => $entity->get('propertyType')
+                'type' => is_array($propertyType) ? $propertyType : [$propertyType]
             ]);
         }
 
