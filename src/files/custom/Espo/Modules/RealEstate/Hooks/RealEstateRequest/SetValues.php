@@ -45,8 +45,23 @@ class SetValues
     {
         $propertyType = $entity->get('propertyType');
 
-        $fieldList = $this->metadata
-            ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $propertyType, 'fieldList'], []);
+        $types = is_array($propertyType) ? $propertyType : [$propertyType];
+        $fieldList = null;
+
+        foreach ($types as $type) {
+            if (empty($type)) continue;
+            
+            $typeFields = $this->metadata
+                ->get(['entityDefs', 'RealEstateProperty', 'propertyTypes', $type, 'fieldList'], []);
+            
+            if ($fieldList === null) {
+                $fieldList = $typeFields;
+            } else {
+                $fieldList = array_intersect($fieldList, $typeFields);
+            }
+        }
+        
+        $fieldList = $fieldList ?: [];
 
         $fieldDefs = $this->metadata->get(['entityDefs', 'RealEstateProperty', 'fields'], []);
 
