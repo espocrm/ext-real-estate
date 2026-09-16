@@ -16,7 +16,7 @@ use Espo\ORM\Entity;
 
 class CriteriaValidation
 {
-    /** @var array<string,array{0:string,1:string,2:string}> from,to,base */
+    /** @var array<string,array{0:string,1:string}> to,base */
     private const PAIRS = [
         'fromSquare' => ['toSquare', 'square'],
         'fromPrice' => ['toPrice', 'price'],
