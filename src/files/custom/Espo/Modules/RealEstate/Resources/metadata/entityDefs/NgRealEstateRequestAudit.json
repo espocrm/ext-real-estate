@@ -1,0 +1,16 @@
+{
+  "fields": {
+    "realEstateRequestId": {"type": "varchar", "maxLength": 64},
+    "sequence": {"type": "int"},
+    "fieldName": {"type": "varchar", "maxLength": 64},
+    "semantic": {"type": "varchar", "maxLength": 8},
+    "beforeValue": {"type": "text", "dbType": "longtext"},
+    "afterValue": {"type": "text", "dbType": "longtext"},
+    "actorId": {"type": "varchar", "maxLength": 64},
+    "occurredAt": {"type": "datetime"},
+    "evidenceSha256": {"type": "varchar", "maxLength": 64}
+  },
+  "indexes": {
+    "requestSequence": {"columns": ["realEstateRequestId", "sequence"], "unique": true}
+  }
+}
