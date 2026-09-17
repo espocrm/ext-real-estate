@@ -1,0 +1,9 @@
+{
+    "options": {
+        "type": {
+            "Apartment": "Căn hộ",
+            "Separate House": "Nhà riêng",
+            "Room": "Phòng"
+        }
+    }
+}

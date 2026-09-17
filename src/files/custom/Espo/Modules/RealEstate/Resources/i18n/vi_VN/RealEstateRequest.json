@@ -27,7 +27,8 @@
         "bathroomCount": "Số phòng tắm",
         "floor": "Tầng",
         "floorCount": "Số tầng",
-        "yearBuilt": "Năm xây dựng"
+        "yearBuilt": "Năm xây dựng",
+        "matchingPropertyCount": "Số bất động sản phù hợp"
     },
     "options": {
         "status": {
