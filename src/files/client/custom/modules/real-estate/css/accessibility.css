@@ -1,0 +1,4 @@
+/* S05.4 G-UX: scoped contrast corrections for Inquiry CRM surfaces. */
+#main .list th,
+#main .list th a { color: #595959; }
+#main .btn { color: #5c5c5c; }
