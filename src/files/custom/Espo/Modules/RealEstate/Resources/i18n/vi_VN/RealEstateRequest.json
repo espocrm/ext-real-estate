@@ -1,0 +1,51 @@
+{
+    "labels": {
+        "Locations": "Địa điểm",
+        "Activities": "Hoạt động",
+        "History": "Lịch sử",
+        "Tasks": "Việc cần làm",
+        "Matching Properties": "Bất động sản phù hợp",
+        "List": "Danh sách"
+    },
+    "fields": {
+        "name": "Tên",
+        "number": "Mã nhu cầu",
+        "assignedUser": "Người phụ trách",
+        "teams": "Nhóm",
+        "createdAt": "Ngày ghi nhận",
+        "description": "Ghi chú nhu cầu",
+        "contact": "Khách hàng",
+        "contacts": "Khách hàng",
+        "locations": "Địa điểm",
+        "matchingProperties": "Bất động sản phù hợp",
+        "status": "Trạng thái",
+        "type": "Loại nhu cầu",
+        "propertyType": "Loại bất động sản",
+        "square": "Diện tích",
+        "price": "Khoảng giá",
+        "bedroomCount": "Số phòng ngủ",
+        "bathroomCount": "Số phòng tắm",
+        "floor": "Tầng",
+        "floorCount": "Số tầng",
+        "yearBuilt": "Năm xây dựng"
+    },
+    "options": {
+        "status": {
+            "New": "Mới",
+            "Assigned": "Đã phân công",
+            "In Process": "Đang xử lý",
+            "Completed": "Hoàn thành",
+            "Canceled": "Đã hủy",
+            "Lost": "Đã mất"
+        },
+        "type": {
+            "Rent": "Thuê",
+            "Sale": "Bán"
+        },
+        "propertyType": {
+            "Apartment": "Căn hộ",
+            "Separate House": "Nhà riêng",
+            "Room": "Phòng"
+        }
+    }
+}
