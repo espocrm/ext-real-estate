@@ -1,54 +1,52 @@
 {
-    "controller": "real-estate:controllers/real-estate-request",
-    "dynamicHandler": "real-estate:request-dynamic-handler",
-    "boolFilterList": [
+    "controller":"real-estate:controllers/real-estate-request",
+    "dynamicHandler":"real-estate:request-dynamic-handler",
+    "boolFilterList":[
         "onlyMy"
     ],
-    "filterList": [
+    "filterList":[
         "actual",
         "actualSale",
         "actualRent",
         {
-            "name": "completed",
-            "style": "success"
+            "name":"completed",
+            "style":"success"
         }
     ],
-    "recordViews": {
-        "detail": "real-estate:views/real-estate-request/record/detail",
-        "list": "real-estate:views/real-estate-request/record/list"
+    "recordViews":{
+        "detail":"real-estate:views/real-estate-request/record/detail"
     },
-    "views": {
-        "detail": "real-estate:views/real-estate-request/detail",
-        "list": "real-estate:views/real-estate-request/list"
+    "views":{
+        "detail":"real-estate:views/real-estate-request/detail"
     },
-    "menu": {
-        "list": {
-            "dropdown": [
+    "menu":{
+        "list":{
+            "dropdown":[
                 {
-                    "link": "#RealEstateLocation",
-                    "aclScope": "RealEstateLocation",
-                    "acl": "read",
-                    "label": "Locations"
+                    "link":"#RealEstateLocation",
+                    "aclScope":"RealEstateLocation",
+                    "acl":"read",
+                    "label":"Locations"
                 }
             ]
         }
     },
-    "sidePanels": {
-        "detail": [
+    "sidePanels":{
+        "detail":[
             {
-                "name": "activities",
-                "label": "Activities",
-                "view": "crm:views/record/panels/activities"
+                "name":"activities",
+                "label":"Activities",
+                "view":"crm:views/record/panels/activities"
             },
             {
-                "name": "history",
-                "label": "History",
-                "view": "crm:views/record/panels/history"
+                "name":"history",
+                "label":"History",
+                "view":"crm:views/record/panels/history"
             },
             {
-                "name": "tasks",
-                "label": "Tasks",
-                "view": "crm:views/record/panels/tasks"
+                "name":"tasks",
+                "label":"Tasks",
+                "view":"crm:views/record/panels/tasks"
             }
         ]
     },
@@ -89,11 +87,7 @@
                         {
                             "type": "notIn",
                             "attribute": "status",
-                            "value": [
-                                "Completed",
-                                "Canceled",
-                                "Lost"
-                            ]
+                            "value": ["Completed", "Canceled", "Lost"]
                         }
                     ]
                 }
@@ -106,22 +100,18 @@
                         {
                             "type": "notIn",
                             "attribute": "status",
-                            "value": [
-                                "Completed",
-                                "Canceled",
-                                "Lost"
-                            ]
+                            "value": ["Completed", "Canceled", "Lost"]
                         }
                     ]
                 }
             }
         }
     },
-    "additionalLayouts": {
-        "listForProperty": {
-            "type": "list"
+    "additionalLayouts":{
+        "listForProperty":{
+            "type":"list"
         }
     },
-    "iconClass": "far fa-dot-circle",
-    "color": "#eaa0a0"
+    "iconClass":"far fa-dot-circle",
+    "color":"#eaa0a0"
 }
