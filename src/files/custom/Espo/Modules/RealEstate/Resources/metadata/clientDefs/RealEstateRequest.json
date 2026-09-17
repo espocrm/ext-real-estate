@@ -18,8 +18,7 @@
         "list": "real-estate:views/real-estate-request/record/list"
     },
     "views": {
-        "detail": "real-estate:views/real-estate-request/detail",
-        "list": "real-estate:views/real-estate-request/list"
+        "detail": "real-estate:views/real-estate-request/detail"
     },
     "menu": {
         "list": {
