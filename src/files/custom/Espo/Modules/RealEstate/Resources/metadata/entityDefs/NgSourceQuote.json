@@ -1,0 +1,191 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "amount": {
+            "type": "decimal",
+            "required": true,
+            "precision": 18,
+            "scale": 2
+        },
+        "currency": {
+            "type": "enum",
+            "options": [
+                "VND",
+                "USD"
+            ],
+            "default": "VND",
+            "required": true
+        },
+        "unit": {
+            "type": "enum",
+            "options": [
+                "total",
+                "per_m2"
+            ],
+            "default": "total",
+            "required": true
+        },
+        "scenario": {
+            "type": "enum",
+            "options": [
+                "sale",
+                "month",
+                "year",
+                "payment_basis"
+            ],
+            "default": "sale"
+        },
+        "sourceProviderType": {
+            "type": "enum",
+            "options": [
+                "Owner",
+                "Contact",
+                "Account",
+                "Partner",
+                "External"
+            ],
+            "required": false
+        },
+        "sourceProviderId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": false
+        },
+        "sourceSnapshot": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "receivedAt": {
+            "type": "datetime",
+            "required": false
+        },
+        "asOfAt": {
+            "type": "datetime",
+            "required": false
+        },
+        "validUntil": {
+            "type": "datetime",
+            "required": false
+        },
+        "recheckDueAt": {
+            "type": "datetime"
+        },
+        "freshnessState": {
+            "type": "enum",
+            "options": [
+                "current",
+                "stale",
+                "withdrawn",
+                "expired"
+            ],
+            "default": "current"
+        },
+        "terms": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "verificationState": {
+            "type": "enum",
+            "options": [
+                "unverified",
+                "pending",
+                "accepted",
+                "rejected"
+            ],
+            "default": "unverified"
+        },
+        "verifiedBy": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "verifiedAt": {
+            "type": "datetime"
+        },
+        "internalEligibility": {
+            "type": "bool",
+            "default": false,
+            "readOnly": true
+        },
+        "internalEligibilityReason": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "policyVersion": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "publicEligibility": {
+            "type": "bool",
+            "default": false,
+            "readOnly": true
+        },
+        "publicEligibilityReason": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "revisionNumber": {
+            "type": "int",
+            "default": 1,
+            "readOnly": true
+        },
+        "predecessorId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "enteredBy": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "notes": {
+            "type": "text"
+        },
+        "evidenceRefs": {
+            "type": "text",
+            "dbType": "longtext"
+        }
+    },
+    "links": {
+        "assignedUser": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "teams": {
+            "type": "hasMany",
+            "entity": "Team",
+            "relationName": "EntityTeam",
+            "layoutRelationshipsDisabled": true
+        },
+        "offerCycle": {
+            "type": "belongsTo",
+            "entity": "NgOfferCycle",
+            "required": true
+        },
+        "predecessor": {
+            "type": "belongsTo",
+            "entity": "NgSourceQuote",
+            "required": false
+        }
+    },
+    "indexes": {
+        "offerCycleRevision": {
+            "columns": [
+                "offerCycleId",
+                "revisionNumber"
+            ],
+            "unique": true
+        },
+        "offerCycleFreshness": {
+            "columns": [
+                "offerCycleId",
+                "freshnessState"
+            ]
+        }
+    }
+}

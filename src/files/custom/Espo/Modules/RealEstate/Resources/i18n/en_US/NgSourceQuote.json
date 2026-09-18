@@ -1,0 +1,71 @@
+{
+    "labels": {
+        "NgSourceQuote": "Source Quote",
+        "NgSourceQuotePlural": "Source Quotes"
+    },
+    "fields": {
+        "name": "Name",
+        "offerCycle": "Offer Cycle",
+        "amount": "Amount",
+        "currency": "Currency",
+        "unit": "Unit",
+        "scenario": "Scenario",
+        "sourceProviderType": "Source Provider Type",
+        "sourceProviderId": "Source Provider",
+        "sourceSnapshot": "Source Snapshot",
+        "receivedAt": "Received At",
+        "asOfAt": "As Of",
+        "validUntil": "Valid Until",
+        "recheckDueAt": "Recheck Due",
+        "freshnessState": "Freshness",
+        "terms": "Terms",
+        "verificationState": "Verification",
+        "verifiedBy": "Verified By",
+        "verifiedAt": "Verified At",
+        "internalEligibility": "Internal Eligibility",
+        "internalEligibilityReason": "Internal Eligibility Reason",
+        "policyVersion": "Policy Version",
+        "publicEligibility": "Public Eligibility",
+        "publicEligibilityReason": "Public Eligibility Reason",
+        "revisionNumber": "Revision",
+        "predecessor": "Predecessor",
+        "enteredBy": "Entered By",
+        "notes": "Notes",
+        "evidenceRefs": "Evidence"
+    },
+    "options": {
+        "currency": {
+            "VND": "VND",
+            "USD": "USD"
+        },
+        "unit": {
+            "total": "Total",
+            "per_m2": "Per m²"
+        },
+        "scenario": {
+            "sale": "Sale",
+            "month": "Per Month",
+            "year": "Per Year",
+            "payment_basis": "Payment Basis"
+        },
+        "freshnessState": {
+            "current": "Current",
+            "stale": "Stale",
+            "withdrawn": "Withdrawn",
+            "expired": "Expired"
+        },
+        "verificationState": {
+            "unverified": "Unverified",
+            "pending": "Pending",
+            "accepted": "Accepted",
+            "rejected": "Rejected"
+        },
+        "sourceProviderType": {
+            "Owner": "Owner",
+            "Contact": "Contact",
+            "Account": "Account",
+            "Partner": "Partner",
+            "External": "External"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "labels": {
+        "NgSourceQuote": "Báo giá nguồn",
+        "NgSourceQuotePlural": "Báo giá nguồn"
+    },
+    "fields": {
+        "amount": "Số tiền báo giá",
+        "sourceProviderId": "Nguồn báo giá",
+        "sourceProviderType": "Loại nguồn",
+        "freshnessState": "Tình trạng hiệu lực",
+        "internalEligibility": "Đủ điều kiện nội bộ",
+        "publicEligibility": "Đủ điều kiện public"
+    },
+    "options": {
+        "freshnessState": {
+            "current": "Còn hiệu lực",
+            "stale": "Đã cũ",
+            "withdrawn": "Đã rút",
+            "expired": "Hết hiệu lực"
+        }
+    }
+}

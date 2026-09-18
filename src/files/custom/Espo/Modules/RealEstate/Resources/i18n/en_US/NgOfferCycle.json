@@ -1,0 +1,69 @@
+{
+    "labels": {
+        "NgOfferCycle": "Offer Cycle",
+        "NgOfferCyclePlural": "Offer Cycles"
+    },
+    "fields": {
+        "name": "Name",
+        "property": "Property",
+        "intent": "Intent",
+        "status": "Status",
+        "effectiveAt": "Effective At",
+        "validUntil": "Valid Until",
+        "sourceProviderType": "Source Provider Type",
+        "sourceProviderId": "Source Provider",
+        "sourceSnapshot": "Source Snapshot",
+        "availabilityState": "Availability",
+        "availabilityAsOf": "Availability As Of",
+        "availabilitySource": "Availability Source",
+        "legalGateState": "Legal Gate",
+        "legalEvidenceRefs": "Legal Evidence",
+        "publicationDecision": "Publication Decision",
+        "publicationReason": "Publication Reason",
+        "publicState": "Public State",
+        "selectedPublicQuoteId": "Selected Public Quote",
+        "selectedPublicSnapshot": "Public Quote Snapshot",
+        "closeReason": "Close Reason",
+        "needsReviewReason": "Needs Review Reason",
+        "notes": "Notes",
+        "sourceEvidenceRefs": "Source Evidence",
+        "sourceQuotes": "Source Quotes"
+    },
+    "options": {
+        "intent": {
+            "SALE": "Sale",
+            "RENT": "Rent"
+        },
+        "status": {
+            "draft": "Draft",
+            "pendingReview": "Pending Review",
+            "active": "Active",
+            "paused": "Paused",
+            "withdrawn": "Withdrawn",
+            "closed": "Closed",
+            "expired": "Expired"
+        },
+        "closeReason": {
+            "sold": "Sold",
+            "leased": "Leased",
+            "owner_stopped": "Owner Stopped Listing",
+            "term_expired": "Term Expired",
+            "no_longer_suitable": "No Longer Suitable",
+            "unverified": "Could Not Verify",
+            "other": "Other"
+        },
+        "publicationDecision": {
+            "pending": "Pending",
+            "yes": "Yes",
+            "no": "No",
+            "withdrawn": "Withdrawn"
+        },
+        "sourceProviderType": {
+            "Owner": "Owner",
+            "Contact": "Contact",
+            "Account": "Account",
+            "Partner": "Partner",
+            "External": "External"
+        }
+    }
+}

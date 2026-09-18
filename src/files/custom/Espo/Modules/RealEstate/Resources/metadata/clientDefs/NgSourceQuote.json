@@ -1,0 +1,7 @@
+{
+    "controller": "controllers/record",
+    "collection": "collections/record",
+    "recordViews": {
+        "list": "views/record/list"
+    }
+}

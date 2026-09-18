@@ -1,0 +1,139 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "intent": {
+            "type": "enum",
+            "options": ["SALE", "RENT"],
+            "required": true,
+            "default": "SALE"
+        },
+        "status": {
+            "type": "enum",
+            "options": ["draft", "pendingReview", "active", "paused", "withdrawn", "closed", "expired"],
+            "required": true,
+            "default": "draft",
+            "style": {
+                "active": "success",
+                "closed": "primary",
+                "withdrawn": "danger",
+                "expired": "warning"
+            }
+        },
+        "effectiveAt": {
+            "type": "datetime",
+            "required": false
+        },
+        "validUntil": {
+            "type": "datetime",
+            "required": false
+        },
+        "sourceProviderType": {
+            "type": "enum",
+            "options": ["Owner", "Contact", "Account", "Partner", "External"],
+            "required": false
+        },
+        "sourceProviderId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": false
+        },
+        "sourceSnapshot": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "availabilityState": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "availabilityAsOf": {
+            "type": "datetime"
+        },
+        "availabilitySource": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "legalGateState": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "legalEvidenceRefs": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "publicationDecision": {
+            "type": "enum",
+            "options": ["pending", "yes", "no", "withdrawn"],
+            "default": "pending"
+        },
+        "publicationReason": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "publicState": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "selectedPublicQuoteId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "selectedPublicSnapshot": {
+            "type": "text",
+            "dbType": "longtext",
+            "readOnly": true
+        },
+        "closeReason": {
+            "type": "enum",
+            "options": ["sold", "leased", "owner_stopped", "term_expired", "no_longer_suitable", "unverified", "other"],
+            "required": false
+        },
+        "needsReviewReason": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "notes": {
+            "type": "text"
+        },
+        "sourceEvidenceRefs": {
+            "type": "text",
+            "dbType": "longtext"
+        }
+    },
+    "links": {
+        "assignedUser": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "teams": {
+            "type": "hasMany",
+            "entity": "Team",
+            "relationName": "EntityTeam",
+            "layoutRelationshipsDisabled": true
+        },
+        "property": {
+            "type": "belongsTo",
+            "entity": "RealEstateProperty",
+            "required": true
+        },
+        "sourceQuotes": {
+            "type": "hasMany",
+            "entity": "NgSourceQuote",
+            "foreign": "offerCycle",
+            "layoutRelationshipsDisabled": true
+        }
+    },
+    "indexes": {
+        "propertyIntentStatus": {
+            "columns": ["propertyId", "intent", "status"]
+        },
+        "propertyId": {
+            "columns": ["propertyId"]
+        }
+    }
+}

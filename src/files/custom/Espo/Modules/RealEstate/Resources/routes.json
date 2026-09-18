@@ -16,5 +16,10 @@
         "route": "RealEstateRequest/:id/matchingProperties",
         "method": "get",
         "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Request\\Api\\GetMatchingProperties"
+    },
+    {
+        "route": "NgOfferCycle/:id/currentInternalQuote",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\OfferCycle\\Api\\GetCurrentInternalQuote"
     }
 ]

@@ -1,0 +1,69 @@
+{
+    "labels": {
+        "NgOfferCycle": "Đợt chào",
+        "NgOfferCyclePlural": "Đợt chào"
+    },
+    "fields": {
+        "name": "Tên",
+        "property": "Bất động sản",
+        "intent": "Nhu cầu chào",
+        "status": "Trạng thái",
+        "effectiveAt": "Hiệu lực từ",
+        "validUntil": "Hiệu lực đến",
+        "sourceProviderType": "Loại nguồn",
+        "sourceProviderId": "Nguồn báo giá",
+        "sourceSnapshot": "Bản ghi nguồn",
+        "availabilityState": "Tình trạng sẵn có",
+        "availabilityAsOf": "Tình trạng ghi nhận lúc",
+        "availabilitySource": "Nguồn tình trạng",
+        "legalGateState": "Cổng pháp lý",
+        "legalEvidenceRefs": "Chứng cứ pháp lý",
+        "publicationDecision": "Quyết định công khai",
+        "publicationReason": "Lý do công khai",
+        "publicState": "Trạng thái công khai",
+        "selectedPublicQuoteId": "Báo giá public được duyệt",
+        "selectedPublicSnapshot": "Bản ghi giá public",
+        "closeReason": "Lý do kết thúc",
+        "needsReviewReason": "Lý do cần xác minh",
+        "notes": "Ghi chú",
+        "sourceEvidenceRefs": "Chứng cứ nguồn",
+        "sourceQuotes": "Báo giá nguồn"
+    },
+    "options": {
+        "intent": {
+            "SALE": "Bán",
+            "RENT": "Cho thuê"
+        },
+        "status": {
+            "draft": "Nháp",
+            "pendingReview": "Chờ kiểm tra",
+            "active": "Đang hoạt động",
+            "paused": "Tạm dừng",
+            "withdrawn": "Đã rút",
+            "closed": "Đã kết thúc",
+            "expired": "Hết hiệu lực"
+        },
+        "closeReason": {
+            "sold": "Đã bán",
+            "leased": "Đã cho thuê",
+            "owner_stopped": "Chủ ngừng gửi",
+            "term_expired": "Hết thời hạn",
+            "no_longer_suitable": "Không còn phù hợp",
+            "unverified": "Không xác minh được",
+            "other": "Khác"
+        },
+        "publicationDecision": {
+            "pending": "Chờ duyệt",
+            "yes": "Đồng ý",
+            "no": "Không",
+            "withdrawn": "Đã rút"
+        },
+        "sourceProviderType": {
+            "Owner": "Chủ nhà",
+            "Contact": "Khách hàng",
+            "Account": "Công ty",
+            "Partner": "Đối tác",
+            "External": "Bên ngoài"
+        }
+    }
+}

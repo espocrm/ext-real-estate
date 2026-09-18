@@ -1,0 +1,5 @@
+{
+    "outputFilterClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Record\\OutputFilter\\SourceQuoteSupply"
+    ]
+}
