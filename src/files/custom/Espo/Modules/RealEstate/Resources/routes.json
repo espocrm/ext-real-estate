@@ -29,5 +29,13 @@
             "controller": "NgAuctionResult",
             "action": "createRevision"
         }
+    },
+    {
+        "route": "NgCommissionRevision/action/createRevision",
+        "method": "post",
+        "params": {
+            "controller": "NgCommissionRevision",
+            "action": "createRevision"
+        }
     }
 ]
