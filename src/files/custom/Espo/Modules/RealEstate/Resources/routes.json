@@ -21,5 +21,13 @@
         "route": "NgOfferCycle/:id/currentInternalQuote",
         "method": "get",
         "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\OfferCycle\\Api\\GetCurrentInternalQuote"
+    },
+    {
+        "route": "NgAuctionResult/action/createRevision",
+        "method": "post",
+        "params": {
+            "controller": "NgAuctionResult",
+            "action": "createRevision"
+        }
     }
 ]
