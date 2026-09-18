@@ -1,0 +1,16 @@
+{
+    "scopeNames": {
+        "RealEstateProperty": "Bất động sản",
+        "RealEstateRequest": "Nhu cầu",
+        "RealEstateLocation": "Địa điểm"
+    },
+    "scopeNamesPlural": {
+        "RealEstateProperty": "Bất động sản",
+        "RealEstateRequest": "Nhu cầu",
+        "RealEstateLocation": "Địa điểm"
+    },
+    "dashlets": {
+        "Properties": "Bất động sản của tôi",
+        "Requests": "Nhu cầu của tôi"
+    }
+}
