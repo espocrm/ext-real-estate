@@ -1,52 +1,48 @@
 define('real-estate:views/real-estate-property/record/panels/current-sale', ['views/base'], function (Dep) {
     return Dep.extend({
         template: 'real-estate:real-estate-property/record/panels/current-sale',
-        data: function () { return {}; },
-        renderState: function (html) {
-            if (this.$el && this.$el.find('.current-sale-body').length) {
-                this.$el.find('.current-sale-body').html(html);
-            }
+
+        data: function () {
+            return {state: this.state};
         },
+
         setup: function () {
             Dep.prototype.setup.call(this);
             this.state = 'loading';
-            this.status = null;
-            this.asOf = null;
-            this.ruleVersion = null;
-            this.chosenAmount = null;
-            this.chosenCurrency = null;
-            this.chosenQuoteId = null;
-            this.candidates = [];
-            this.excluded = {};
             var self = this;
-            var where = encodeURIComponent(JSON.stringify([
-                {type: 'equals', attribute: 'propertyId', value: this.model.id},
-                {type: 'equals', attribute: 'intent', value: 'SALE'}
-            ]));
-            Espo.Ajax.getRequest('NgOfferCycle?where=' + where + '&maxSize=1').then(function (list) {
-                var cycleId = list && list.list && list.list[0] && list.list[0].id;
-                if (!cycleId) {
-                    self.renderState('<p>Chưa có đợt chào bán</p>');
-                    return null;
+            // Server-side current-cycle resolver; never trusts list[0] ordering.
+            Espo.Ajax.getRequest('RealEstateProperty/' + this.model.id + '/currentSaleCycle').then(function (res) {
+                if (!res || !res.cycleId) {
+                    self.state = 'no-cycle';
+                    if (self.isRendered()) self.reRender();
                     return null;
                 }
-                self.cycleId = cycleId;
-                return Espo.Ajax.getRequest('NgOfferCycle/' + cycleId + '/currentInternalQuote');
+                return Espo.Ajax.getRequest('NgOfferCycle/' + res.cycleId + '/currentInternalQuote');
             }).then(function (data) {
                 if (!data) return;
-                if (!self.isRendered() && !self.$el) return;
-                var html;
-                if (data.status === 'NEEDS_PRICE') {
-                    html = '<p><span class="label label-warning">CHỜ GIÁ / CẦN XÁC MINH</span></p>';
-                } else {
-                    html = '<p>' + (data.chosenAmount || '') + ' ' + (data.chosenCurrency || '') +
-                        ' <span class="text-muted">(' + (data.chosenQuoteId || '') + ')</span></p>' +
-                        '<p class="text-muted">' + (data.asOf || '') + ' &middot; ' + (data.ruleVersion || '') + '</p>';
-                }
-                self.renderState(html);
+                self.state = data.status === 'NEEDS_PRICE' ? 'needs-price' : 'ok';
+                self.chosenAmount = data.chosenAmount;
+                self.chosenCurrency = data.chosenCurrency;
+                self.chosenQuoteId = data.chosenQuoteId;
+                self.asOf = data.asOf;
+                self.ruleVersion = data.ruleVersion;
+                if (self.isRendered()) self.reRender();
             }).catch(function () {
-                if (self.$el) self.renderState('<p>Không có quyền truy cập</p>');
+                self.state = 'denied';
+                if (self.isRendered()) self.reRender();
             });
+        },
+
+        afterRender: function () {
+            Dep.prototype.afterRender.call(this);
+            if (this.state !== 'ok' || !this.$el) return;
+            var lang = this.getLanguage();
+            var esc = _.escape;
+            var html = '<p>' + esc(lang.translate('internalBest', 'fields', 'RealEstateProperty')) + ': ' +
+                esc(this.chosenAmount || '') + ' ' + esc(this.chosenCurrency || '') +
+                ' <span class="text-muted">(' + esc(this.chosenQuoteId || '') + ')</span></p>' +
+                '<p class="text-muted">' + esc(this.asOf || '') + ' &middot; ' + esc(this.ruleVersion || '') + '</p>';
+            this.$el.find('.current-sale-body').html(html);
         }
     });
 });

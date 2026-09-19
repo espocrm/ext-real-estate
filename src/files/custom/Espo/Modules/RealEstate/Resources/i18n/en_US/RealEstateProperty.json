@@ -5,7 +5,13 @@
         "Locations": "Locations",
         "choGia": "NEEDS PRICE / VERIFICATION REQUIRED",
         "chaoGia": "No current sale cycle",
-        "Create": "Create Property"
+        "Create": "Create Property",
+        "auctionHistory": "Auction History",
+        "noAuctionHistory": "No auction history",
+        "commissionPanel": "Commission",
+        "noCommission": "No commission",
+        "Dropdown": "Open options",
+        "MatchingRequest": "Matching Request"
     },
     "fields": {
         "type": "Type",

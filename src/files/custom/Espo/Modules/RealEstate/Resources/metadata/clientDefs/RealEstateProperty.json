@@ -62,6 +62,22 @@
                 "order": 1
             },
             {
+                "name": "auctionHistory",
+                "label": "auctionHistory",
+                "view": "real-estate:views/real-estate-property/record/panels/auction-history",
+                "create": false,
+                "select": false,
+                "order": 2
+            },
+            {
+                "name": "commissionPanel",
+                "label": "commissionPanel",
+                "view": "real-estate:views/real-estate-property/record/panels/commission-panel",
+                "create": false,
+                "select": false,
+                "order": 3
+            },
+            {
                 "name": "matchingRequests",
                 "label": "Matching Requests",
                 "view": "real-estate:views/real-estate-property/record/panels/matching-requests",

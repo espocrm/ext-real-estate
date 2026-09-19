@@ -4,6 +4,18 @@
             "Apartment": "Căn hộ",
             "Separate House": "Nhà riêng",
             "Room": "Phòng"
+        },
+        "status": {
+            "New": "Mới",
+            "Assigned": "Đã phân công",
+            "In Process": "Đang xử lý",
+            "Completed": "Hoàn tất",
+            "Canceled": "Đã hủy",
+            "Lost": "Đã mất"
+        },
+        "requestType": {
+            "Rent": "Thuê",
+            "Sale": "Bán"
         }
     },
     "fields": {
@@ -37,6 +49,12 @@
         "Create Property": "Tạo bất động sản",
         "All": "Tất cả",
         "Create": "Tạo bất động sản",
-        "Create RealEstateProperty": "Tạo bất động sản"
+        "Create RealEstateProperty": "Tạo bất động sản",
+        "auctionHistory": "Lịch sử đấu giá",
+        "noAuctionHistory": "Chưa có lịch sử đấu giá",
+        "commissionPanel": "Hoa hồng",
+        "noCommission": "Chưa có hoa hồng",
+        "Dropdown": "Mở tùy chọn",
+        "MatchingRequest": "Nhu cầu phù hợp"
     }
 }

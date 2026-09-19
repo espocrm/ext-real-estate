@@ -55,5 +55,20 @@
             "controller": "NgShortlist",
             "action": "updateStatus"
         }
+    },
+    {
+        "route": "RealEstateProperty/:id/currentSaleCycle",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetCurrentSaleCycle"
+    },
+    {
+        "route": "RealEstateProperty/:id/auctionHistory",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetAuctionHistory"
+    },
+    {
+        "route": "RealEstateProperty/:id/commissionHistory",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetCommissionHistory"
     }
 ]
