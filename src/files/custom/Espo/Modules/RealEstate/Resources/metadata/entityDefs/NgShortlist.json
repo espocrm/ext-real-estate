@@ -1,0 +1,123 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "inquiryId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": true
+        },
+        "propertyId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": true
+        },
+        "offerCycleId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": false
+        },
+        "status": {
+            "type": "enum",
+            "options": [
+                "suggested",
+                "sent",
+                "interested",
+                "viewed",
+                "selected",
+                "not-fit"
+            ],
+            "default": "suggested",
+            "required": true
+        },
+        "fitReason": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "mismatchReason": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "addedAt": {
+            "type": "datetime",
+            "readOnly": true
+        },
+        "addedBy": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "removedAt": {
+            "type": "datetime"
+        },
+        "removedBy": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "removeReason": {
+            "type": "text",
+            "dbType": "longtext"
+        },
+        "sentAt": {
+            "type": "datetime",
+            "readOnly": true
+        },
+        "sentBy": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "channel": {
+            "type": "enum",
+            "options": ["internal", "email", "other"],
+            "default": "internal"
+        }
+    },
+    "links": {
+        "inquiry": {
+            "type": "belongsTo",
+            "entity": "RealEstateRequest",
+            "required": true
+        },
+        "property": {
+            "type": "belongsTo",
+            "entity": "RealEstateProperty",
+            "required": true
+        },
+        "offerCycle": {
+            "type": "belongsTo",
+            "entity": "NgOfferCycle",
+            "required": false
+        },
+        "sentSnapshot": {
+            "type": "hasOne",
+            "entity": "NgShortlistSnapshot",
+            "foreign": "shortlist",
+            "layoutRelationshipsDisabled": true
+        },
+        "assignedUser": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "teams": {
+            "type": "hasMany",
+            "entity": "Team",
+            "relationName": "EntityTeam",
+            "layoutRelationshipsDisabled": true
+        }
+    },
+    "indexes": {
+        "inquiryProperty": {
+            "columns": ["inquiryId", "propertyId", "deleted"],
+            "unique": true
+        },
+        "propertyStatus": {
+            "columns": ["propertyId", "status"]
+        },
+        "inquiryStatus": {
+            "columns": ["inquiryId", "status"]
+        }
+    }
+}

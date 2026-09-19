@@ -36,6 +36,14 @@
     "sidePanels": {
         "detail": [
             {
+                "name": "shortlist",
+                "label": "Shortlist",
+                "view": "real-estate:views/real-estate-request/record/panels/shortlist",
+                "create": false,
+                "select": false,
+                "order": 3
+            },
+            {
                 "name": "activities",
                 "label": "Activities",
                 "view": "crm:views/record/panels/activities"

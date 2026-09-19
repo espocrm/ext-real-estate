@@ -7,7 +7,14 @@
         "Unset Not Interested": "Unset Not Interested",
         "Locations": "Locations",
         "Min": "Min",
-        "Max": "Max"
+        "Max": "Max",
+        "Shortlist": "Shortlist",
+        "noShortlist": "No properties in the shortlist yet",
+        "sentSnapshot": "Sent quote snapshot",
+        "choGia": "Awaiting price / verification required",
+        "asOfLabel": "As of",
+        "ruleVersionLabel": "Rule version",
+        "sentLabel": "Sent at"
     },
     "fields": {
         "status": "Status",
@@ -42,7 +49,9 @@
         "yearBuilt": "Year Built",
         "fromYearBuilt": "Min Year Built",
         "toYearBuilt": "Max Year Built",
-        "matchingPropertyCount": "Matching Count"
+        "matchingPropertyCount": "Matching Count",
+        "propertyId": "Property",
+        "fitReason": "Fit Reason"
     },
     "links": {
         "contact": "Contact",

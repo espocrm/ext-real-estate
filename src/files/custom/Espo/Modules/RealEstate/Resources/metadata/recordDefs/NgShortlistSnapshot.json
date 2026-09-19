@@ -1,0 +1,8 @@
+{
+    "outputFilterClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Record\\OutputFilter\\ShortlistSnapshotPrivacy"
+    ],
+    "selectApplierClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Select\\Shortlist\\ParentReadFilter"
+    ]
+}

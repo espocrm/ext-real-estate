@@ -5,7 +5,14 @@
         "History": "Lịch sử",
         "Tasks": "Việc cần làm",
         "Matching Properties": "Bất động sản phù hợp",
-        "List": "Danh sách"
+        "List": "Danh sách",
+        "Shortlist": "Danh sách chọn",
+        "noShortlist": "Chưa có bất động sản trong danh sách chọn",
+        "sentSnapshot": "Snapshot báo giá đã gửi",
+        "choGia": "CHỜ GIÁ / CẦN XÁC MINH",
+        "asOfLabel": "As-of",
+        "ruleVersionLabel": "Phiên bản quy tắc",
+        "sentLabel": "Đã gửi lúc"
     },
     "fields": {
         "name": "Tên",
@@ -28,7 +35,9 @@
         "floor": "Tầng",
         "floorCount": "Số tầng",
         "yearBuilt": "Năm xây dựng",
-        "matchingPropertyCount": "Số bất động sản phù hợp"
+        "matchingPropertyCount": "Số bất động sản phù hợp",
+        "propertyId": "Bất động sản",
+        "fitReason": "Lý do phù hợp"
     },
     "options": {
         "status": {

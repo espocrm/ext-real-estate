@@ -1,0 +1,105 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "shortlistId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": true
+        },
+        "quoteId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "required": true
+        },
+        "revisionNumber": {
+            "type": "int",
+            "default": 1,
+            "readOnly": true
+        },
+        "amount": {
+            "type": "currency",
+            "required": true,
+            "matchingDisabled": true
+        },
+        "currency": {
+            "type": "enum",
+            "options": ["VND", "USD"],
+            "default": "VND",
+            "required": true
+        },
+        "unit": {
+            "type": "enum",
+            "options": ["total", "per_m2"],
+            "default": "total",
+            "required": true
+        },
+        "scenario": {
+            "type": "enum",
+            "options": ["sale", "month", "year", "payment_basis"],
+            "default": "sale"
+        },
+        "asOf": {
+            "type": "datetime"
+        },
+        "ruleVersion": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "selectorStatus": {
+            "type": "enum",
+            "options": ["OK", "NEEDS_PRICE"],
+            "required": true
+        },
+        "capturedAt": {
+            "type": "datetime",
+            "readOnly": true
+        },
+        "capturedBy": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "channel": {
+            "type": "enum",
+            "options": ["internal", "email", "other"],
+            "default": "internal"
+        },
+        "publicEligibility": {
+            "type": "bool",
+            "default": false,
+            "readOnly": true
+        }
+    },
+    "links": {
+        "shortlist": {
+            "type": "belongsTo",
+            "entity": "NgShortlist",
+            "required": true
+        },
+        "sourceQuote": {
+            "type": "belongsTo",
+            "entity": "NgSourceQuote",
+            "required": true,
+            "layoutRelationshipsDisabled": true
+        },
+        "assignedUser": {
+            "type": "belongsTo",
+            "entity": "User"
+        },
+        "teams": {
+            "type": "hasMany",
+            "entity": "Team",
+            "relationName": "EntityTeam",
+            "layoutRelationshipsDisabled": true
+        }
+    },
+    "indexes": {
+        "shortlistQuoteRevision": {
+            "columns": ["shortlistId", "quoteId", "revisionNumber"],
+            "unique": true
+        }
+    }
+}

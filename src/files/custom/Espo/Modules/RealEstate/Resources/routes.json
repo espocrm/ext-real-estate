@@ -37,5 +37,23 @@
             "controller": "NgCommissionRevision",
             "action": "createRevision"
         }
+    },
+    {
+        "route": "NgShortlist/action/create",
+        "method": "post",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Shortlist\\Api\\Create"
+    },
+    {
+        "route": "NgShortlistSnapshot/action/create",
+        "method": "post",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Shortlist\\Api\\CreateSnapshot"
+    },
+    {
+        "route": "NgShortlist/action/updateStatus",
+        "method": "post",
+        "params": {
+            "controller": "NgShortlist",
+            "action": "updateStatus"
+        }
     }
 ]

@@ -1,0 +1,6 @@
+{
+    "outputFilterClassNameList": [],
+    "selectApplierClassNameList": [
+        "Espo\\Modules\\RealEstate\\Classes\\Select\\Shortlist\\ParentReadFilter"
+    ]
+}
