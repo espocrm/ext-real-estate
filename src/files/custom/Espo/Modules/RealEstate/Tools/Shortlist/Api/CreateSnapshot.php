@@ -49,7 +49,9 @@ class CreateSnapshot implements Action
     {
         $entity = null;
 
-        for ($attempt = 0; $attempt < 3 && $entity === null; $attempt++) {
+        // Five concurrent writers can queue behind the same shortlist row;
+        // allow enough restart attempts for every waiter to observe the new head.
+        for ($attempt = 0; $attempt < 6 && $entity === null; $attempt++) {
             try {
                 $this->entityManager->getTransactionManager()->run(function () use (&$entity, $values) {
             $shortlist = $this->entityManager->getEntityById('NgShortlist', (string) $values['shortlistId']);
@@ -67,18 +69,40 @@ class CreateSnapshot implements Action
                 ->where(['id' => $values['shortlistId']])
                 ->findOne();
 
-            $prev = $this->entityManager
+            // FX4: the unique index (shortlistId, quoteId, revisionNumber)
+            // retains soft-deleted slots. Allocate above the max across ALL
+            // rows, including deleted ones, or a deleted head causes the same
+            // number to be assigned again and every retry hits 1062.
+            $max = $this->entityManager
                 ->getRDBRepository('NgShortlistSnapshot')
                 ->where([
                     'shortlistId' => $values['shortlistId'],
                     'quoteId' => $values['quoteId'],
+                    'deleted' => [0, 1],
                 ])
-                ->order('revisionNumber', true)
+                ->max('revisionNumber');
+
+            // The entity schema has no predecessorId column. Still resolve the
+            // contract's live head by revision order (rather than treating the
+            // deleted max as a predecessor); if a future schema exposes the
+            // optional field, bind it to that non-deleted head without adding
+            // a migration or changing this two-file FX4 scope.
+            $head = $this->entityManager
+                ->getRDBRepository('NgShortlistSnapshot')
+                ->where([
+                    'shortlistId' => $values['shortlistId'],
+                    'quoteId' => $values['quoteId'],
+                    'deleted' => false,
+                ])
+                ->order('revisionNumber', 'DESC')
                 ->findOne();
 
-            $next = $prev ? ((int) $prev->get('revisionNumber')) + 1 : 1;
+            $next = $max === null ? 1 : (int) $max + 1;
 
             $entity = $this->entityManager->getNewEntity('NgShortlistSnapshot');
+            if ($head && $entity->has('predecessorId')) {
+                $entity->set('predecessorId', $head->getId());
+            }
             $entity->set($values);
             $entity->set('revisionNumber', $next);
             $entity->set('capturedAt', gmdate('Y-m-d H:i:s'));
@@ -93,10 +117,22 @@ class CreateSnapshot implements Action
             $this->entityManager->saveEntity($entity, ['silent' => true, 'noStream' => true, 'noNotifications' => true]);
                 });
             } catch (\PDOException $e) {
+                // FX4: retry on every serialization outcome of the head race,
+                // not only the duplicate-key error. Under concurrent creators
+                // MariaDB also raises 1020 ("Record has changed since last
+                // read ... try restarting transaction") and, rarely, 1213
+                // (deadlock) / 1205 (lock wait timeout). Those are retryable
+                // by definition; treating them as fatal turned a lost race
+                // into a 500.
                 $message = $e->getMessage();
-                $isUniqueRevision = str_contains($message, 'UNIQ_SHORTLIST_QUOTE_REVISION')
-                    || str_contains($message, 'shortlistQuoteRevision');
-                if (!$isUniqueRevision || $attempt === 2) {
+                $isRetryable = str_contains($message, 'UNIQ_SHORTLIST_QUOTE_REVISION')
+                    || str_contains($message, 'shortlistQuoteRevision')
+                    || str_contains($message, 'Record has changed since last read')
+                    || str_contains($message, 'SQLSTATE[HY000]: General error: 1020')
+                    || str_contains($message, 'Deadlock found')
+                    || str_contains($message, 'Lock wait timeout');
+
+                if (!$isRetryable || $attempt === 5) {
                     throw $e;
                 }
                 // A concurrent writer won the head race; retry the transaction
