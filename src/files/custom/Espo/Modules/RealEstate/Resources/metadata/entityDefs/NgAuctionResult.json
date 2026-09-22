@@ -33,32 +33,43 @@
     "winningAmount": {
       "type": "decimal",
       "precision": 18,
-      "scale": 2
+      "scale": 2,
+      "exportDisabled": true
     },
     "currency": {
       "type": "enum",
       "options": [
         "VND",
         "USD"
-      ]
+      ],
+      "exportDisabled": true
     },
     "priceUnit": {
       "type": "enum",
       "options": [
         "total",
         "per_m2"
-      ]
+      ],
+      "exportDisabled": true
     },
     "sourceEvidenceRefs": {
       "type": "text",
-      "dbType": "longtext"
+      "dbType": "longtext",
+      "exportDisabled": true
     },
     "sourceAsOf": {
-      "type": "datetime"
+      "type": "datetime",
+      "exportDisabled": true
     },
     "notes": {
       "type": "text",
-      "dbType": "longtext"
+      "dbType": "longtext",
+      "exportDisabled": true
+    },
+    "requestId": {
+      "type": "varchar",
+      "maxLength": 64,
+      "exportDisabled": true
     }
   },
   "indexes": {
@@ -66,6 +77,12 @@
       "columns": [
         "lotId",
         "revisionNumber"
+      ],
+      "unique": true
+    },
+    "requestIdentity": {
+      "columns": [
+        "requestId"
       ],
       "unique": true
     }

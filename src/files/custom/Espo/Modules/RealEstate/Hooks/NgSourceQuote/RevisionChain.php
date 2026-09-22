@@ -27,7 +27,27 @@ class RevisionChain
 {
     public static $order = 20;
 
-    private const IMMUTABLE_FIELDS = ['amount', 'currency', 'unit', 'offerCycleId'];
+    // H04: immutable fact inventory per contract — scenario/source/terms/asOf/
+    // validity/policy facts are append-only; only freshness/verification/
+    // eligibility/note lifecycle state remains mutable.
+    private const IMMUTABLE_FIELDS = [
+        'amount',
+        'currency',
+        'unit',
+        'scenario',
+        'offerCycleId',
+        'sourceProviderType',
+        'sourceProviderId',
+        'sourceSnapshot',
+        'receivedAt',
+        'asOfAt',
+        'validUntil',
+        'terms',
+        'policyVersion',
+        'evidenceRefs',
+        'enteredBy',
+        'predecessorId',
+    ];
 
     public function __construct(private EntityManager $entityManager)
     {}
@@ -62,17 +82,28 @@ class RevisionChain
         // provides the row-lock and duplicate retry for the serialized path,
         // while generic create is still guarded by the DB unique index.
 
+        // FX1: the unique index (offerCycleId, revisionNumber) keeps the slot of a
+        // soft-deleted row, so allocation must consider deleted rows too.
+        // Excluding them re-assigns a taken number and the insert then fails with
+        // a duplicate-key error that no retry can resolve. No row is renumbered,
+        // no counter is reset and no history is deleted: this only reads a wider
+        // max.
         $max = $this->entityManager
             ->getRDBRepository('NgSourceQuote')
-            ->where(['offerCycleId' => $cycleId])
+            ->where(['offerCycleId' => $cycleId, 'deleted' => [0, 1]])
             ->max('revisionNumber');
 
         $revision = $max === null ? 1 : (int) $max + 1;
         $entity->set('revisionNumber', $revision);
 
+        // FX1: the predecessor is the current non-deleted head, selected by
+        // revision order — NOT by looking up revisionNumber === max, which would
+        // silently link nothing (or link a deleted row) whenever the max belongs
+        // to a soft-deleted revision.
         $head = $this->entityManager
             ->getRDBRepository('NgSourceQuote')
-            ->where(['offerCycleId' => $cycleId, 'revisionNumber' => (int) $max])
+            ->where(['offerCycleId' => $cycleId, 'deleted' => false])
+            ->order('revisionNumber', 'DESC')
             ->findOne();
 
         if ($head) {

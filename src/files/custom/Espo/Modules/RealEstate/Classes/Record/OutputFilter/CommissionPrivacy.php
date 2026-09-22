@@ -7,7 +7,7 @@ use Espo\Entities\User;
 use Espo\ORM\Entity;
 class CommissionPrivacy implements Filter
 {
-    private const SENS=['method','percentage','fixedAmount','baseAmount','baseSemantic','expectedAmount','currency','payer','conditions','effectiveFrom','effectiveTo','policyRevision','sourceEvidenceRefs','notes'];
+    private const SENS=['method','percentage','fixedAmount','baseAmount','baseSemantic','expectedAmount','currency','payer','conditions','effectiveFrom','effectiveTo','policyRevision','sourceEvidenceRefs','notes','requestId'];
     public function __construct(private Acl $acl, private User $user) {}
     public function filter(Entity $entity): void
     {

@@ -67,15 +67,17 @@ class GetAuctionHistory implements Action
                 ];
             }
 
+            // H01: source provenance fields (sourceAsOf/sourceEvidenceRefs) are
+            // restricted the same as price facts; only the full projection exposes them.
             $item = [
                 'id' => (string) $lot->getId(),
                 'lotCode' => (string) $lot->get('lotCode'),
                 'resultState' => (string) $lot->get('resultState'),
-                'currency' => (string) $lot->get('currency'),
-                'priceUnit' => (string) $lot->get('priceUnit'),
-                'sourceAsOf' => $lot->get('sourceAsOf'),
             ];
             if ($full) {
+                $item['currency'] = (string) $lot->get('currency');
+                $item['priceUnit'] = (string) $lot->get('priceUnit');
+                $item['sourceAsOf'] = $lot->get('sourceAsOf');
                 $item['startingAmount'] = $lot->get('startingAmount');
                 $item['depositAmount'] = $lot->get('depositAmount');
                 $item['stepAmount'] = $lot->get('stepAmount');
@@ -91,9 +93,9 @@ class GetAuctionHistory implements Action
                     'id' => (string) $result->getId(),
                     'resultState' => (string) $result->get('resultState'),
                     'revisionNumber' => (int) $result->get('revisionNumber'),
-                    'sourceAsOf' => $result->get('sourceAsOf'),
                 ];
                 if ($full) {
+                    $resultData['sourceAsOf'] = $result->get('sourceAsOf');
                     $resultData['winningAmount'] = $result->get('winningAmount');
                     $resultData['currency'] = $result->get('currency');
                     $resultData['priceUnit'] = $result->get('priceUnit');

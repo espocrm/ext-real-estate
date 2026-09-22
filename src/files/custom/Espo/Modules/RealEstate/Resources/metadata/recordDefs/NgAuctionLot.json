@@ -1,0 +1,6 @@
+{
+  "exportDisabled": true,
+  "outputFilterClassNameList": [
+    "Espo\\Modules\\RealEstate\\Classes\\Record\\OutputFilter\\AuctionLotPrivacy"
+  ]
+}

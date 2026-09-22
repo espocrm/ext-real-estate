@@ -22,11 +22,13 @@ use RuntimeException;
 /**
  * Serialized quote creation (Gate A guard, FC-SQ-012).
  *
- * The revision number is current-head + 1, guarded by the DB unique index
- * (offerCycleId, revisionNumber). Concurrent creates can race on max+1; this
- * service runs the allocate-and-insert inside a transaction and retries on a
- * duplicate-key/unique collision, so concurrent writes serialize instead of
- * surfacing a 500. This is the single write path for new quotes.
+ * The revision number is max(revisionNumber) + 1 over ALL rows for the cycle —
+ * including soft-deleted ones, because the unique index
+ * (offerCycleId, revisionNumber) keeps the slot of a deleted revision. Concurrent
+ * creates can race on max+1; this service runs the allocate-and-insert inside a
+ * transaction and retries on a duplicate-key/unique collision, so concurrent
+ * writes serialize instead of surfacing a 500. This is the single write path for
+ * new quotes.
  */
 class QuoteCreator
 {
@@ -94,13 +96,25 @@ class QuoteCreator
                 ->where(['id' => $values['offerCycleId']])
                 ->findOne();
 
+            // FX1: allocate above the max over ALL rows, including soft-deleted
+            // ones. The unique index (offerCycleId, revisionNumber) keeps the slot
+            // of a deleted revision, so a max over live rows only re-assigns a
+            // taken number and the insert fails with a duplicate-key error that
+            // the retry loop cannot resolve (it recomputes the same number).
+            $max = $this->entityManager
+                ->getRDBRepository('NgSourceQuote')
+                ->where(['offerCycleId' => $values['offerCycleId'], 'deleted' => [0, 1]])
+                ->max('revisionNumber');
+
+            $revision = $max === null ? 1 : (int) $max + 1;
+
+            // FX1: the predecessor is the non-deleted head by revision order, not
+            // the row that happens to hold the max (which may be deleted).
             $head = $this->entityManager
                 ->getRDBRepository('NgSourceQuote')
-                ->where(['offerCycleId' => $values['offerCycleId']])
+                ->where(['offerCycleId' => $values['offerCycleId'], 'deleted' => false])
                 ->order('revisionNumber', 'DESC')
                 ->findOne();
-
-            $revision = $head ? (int) $head->get('revisionNumber') + 1 : 1;
 
             $entity = $this->entityManager->getNewEntity('NgSourceQuote');
             $entity->set($values);

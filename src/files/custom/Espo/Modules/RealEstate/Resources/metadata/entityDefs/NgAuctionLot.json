@@ -38,22 +38,26 @@
     "startingAmount": {
       "type": "decimal",
       "precision": 18,
-      "scale": 2
+      "scale": 2,
+      "exportDisabled": true
     },
     "depositAmount": {
       "type": "decimal",
       "precision": 18,
-      "scale": 2
+      "scale": 2,
+      "exportDisabled": true
     },
     "stepAmount": {
       "type": "decimal",
       "precision": 18,
-      "scale": 2
+      "scale": 2,
+      "exportDisabled": true
     },
     "winningAmount": {
       "type": "decimal",
       "precision": 18,
-      "scale": 2
+      "scale": 2,
+      "exportDisabled": true
     },
     "resultState": {
       "type": "enum",
@@ -70,10 +74,12 @@
     },
     "sourceEvidenceRefs": {
       "type": "text",
-      "dbType": "longtext"
+      "dbType": "longtext",
+      "exportDisabled": true
     },
     "sourceAsOf": {
-      "type": "datetime"
+      "type": "datetime",
+      "exportDisabled": true
     },
     "currentSaleOfferCycleId": {
       "type": "varchar",
