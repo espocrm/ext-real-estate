@@ -12,7 +12,10 @@
         "choGia": "CHỜ GIÁ / CẦN XÁC MINH",
         "asOfLabel": "As-of",
         "ruleVersionLabel": "Phiên bản quy tắc",
-        "sentLabel": "Đã gửi lúc"
+        "sentLabel": "Đã gửi lúc",
+        "ActualBuy": "Đang mua",
+        "ActualLoan": "Đang vay",
+        "ActualOther": "Đang tư vấn"
     },
     "fields": {
         "name": "Tên",
