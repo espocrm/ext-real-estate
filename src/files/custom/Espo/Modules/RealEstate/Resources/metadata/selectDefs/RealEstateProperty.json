@@ -1,12 +1,19 @@
 {
     "selectAttributesDependencyMap": {
-        "fromPrice": ["fromPriceCurrency"],
-        "toPrice": ["toPriceCurrency"]
+        "fromPrice": [
+            "fromPriceCurrency"
+        ],
+        "toPrice": [
+            "toPriceCurrency"
+        ]
     },
     "primaryFilterClassNameMap": {
         "actual": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\Actual",
         "actualRent": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\ActualRent",
         "actualSale": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\ActualSale",
-        "completed": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\Completed"
+        "completed": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\Completed",
+        "actualBuy": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\ActualBuy",
+        "actualLoan": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\ActualLoan",
+        "actualOther": "Espo\\Modules\\RealEstate\\Classes\\Select\\RealEstateProperty\\PrimaryFilters\\ActualOther"
     }
 }

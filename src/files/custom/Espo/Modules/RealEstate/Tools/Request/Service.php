@@ -158,6 +158,21 @@ class Service
                 $primaryFilter = 'actualSale';
 
                 break;
+
+            case 'Buy':
+                $primaryFilter = 'actualBuy';
+
+                break;
+
+            case 'Loan':
+                $primaryFilter = 'actualLoan';
+
+                break;
+
+            case 'Other':
+                $primaryFilter = 'actualOther';
+
+                break;
         }
 
         if ($primaryFilter) {

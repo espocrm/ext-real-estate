@@ -1,0 +1,58 @@
+<?php
+/************************************************************************
+* This file is part of EspoCRM.
+*
+* EspoCRM – Open Source CRM application.
+* Copyright (C) 2014-2026 EspoCRM, Inc.
+* Website: https://www.espocrm.com
+*
+* GNU AGPLv3 header preserved (see upstream modules).
+************************************************************************/
+
+namespace Espo\Modules\RealEstate\Controllers;
+
+use Espo\Core\Api\Request;
+use Espo\Core\Api\Response;
+use Espo\Core\Controllers\Record;
+use Espo\Core\Exceptions\Forbidden;
+use Espo\Core\Exceptions\NotFoundSilent;
+use stdClass;
+use Espo\Core\Exceptions\BadRequest;
+use Espo\Modules\RealEstate\Tools\OfferCycle\Selector;
+
+class NgOfferCycle extends Record
+{
+    /** Normalize foreign-existing and unknown IDs to one silent 404 shape. */
+    public function getActionRead(Request $request, Response $response): stdClass
+    {
+        try {
+            return parent::getActionRead($request, $response);
+        } catch (Forbidden $e) {
+            throw new NotFoundSilent();
+        }
+    }
+
+    /**
+     * GET /NgOfferCycle/:id/currentInternalQuote
+     *
+     * Derived internal-best quote (Gate B). Read-only; never mutates
+     * NgOfferCycle / NgSourceQuote / RealEstateProperty.
+     *
+     * @throws BadRequest
+     */
+    public function getActionCurrentInternalQuote(Request $request, Response $response): array
+    {
+        $id = $request->getRouteParam('id');
+
+        if (!$id) {
+            throw new BadRequest('id is required.');
+        }
+
+        $asOf = $request->getQueryParam('asOf') ?: null;
+        $policyVersion = $request->getQueryParam('policyVersion') ?: null;
+
+        return $this->injectableFactory
+            ->create(Selector::class)
+            ->selectInternalBest($id, $asOf, $policyVersion);
+    }
+}

@@ -16,5 +16,59 @@
         "route": "RealEstateRequest/:id/matchingProperties",
         "method": "get",
         "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Request\\Api\\GetMatchingProperties"
+    },
+    {
+        "route": "NgOfferCycle/:id/currentInternalQuote",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\OfferCycle\\Api\\GetCurrentInternalQuote"
+    },
+    {
+        "route": "NgAuctionResult/action/createRevision",
+        "method": "post",
+        "params": {
+            "controller": "NgAuctionResult",
+            "action": "createRevision"
+        }
+    },
+    {
+        "route": "NgCommissionRevision/action/createRevision",
+        "method": "post",
+        "params": {
+            "controller": "NgCommissionRevision",
+            "action": "createRevision"
+        }
+    },
+    {
+        "route": "NgShortlist/action/create",
+        "method": "post",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Shortlist\\Api\\Create"
+    },
+    {
+        "route": "NgShortlistSnapshot/action/create",
+        "method": "post",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Shortlist\\Api\\CreateSnapshot"
+    },
+    {
+        "route": "NgShortlist/action/updateStatus",
+        "method": "post",
+        "params": {
+            "controller": "NgShortlist",
+            "action": "updateStatus"
+        }
+    },
+    {
+        "route": "RealEstateProperty/:id/currentSaleCycle",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetCurrentSaleCycle"
+    },
+    {
+        "route": "RealEstateProperty/:id/auctionHistory",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetAuctionHistory"
+    },
+    {
+        "route": "RealEstateProperty/:id/commissionHistory",
+        "method": "get",
+        "actionClassName": "Espo\\Modules\\RealEstate\\Tools\\Property\\Api\\GetCommissionHistory"
     }
 ]

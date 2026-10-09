@@ -2,7 +2,16 @@
     "labels": {
         "Create RealEstateProperty": "Create Property",
         "Matching Requests": "Matching Requests",
-        "Locations": "Locations"
+        "Locations": "Locations",
+        "choGia": "NEEDS PRICE / VERIFICATION REQUIRED",
+        "chaoGia": "No current sale cycle",
+        "Create": "Create Property",
+        "auctionHistory": "Auction History",
+        "noAuctionHistory": "No auction history",
+        "commissionPanel": "Commission",
+        "noCommission": "No commission",
+        "Dropdown": "Open options",
+        "MatchingRequest": "Matching Request"
     },
     "fields": {
         "type": "Type",
@@ -28,7 +37,9 @@
         "account": "Account",
         "addressMap": "Map",
         "matchingRequestCount": "Matching Count",
-        "contactRole": "Role"
+        "contactRole": "Role",
+        "currentSaleCycleState": "Current Sale Cycle",
+        "internalBest": "Internal Best"
     },
     "type": {
         "Apartment": "Apartment",

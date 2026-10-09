@@ -1,57 +1,82 @@
 {
-    "controller":"real-estate:controllers/real-estate-property",
-    "dynamicHandler":"real-estate:property-dynamic-handler",
-    "boolFilterList":[
+    "controller": "real-estate:controllers/real-estate-property",
+    "dynamicHandler": "real-estate:property-dynamic-handler",
+    "boolFilterList": [
         "onlyMy"
     ],
-    "filterList":[
+    "filterList": [
         "actual",
         "actualSale",
         "actualRent",
         {
-            "name":"completed",
-            "style":"success"
+            "name": "completed",
+            "style": "success"
         }
     ],
-    "menu":{
-        "list":{
-            "dropdown":[
+    "menu": {
+        "list": {
+            "dropdown": [
                 {
-                    "link":"#RealEstateLocation",
-                    "aclScope":"RealEstateLocation",
-                    "acl":"read",
-                    "label":"Locations"
+                    "link": "#RealEstateLocation",
+                    "aclScope": "RealEstateLocation",
+                    "acl": "read",
+                    "label": "Locations"
                 }
             ]
         }
     },
-    "recordViews":{
-        "detail":"real-estate:views/real-estate-property/record/detail"
+    "recordViews": {
+        "detail": "real-estate:views/real-estate-property/record/detail"
     },
-    "views":{
-        "detail":"real-estate:views/real-estate-property/detail"
+    "views": {
+        "detail": "real-estate:views/real-estate-property/detail",
+        "list": "real-estate:views/real-estate-property/list"
     },
-    "sidePanels":{
-        "detail":[
+    "sidePanels": {
+        "detail": [
             {
-                "name":"activities",
-                "label":"Activities",
-                "view":"crm:views/record/panels/activities"
+                "name": "activities",
+                "label": "Activities",
+                "view": "crm:views/record/panels/activities"
             },
             {
-                "name":"history",
-                "label":"History",
-                "view":"crm:views/record/panels/history"
+                "name": "history",
+                "label": "History",
+                "view": "crm:views/record/panels/history"
             },
             {
-                "name":"tasks",
-                "label":"Tasks",
-                "view":"crm:views/record/panels/tasks"
+                "name": "tasks",
+                "label": "Tasks",
+                "view": "crm:views/record/panels/tasks"
             }
         ]
     },
     "bottomPanels": {
         "detail": [
+            {
+                "name": "currentSaleReference",
+                "label": "Current Sale Reference",
+                "view": "real-estate:views/real-estate-property/record/panels/current-sale",
+                "create": false,
+                "select": false,
+                "order": 1
+            },
+            {
+                "name": "auctionHistory",
+                "label": "auctionHistory",
+                "view": "real-estate:views/real-estate-property/record/panels/auction-history",
+                "create": false,
+                "select": false,
+                "order": 2
+            },
+            {
+                "name": "commissionPanel",
+                "label": "commissionPanel",
+                "view": "real-estate:views/real-estate-property/record/panels/commission-panel",
+                "create": false,
+                "select": false,
+                "order": 3
+            },
             {
                 "name": "matchingRequests",
                 "label": "Matching Requests",
@@ -71,12 +96,12 @@
             }
         ]
     },
-    "relationshipPanels":{
-        "opportunities":{
-            "layout":"listForProperty",
-            "rowActionsView":"views/record/row-actions/relationship-no-unlink",
-            "view":"real-estate:views/real-estate-request/record/panels/opportunities",
-            "select":false
+    "relationshipPanels": {
+        "opportunities": {
+            "layout": "listForProperty",
+            "rowActionsView": "views/record/row-actions/relationship-no-unlink",
+            "view": "real-estate:views/real-estate-request/record/panels/opportunities",
+            "select": false
         }
     },
     "dynamicLogic": {
@@ -87,7 +112,11 @@
                         {
                             "type": "notIn",
                             "attribute": "status",
-                            "value": ["Completed", "Canceled", "Lost"]
+                            "value": [
+                                "Completed",
+                                "Canceled",
+                                "Lost"
+                            ]
                         }
                     ]
                 }
@@ -100,21 +129,25 @@
                         {
                             "type": "notIn",
                             "attribute": "status",
-                            "value": ["Completed", "Canceled", "Lost"]
+                            "value": [
+                                "Completed",
+                                "Canceled",
+                                "Lost"
+                            ]
                         }
                     ]
                 }
             }
         }
     },
-    "additionalLayouts":{
-        "listForRequest":{
-            "type":"list"
+    "additionalLayouts": {
+        "listForRequest": {
+            "type": "list"
         },
-        "listForContact":{
-            "type":"list"
+        "listForContact": {
+            "type": "list"
         }
     },
-    "iconClass":"far fa-building",
-    "color":"#aea7d4"
+    "iconClass": "far fa-building",
+    "color": "#aea7d4"
 }

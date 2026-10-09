@@ -1,0 +1,111 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "maxLength": 255
+    },
+    "lotId": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 64
+    },
+    "revisionNumber": {
+      "type": "int",
+      "required": true,
+      "default": 1,
+      "readOnly": true
+    },
+    "predecessorId": {
+      "type": "varchar",
+      "maxLength": 64,
+      "readOnly": true
+    },
+    "resultState": {
+      "type": "enum",
+      "options": [
+        "no-result",
+        "won",
+        "cancelled",
+        "correction"
+      ],
+      "required": true
+    },
+    "winningAmount": {
+      "type": "decimal",
+      "precision": 18,
+      "scale": 2,
+      "exportDisabled": true
+    },
+    "currency": {
+      "type": "enum",
+      "options": [
+        "VND",
+        "USD"
+      ],
+      "exportDisabled": true
+    },
+    "priceUnit": {
+      "type": "enum",
+      "options": [
+        "total",
+        "per_m2"
+      ],
+      "exportDisabled": true
+    },
+    "sourceEvidenceRefs": {
+      "type": "text",
+      "dbType": "longtext",
+      "exportDisabled": true
+    },
+    "sourceAsOf": {
+      "type": "datetime",
+      "exportDisabled": true
+    },
+    "notes": {
+      "type": "text",
+      "dbType": "longtext",
+      "exportDisabled": true
+    },
+    "requestId": {
+      "type": "varchar",
+      "maxLength": 64,
+      "exportDisabled": true
+    }
+  },
+  "indexes": {
+    "lotRevision": {
+      "columns": [
+        "lotId",
+        "revisionNumber"
+      ],
+      "unique": true
+    },
+    "requestIdentity": {
+      "columns": [
+        "requestId"
+      ],
+      "unique": true
+    }
+  },
+  "links": {
+    "lot": {
+      "type": "belongsTo",
+      "entity": "NgAuctionLot",
+      "required": true
+    },
+    "predecessor": {
+      "type": "belongsTo",
+      "entity": "NgAuctionResult"
+    },
+    "assignedUser": {
+      "type": "belongsTo",
+      "entity": "User"
+    },
+    "teams": {
+      "type": "hasMany",
+      "entity": "Team",
+      "relationName": "EntityTeam",
+      "layoutRelationshipsDisabled": true
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 255
+    },
+    "code": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 64
+    },
+    "projectSnapshot": {
+      "type": "varchar",
+      "maxLength": 255
+    },
+    "scheduledAt": {
+      "type": "datetime"
+    },
+    "organizerSnapshot": {
+      "type": "text",
+      "dbType": "longtext"
+    },
+    "location": {
+      "type": "varchar",
+      "maxLength": 255
+    },
+    "method": {
+      "type": "enum",
+      "options": [
+        "online",
+        "onsite",
+        "hybrid"
+      ]
+    },
+    "status": {
+      "type": "enum",
+      "options": [
+        "pending",
+        "scheduled",
+        "held",
+        "completed",
+        "cancelled",
+        "result-cancelled"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "sourceEvidenceRefs": {
+      "type": "text",
+      "dbType": "longtext"
+    },
+    "sourceAsOf": {
+      "type": "datetime"
+    },
+    "revisionNumber": {
+      "type": "int",
+      "default": 1,
+      "readOnly": true
+    },
+    "notes": {
+      "type": "text",
+      "dbType": "longtext"
+    }
+  },
+  "indexes": {
+    "code": {
+      "columns": [
+        "code"
+      ],
+      "unique": true
+    }
+  },
+  "links": {
+    "lots": {
+      "type": "hasMany",
+      "entity": "NgAuctionLot",
+      "foreign": "session"
+    },
+    "assignedUser": {
+      "type": "belongsTo",
+      "entity": "User"
+    },
+    "teams": {
+      "type": "hasMany",
+      "entity": "Team",
+      "relationName": "EntityTeam",
+      "layoutRelationshipsDisabled": true
+    }
+  }
+}

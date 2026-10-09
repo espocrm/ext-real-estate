@@ -4,6 +4,57 @@
             "Apartment": "Căn hộ",
             "Separate House": "Nhà riêng",
             "Room": "Phòng"
+        },
+        "status": {
+            "New": "Mới",
+            "Assigned": "Đã phân công",
+            "In Process": "Đang xử lý",
+            "Completed": "Hoàn tất",
+            "Canceled": "Đã hủy",
+            "Lost": "Đã mất"
+        },
+        "requestType": {
+            "Rent": "Thuê",
+            "Sale": "Bán"
         }
+    },
+    "fields": {
+        "currentSaleCycleState": "Trạng thái đợt bán hiện tại",
+        "internalBest": "Báo giá nội bộ hiện tại",
+        "name": "Tên",
+        "number": "Mã",
+        "type": "Loại",
+        "status": "Trạng thái báo cáo",
+        "square": "Diện tích",
+        "addressStreet": "Đường",
+        "addressCity": "Thành phố",
+        "assignedUser": "Người phụ trách",
+        "createdAt": "Ngày ghi nhận",
+        "price": "Giá (hiển thị cũ, không là giá hiện tại)",
+        "yearBuilt": "Năm xây dựng",
+        "bedroomCount": "Số phòng ngủ",
+        "bathroomCount": "Số phòng tắm",
+        "floor": "Tầng",
+        "floorCount": "Số tầng",
+        "location": "Vị trí",
+        "addressMap": "Bản đồ",
+        "requestType": "Loại nhu cầu"
+    },
+    "labels": {
+        "choGia": "CHỜ GIÁ / CẦN XÁC MINH",
+        "chaoGia": "Chưa có đợt chào bán",
+        "RealEstateProperty": "Bất động sản",
+        "RealEstatePropertyPlural": "Bất động sản",
+        "Properties": "Bất động sản",
+        "Create Property": "Tạo bất động sản",
+        "All": "Tất cả",
+        "Create": "Tạo bất động sản",
+        "Create RealEstateProperty": "Tạo bất động sản",
+        "auctionHistory": "Lịch sử đấu giá",
+        "noAuctionHistory": "Chưa có lịch sử đấu giá",
+        "commissionPanel": "Hoa hồng",
+        "noCommission": "Chưa có hoa hồng",
+        "Dropdown": "Mở tùy chọn",
+        "MatchingRequest": "Nhu cầu phù hợp"
     }
 }

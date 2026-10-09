@@ -1,0 +1,16 @@
+{
+    "entity": true,
+    "layouts": true,
+    "tab": false,
+    "acl": true,
+    "customizable": false,
+    "importable": false,
+    "notifications": false,
+    "stream": false,
+    "type": "Base",
+    "module": "RealEstate",
+    "object": true,
+    "isCustom": false,
+    "aclPortal": false,
+    "statusField": "status"
+}

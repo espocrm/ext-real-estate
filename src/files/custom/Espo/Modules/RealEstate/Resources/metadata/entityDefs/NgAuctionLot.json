@@ -1,0 +1,139 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "maxLength": 255
+    },
+    "lotCode": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 64
+    },
+    "sessionId": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 64
+    },
+    "propertyId": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 64
+    },
+    "currency": {
+      "type": "enum",
+      "options": [
+        "VND",
+        "USD"
+      ],
+      "required": true
+    },
+    "priceUnit": {
+      "type": "enum",
+      "options": [
+        "total",
+        "per_m2"
+      ],
+      "required": true
+    },
+    "startingAmount": {
+      "type": "decimal",
+      "precision": 18,
+      "scale": 2,
+      "exportDisabled": true
+    },
+    "depositAmount": {
+      "type": "decimal",
+      "precision": 18,
+      "scale": 2,
+      "exportDisabled": true
+    },
+    "stepAmount": {
+      "type": "decimal",
+      "precision": 18,
+      "scale": 2,
+      "exportDisabled": true
+    },
+    "winningAmount": {
+      "type": "decimal",
+      "precision": 18,
+      "scale": 2,
+      "exportDisabled": true
+    },
+    "resultState": {
+      "type": "enum",
+      "options": [
+        "not-held",
+        "upcoming",
+        "held",
+        "won",
+        "no-result",
+        "cancelled"
+      ],
+      "default": "not-held",
+      "required": true
+    },
+    "sourceEvidenceRefs": {
+      "type": "text",
+      "dbType": "longtext",
+      "exportDisabled": true
+    },
+    "sourceAsOf": {
+      "type": "datetime",
+      "exportDisabled": true
+    },
+    "currentSaleOfferCycleId": {
+      "type": "varchar",
+      "maxLength": 64
+    },
+    "publicEligibility": {
+      "type": "bool",
+      "default": false,
+      "readOnly": true
+    },
+    "notes": {
+      "type": "text",
+      "dbType": "longtext"
+    }
+  },
+  "indexes": {
+    "sessionLot": {
+      "columns": [
+        "sessionId",
+        "lotCode"
+      ],
+      "unique": true
+    },
+    "property": {
+      "columns": [
+        "propertyId"
+      ]
+    }
+  },
+  "links": {
+    "session": {
+      "type": "belongsTo",
+      "entity": "NgAuctionSession",
+      "required": true
+    },
+    "property": {
+      "type": "belongsTo",
+      "entity": "RealEstateProperty",
+      "required": true
+    },
+    "results": {
+      "type": "hasMany",
+      "entity": "NgAuctionResult",
+      "foreign": "lot"
+    },
+    "assignedUser": {
+      "type": "belongsTo",
+      "entity": "User"
+    },
+    "teams": {
+      "type": "hasMany",
+      "entity": "Team",
+      "relationName": "EntityTeam",
+      "layoutRelationshipsDisabled": true
+    }
+  }
+}

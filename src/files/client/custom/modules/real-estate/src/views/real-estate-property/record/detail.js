@@ -27,8 +27,33 @@
 ************************************************************************/
 
 define('real-estate:views/real-estate-property/record/detail', 'views/record/detail', function (Dep) {
-
+    /**
+     * S05.7 scoped accessibility remediation: labels native dropdown-toggle icon
+     * buttons that lack aria-label (Espo core does not add them). Only runs on
+     * Property detail surface — does not touch upstream core. Safe no-op if label
+     * already present. Contrast handled globally via accessibility.css.
+     */
     return Dep.extend({
+        afterRender: function () {
+            Dep.prototype.afterRender.call(this);
+            this.patchDropdownLabels();
+            var self = this;
+            setTimeout(function () { self.patchDropdownLabels(); }, 750);
+        },
 
+        patchDropdownLabels: function () {
+            if (!this.$el) return;
+            var self = this;
+            this.$el.find('button.dropdown-toggle[data-toggle="dropdown"]').each(function () {
+                if ($(this).attr('aria-label')) return;
+                $(this).attr('aria-label', self.getLanguage().translate('Dropdown', 'labels', 'RealEstateProperty'));
+            });
+            this.$el.find('a.link[href*="#RealEstateRequest/view/"]').each(function () {
+                if ($(this).attr('aria-label')) return;
+                var text = $(this).text().trim();
+                var label = text || self.getLanguage().translate('MatchingRequest', 'labels', 'RealEstateProperty');
+                $(this).attr('aria-label', label);
+            });
+        }
     });
 });

@@ -1,0 +1,163 @@
+{
+ "fields": {
+  "name": {
+   "type": "varchar",
+   "maxLength": 255
+  },
+  "offerCycleId": {
+   "type": "varchar",
+   "maxLength": 64
+  },
+  "sourceQuoteId": {
+   "type": "varchar",
+   "maxLength": 64
+  },
+  "method": {
+   "type": "enum",
+   "options": [
+    "percentage",
+    "fixed",
+    "other-evidenced"
+   ],
+   "required": true,
+   "exportDisabled": true
+  },
+  "percentage": {
+   "type": "decimal",
+   "precision": 18,
+   "scale": 2,
+   "exportDisabled": true
+  },
+  "fixedAmount": {
+   "type": "decimal",
+   "precision": 18,
+   "scale": 2,
+   "exportDisabled": true
+  },
+  "baseAmount": {
+   "type": "decimal",
+   "precision": 18,
+   "scale": 2,
+   "exportDisabled": true
+  },
+  "baseSemantic": {
+   "type": "varchar",
+   "maxLength": 255,
+   "exportDisabled": true
+  },
+  "expectedAmount": {
+   "type": "decimal",
+   "precision": 18,
+   "scale": 2,
+   "readOnly": true,
+   "exportDisabled": true
+  },
+  "currency": {
+   "type": "enum",
+   "options": [
+    "VND",
+    "USD"
+   ],
+   "required": true,
+   "exportDisabled": true
+  },
+  "payer": {
+   "type": "enum",
+   "options": [
+    "owner",
+    "buyer",
+    "other-party-snapshot"
+   ],
+   "required": true,
+   "exportDisabled": true
+  },
+  "conditions": {
+   "type": "text",
+   "dbType": "longtext",
+   "exportDisabled": true
+  },
+  "effectiveFrom": {
+   "type": "datetime",
+   "exportDisabled": true
+  },
+  "effectiveTo": {
+   "type": "datetime",
+   "exportDisabled": true
+  },
+  "policyRevision": {
+   "type": "varchar",
+   "maxLength": 255,
+   "exportDisabled": true
+  },
+  "sourceEvidenceRefs": {
+   "type": "text",
+   "dbType": "longtext",
+   "exportDisabled": true
+  },
+  "revisionNumber": {
+   "type": "int",
+   "default": 1,
+   "readOnly": true
+  },
+  "predecessorId": {
+   "type": "varchar",
+   "maxLength": 64,
+   "readOnly": true
+  },
+  "publicEligibility": {
+   "type": "bool",
+   "default": false,
+   "readOnly": true
+  },
+  "notes": {
+   "type": "text",
+   "dbType": "longtext",
+   "exportDisabled": true
+  },
+  "requestId": {
+   "type": "varchar",
+   "maxLength": 64,
+   "exportDisabled": true
+  }
+ },
+ "links": {
+  "offerCycle": {
+   "type": "belongsTo",
+   "entity": "NgOfferCycle"
+  },
+  "sourceQuote": {
+   "type": "belongsTo",
+   "entity": "NgSourceQuote"
+  },
+  "predecessor": {
+   "type": "belongsTo",
+   "entity": "NgCommissionRevision"
+  },
+  "assignedUser": {
+   "type": "belongsTo",
+   "entity": "User"
+  },
+  "teams": {
+   "type": "hasMany",
+   "entity": "Team",
+   "relationName": "EntityTeam",
+   "layoutRelationshipsDisabled": true
+  }
+ },
+ "indexes": {
+  "parentRevision": {
+   "columns": [
+    "offerCycleId",
+    "sourceQuoteId",
+    "revisionNumber"
+   ],
+   "unique": true
+  },
+  "requestIdentity": {
+   "columns": [
+    "requestId"
+   ],
+   "unique": true
+  }
+ }
+}
