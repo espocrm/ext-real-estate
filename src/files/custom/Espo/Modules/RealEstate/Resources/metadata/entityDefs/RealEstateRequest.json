@@ -61,11 +61,12 @@
             "isSorted": false
         },
         "propertyType": {
-            "type": "enum",
+            "type": "multiEnum",
             "view": "real-estate:views/real-estate-request/fields/property-type",
             "customizationOptionsDisabled": true,
             "isSorted": false,
-            "default": "Apartment"
+            "storeArrayValues": true,
+            "default": []
         },
         "number": {
             "type": "autoincrement",
